@@ -1,0 +1,4 @@
+# Local visual QA captures and reports; not required by the portfolio.
+/artifacts/
+# Preserve the user's local working backup without publishing a second site.
+/index_work_backup.html

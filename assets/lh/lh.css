@@ -12,3 +12,74 @@ main{width:100%;max-width:none;margin:0}
 @media(max-width:700px){.home-feature>.phone{width:165px!important;right:4%}.feature-points{width:44vw}.feature-points article{gap:8px;padding:16px 10px}.feature-points h3{font-size:11px}.feature-points p{font-size:8px}}
 
 .avatar{position:relative;overflow:hidden}.avatar:before{content:"";position:absolute;top:13%;left:29%;width:43%;height:49%;border-radius:48% 48% 42% 42%;background:#f0cfb4;box-shadow:inset 1px 5px 0 #4b3a2f;z-index:1}.avatar:after{content:"";position:absolute;width:70%;height:44%;left:15%;bottom:0;border-radius:50% 50% 0 0;background:#6c8278}.avatar i{position:absolute;background:#54433a;width:48%;height:59%;left:26%;top:10%;border-radius:48% 48% 20% 20%}.quotes article:nth-child(2n) .avatar i{height:40%}.quotes article:nth-child(3n) .avatar:after{background:#b5a18b}.quotes article:nth-child(5) .avatar i{background:#a7a5a0}
+
+/* Live pages keep their native 390px layout and scroll independently inside the device. */
+.live-app-viewport{position:relative;width:100%;height:100%;overflow:hidden;background:white;isolation:isolate}
+.live-app-surface{position:absolute;left:0;top:0;width:390px;transform-origin:0 0;background:#fff}
+.mockup-status{height:24px;display:flex;justify-content:space-between;align-items:center;padding:0 25px;font:600 11px/1 Arial,sans-serif;color:#111;background:#fff}
+.live-app-frame{display:block;width:390px;border:0;background:#fff;max-width:none;color-scheme:light}
+.screen-sheet>.live-app-viewport{border-radius:4px}
+/* Additional breathing room around the existing section compositions. */
+@media(min-width:701px){
+ .hero{height:790px}
+ .background{height:1550px}
+ .persona{height:940px}
+ .persona>h2{padding-top:170px}
+ .quotes{margin-top:110px}
+ .direction{height:1360px;padding-top:175px}
+ .strategy-grid{margin-top:245px}
+ .before-after{height:930px;padding-top:150px}
+ .comparison{margin-top:85px}
+ .architecture{height:930px;padding-top:160px}
+ .sitemap{margin-top:105px}
+ .style-guide{height:940px}
+ .guide-panels{margin-top:155px}
+ .home-feature{height:1410px}
+ .home-feature .feature-copy{top:170px}
+ .home-feature>.phone{top:240px}
+ .notice-feature{height:1430px}
+ .notice-feature .feature-copy{top:155px}
+ .notice-feature>.phone{top:260px}
+ .notice-dialogue{top:510px}
+ .documents-feature{height:1450px}
+ .documents-feature>.phone{top:210px}
+ .documents-feature .feature-copy{top:300px}
+ .family-feature{height:1590px}
+ .family-feature .feature-copy{top:150px}
+ .family-flow{top:500px}
+ .family-phones{top:540px}
+ .publishing{height:1130px;padding-top:145px}
+ .publishing-screens{margin-top:90px}
+ .takeaway{height:920px;padding-top:235px}
+ .eyebrow{top:65px}
+}
+@media(max-width:700px){
+ .hero{height:700px}
+ .hero-phones{top:330px}
+ .background{height:1110px}
+ .persona{height:750px}
+ .persona>h2{padding-top:110px}
+ .quotes{margin-top:60px}
+ .direction{height:910px;padding-top:110px}
+ .before-after{height:710px;padding-top:105px}
+ .architecture{height:680px;padding-top:110px}
+ .style-guide{height:750px}
+ .guide-panels{margin-top:115px}
+ .home-feature{height:1100px}
+ .home-feature .feature-copy{top:100px}
+ .home-feature>.phone{top:300px}
+ .notice-feature{height:1140px}
+ .notice-feature .feature-copy{top:95px}
+ .notice-dialogue{top:325px}
+ .notice-feature>.phone{top:380px}
+ .documents-feature{height:1050px}
+ .documents-feature .feature-copy{top:100px}
+ .documents-feature>.phone{top:480px}
+ .family-feature{height:1480px}
+ .family-feature .feature-copy{top:95px}
+ .family-flow{top:330px}
+ .family-phones{top:700px}
+ .publishing{height:900px;padding-top:100px}
+ .takeaway{height:720px;padding-top:170px}
+ .eyebrow{top:35px}
+}

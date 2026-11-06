@@ -106,7 +106,8 @@
     gsap.registerPlugin(ScrollTrigger);
     // Animation only changes opacity/transform; the reference composition stays fixed.
     document.querySelectorAll('section:not(.hero)').forEach(section=>{
-      const targets=section.querySelectorAll(':scope > h2,:scope > .feature-copy,:scope > .guide-panels,:scope > .comparison,:scope > .strategy-grid,:scope > .sitemap,:scope > .quotes,:scope > .takeaway-copy');
+      const content=section.querySelector(':scope > .section-content') || section;
+      const targets=content.querySelectorAll(':scope > h2,:scope > .feature-copy,:scope > .guide-panels,:scope > .comparison,:scope > .strategy-grid,:scope > .sitemap,:scope > .quotes,:scope > .takeaway-copy');
       gsap.from(targets,{y:22,opacity:0,duration:.75,stagger:.08,ease:'power2.out',scrollTrigger:{trigger:section,start:'top 82%',once:true}});
     });
     document.querySelectorAll('.hero-phones,.notice-dialogue>img,.ia-robot').forEach(el=>{

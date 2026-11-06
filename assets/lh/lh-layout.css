@@ -1,0 +1,83 @@
+/*
+ * The design frame stops at 1920px; section backgrounds remain full bleed.
+ * Existing section/card/device dimensions and responsive rules live in lh.css.
+ * No page-level scale, zoom, typography or device transform is introduced here.
+ */
+:root {
+  --lh-design-width: 1920px;
+}
+
+main > section {
+  width: 100%;
+}
+
+main > section > .section-content {
+  position: relative;
+  width: 100%;
+  max-width: var(--lh-design-width);
+  height: 100%;
+  margin-inline: auto;
+  padding: var(--lh-section-padding, 0);
+  /* Keep the original frame-edge crops, including the hero robot and skylines. */
+  overflow: hidden;
+}
+
+/* Move the existing padding onto the content frame, without changing its values.
+ * Absolute-positioned children still use the complete frame as their reference.
+ */
+.direction,
+.before-after,
+.architecture,
+.publishing,
+.takeaway {
+  padding: 0;
+}
+
+.direction {
+  --lh-section-padding: 175px 0 0;
+}
+
+.before-after {
+  --lh-section-padding: 150px 0 0;
+}
+
+.architecture {
+  --lh-section-padding: 160px 0 0;
+}
+
+.publishing {
+  --lh-section-padding: 145px min(5vw, 96px) 0;
+}
+
+.takeaway {
+  --lh-section-padding: 235px min(10vw, 192px) 0;
+}
+
+main > footer {
+  width: 90%;
+  max-width: 1728px; /* The existing 5% gutters within the 1920px frame. */
+  margin-inline: auto;
+}
+
+/* Preserve the existing mobile reflow; do not shrink the complete design frame. */
+@media (max-width: 700px) {
+  .direction {
+    --lh-section-padding: 110px 7% 0;
+  }
+
+  .before-after {
+    --lh-section-padding: 105px 0 0;
+  }
+
+  .architecture {
+    --lh-section-padding: 110px 5% 0;
+  }
+
+  .publishing {
+    --lh-section-padding: 100px 6% 0;
+  }
+
+  .takeaway {
+    --lh-section-padding: 170px 8% 0;
+  }
+}

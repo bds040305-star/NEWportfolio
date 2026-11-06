@@ -1,0 +1,88 @@
+/* The design plane stays 1920px wide. Only the section background is full bleed. */
+#view-lh .figma-page { width:100%; margin:0; zoom:1 !important; }
+#view-lh .figma-section { width:100%; overflow:hidden; }
+#view-lh .figma-section > .lh-design-frame,
+#view-lh .lh-background-plane {
+  position:absolute; top:0; left:50%; width:1920px !important;
+  height:var(--lh-design-height) !important; margin:0;
+  transform:translateX(-50%) scale(var(--lh-layout-scale,1));
+  transform-origin:50% 0;
+}
+#view-lh .figma-section > .lh-design-frame { overflow:hidden; z-index:1; }
+#view-lh .figma-section > .lh-section-backdrop {
+  position:absolute; inset:0; width:100%; height:100%;
+  overflow:hidden; pointer-events:none; z-index:0;
+}
+#view-lh .lh-background-plane { overflow:visible; pointer-events:none; }
+#view-lh .lh-background-plane * { pointer-events:none !important; }
+#view-lh .lh-background-plane > * { box-shadow:none !important; }
+#view-lh .lh-edge-tone {
+  position:absolute; pointer-events:none;
+  top:calc(var(--lh-art-top) * var(--lh-layout-scale,1));
+  height:calc(var(--lh-art-height) * var(--lh-layout-scale,1));
+  width:max(0px,calc((100% - 1920px) / 2));
+  background-repeat:repeat-x; background-size:1px 100%;
+  filter:blur(24px);
+}
+#view-lh .lh-edge-tone--left { left:0; }
+#view-lh .lh-edge-tone--right { right:0; }
+#view-lh .lh-background-band {
+  position:absolute; left:0; right:0; pointer-events:none;
+  top:calc(var(--lh-art-top) * var(--lh-layout-scale,1));
+  height:calc(var(--lh-art-height) * var(--lh-layout-scale,1));
+}
+
+/* Live content occupies the existing glass rectangle, below its Figma status bar. */
+#view-lh .lh-live-viewport {
+  position:absolute; left:0; right:0; bottom:0; z-index:12;
+  overflow:hidden; opacity:0; pointer-events:none;
+  background:#fff; overscroll-behavior:contain;
+}
+#view-lh .lh-live-viewport[data-state="ready"] { opacity:1; pointer-events:auto; }
+#view-lh .lh-live-iframe {
+  display:block; position:absolute; top:0; left:0; width:390px;
+  max-width:none; margin:0; border:0; background:#fff;
+  transform-origin:0 0; touch-action:auto;
+}
+#view-lh .lh-live-surface {
+  position:absolute; top:0; left:0; width:390px; transform-origin:0 0;
+}
+#view-lh .lh-live-mockup:focus-within { outline:2px solid #0056b3; outline-offset:3px; }
+#view-lh .lh-live-mockup { isolation:isolate; transition:outline-color .25s ease; }
+@media (hover:hover) {
+  #view-lh .lh-live-mockup:hover:not(:focus-within) { outline:2px solid #0056b326; outline-offset:2px; }
+  #view-lh .lh-design-frame a[href]:not(.lh-historical-link):not(.lh-strip-item) { transition:opacity .2s ease; }
+  #view-lh .lh-design-frame a[href]:not(.lh-historical-link):not(.lh-strip-item):hover { opacity:.86; }
+}
+#view-lh .lh-live-retry {
+  display:none; position:absolute; right:8px; bottom:10px; z-index:14;
+  padding:6px 9px; border:1px solid #b8c9df; border-radius:7px;
+  background:#fff; color:#0056b3; font:600 12px/1.3 Pretendard,sans-serif;
+  text-decoration:none; cursor:pointer;
+}
+#view-lh .lh-live-mockup[data-live-state="unavailable"] > .lh-live-retry { display:block; }
+#view-lh .lh-historical-link { position:absolute; inset:0; display:block; z-index:12; }
+#view-lh .lh-historical-link:focus-visible { outline:3px solid #0056b3; outline-offset:4px; }
+#view-lh .lh-caption-link:focus-visible { outline:2px solid #0056b3; outline-offset:4px; }
+#view-lh .lh-motion-target { will-change:opacity; }
+#view-lh .lh-interaction-card {
+  outline:1px solid transparent; outline-offset:3px;
+  transition:box-shadow .25s ease,outline-color .25s ease;
+}
+#view-lh .lh-interaction-card:hover,
+#view-lh .lh-interaction-card:focus-visible {
+  outline-color:#0056b34d;
+  box-shadow:0 12px 28px -14px #0056b333;
+}
+#view-lh .lh-design-frame button:not(:disabled):not(.signature-hotspot):active,
+#view-lh .lh-design-frame a[href]:active { opacity:.72; }
+#view-lh .signature-hotspot:active { background:#79c0000d; }
+#view-lh #signatureDemo .pp-badge { transition:background-color .25s ease,color .25s ease; }
+@media (prefers-reduced-motion:reduce) {
+  #view-lh .lh-live-mockup { transition:none; }
+  #view-lh .lh-interaction-card { transition:none; }
+  #view-lh .lh-motion-target { opacity:1 !important; will-change:auto; }
+}
+.lh-sign-control{cursor:pointer}
+.lh-sign-control:focus-visible{outline:2px solid #90c320;outline-offset:2px}
+.lh-sign-control[aria-disabled="true"]{cursor:default}

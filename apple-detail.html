@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Apple TV — 변다솜 포트폴리오</title>
+<style>
+  :root{
+    --bg:#0b0b0d;
+    --bg2:#121216;
+    --panel:#16161b;
+    --panel2:#1d1d23;
+    --line:rgba(255,255,255,.09);
+    --line-dark:#e7e7e7;
+    --text:#f5f5f7;
+    --muted:rgba(255,255,255,.72);
+    --ink:#151515;
+    --sub:#666;
+    --paper:#f6f6f3;
+    --card:#ffffff;
+    --accent:#e91e1b;
+    --accent2:#5865f2;
+    --blue:#2f78ff;
+    --radius:24px;
+    --shadow:0 18px 40px rgba(0,0,0,.12);
+    --max:1320px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:Inter, Pretendard, Apple SD Gothic Neo, Segoe UI, sans-serif;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  img{display:block;max-width:100%}
+  a{text-decoration:none;color:inherit}
+  .wrap{width:min(calc(100% - 56px), var(--max));margin:0 auto}
+
+  /* Header */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(17,17,20,.86);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.08)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .chip-back{display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;font-size:13px;font-weight:700}
+  .crumb{color:rgba(255,255,255,.86);font-weight:700}
+  .brand{color:#fff;font-weight:800}
+
+  /* Hero */
+  .hero{position:relative;min-height:100vh;background:#000;overflow:hidden}
+  
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,.2) 0%, rgba(0,0,0,.45) 42%, rgba(9,9,12,.92) 100%), radial-gradient(circle at 18% 32%, rgba(255,255,255,.08), transparent 28%)}
+  @keyframes heroDrift{from{transform:scale(1.05) translate3d(0,0,0)}to{transform:scale(1.12) translate3d(-24px,-16px,0)}}
+  .hero-inner{position:relative;z-index:2;padding:132px 0 72px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:44px;align-items:end;min-height:calc(100vh - 72px)}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;padding:10px 15px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;margin-bottom:24px}
+  .hero h1{margin:0;font-size:clamp(56px, 8vw, 108px);line-height:.92;letter-spacing:-.07em;color:#fff;max-width:9ch}
+  .hero .lead{margin:22px 0 24px;max-width:770px;font-size:18px;line-height:1.8;color:rgba(255,255,255,.82)}
+  .hero-tags{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px}
+  .hero-tags span{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:13px;font-weight:600}
+  .hero-points{display:grid;gap:10px;margin:0;padding:0;list-style:none;max-width:780px}
+  .hero-points li{padding:16px 18px;border-radius:18px;background:rgba(10,10,12,.42);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.84);font-size:14px;line-height:1.74;backdrop-filter:blur(10px)}
+  .hero-points strong{color:#fff;display:inline-block;min-width:74px}
+  .hero-side{background:linear-gradient(180deg, rgba(14,14,18,.8), rgba(24,24,30,.9));border:1px solid rgba(255,255,255,.12);border-radius:30px;padding:24px;box-shadow:0 32px 80px rgba(0,0,0,.28);backdrop-filter:blur(18px)}
+  .hero-side h3{margin:0 0 14px;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+  .hero-side-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+  .hero-side-grid .card{padding:14px 15px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06)}
+  .hero-side-grid .card span{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.58);font-weight:700;margin-bottom:8px}
+  .hero-side-grid .card strong{display:block;font-size:14px;line-height:1.6;color:#fff}
+  .hero-side .note{padding:18px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
+  .hero-side .note b{display:block;margin-bottom:10px;color:#fff}
+  .hero-side .note p{margin:0;color:rgba(255,255,255,.76);font-size:14px;line-height:1.76}
+
+  /* Intro like Haevichi */
+  .intro{background:var(--paper);padding:72px 0 38px}
+  .label-row{display:flex;align-items:center;gap:10px;color:#19559e;font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+  .label-row .line{width:26px;height:2px;background:#19559e;border-radius:2px}
+  .title-ko{margin:18px 0 8px;font-size:clamp(44px, 5vw, 72px);line-height:1.02;letter-spacing:-.06em}
+  .title-en{margin:0;font-size:26px;color:#7d7d7d;font-weight:500}
+  .desc{margin:28px 0 0;max-width:960px;font-size:18px;line-height:1.86;color:#4d4d4d}
+  .meta{margin-top:48px;padding-top:28px;border-top:1px solid #ddd;display:grid;grid-template-columns:repeat(4,1fr);gap:26px}
+  .meta .item small{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8d8d8d;font-weight:800;margin-bottom:12px}
+  .meta .item div{font-size:16px;line-height:1.8;color:#202020}
+  .focus-row{margin-top:30px;display:grid;grid-template-columns:170px 1fr;gap:18px;align-items:start}
+  .focus-row .head{font-size:12px;color:#888;padding-top:12px;font-weight:700}
+  .focus-chips{display:flex;flex-wrap:wrap;gap:12px}
+  .focus-chip{background:#1f5fa9;color:#fff;border-radius:16px;padding:16px 18px;min-width:220px;box-shadow:var(--shadow)}
+  .focus-chip b{display:block;font-size:15px;margin-bottom:6px}
+  .focus-chip span{display:block;font-size:13px;line-height:1.5;opacity:.9}
+  .focus-chip.ghost{background:#fff;border:1px solid #ddd;color:#111;box-shadow:none}
+  .focus-chip.ghost span{opacity:.64}
+
+  .browser{margin-top:34px;border-radius:20px;overflow:hidden;box-shadow:0 22px 40px rgba(0,0,0,.09);background:#fff;border:1px solid #ddd}
+  .browser-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#232323;color:#fff;font-size:12px}
+  .browser-dots{display:flex;gap:8px}
+  .browser-dots span{width:10px;height:10px;border-radius:999px;background:#4c4c4c}
+  .browser-url{opacity:.78}
+  .browser-cta{font-size:12px;font-weight:700;color:#fff;background:#1f5fa9;padding:8px 12px;border-radius:999px}
+  .browser img{width:100%;height:auto}
+
+  /* Sections */
+  .section{padding:160px 0!important;background:var(--paper)}
+  .section.dark{background:var(--bg);color:var(--text)}
+  .section-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,430px);gap:24px;align-items:end;margin-bottom:48px}
+  .section-head .ey{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#19559e;font-weight:800}
+  .section.dark .section-head .ey{color:#87a9ff}
+  .section-head h2{margin:8px 0 0;font-size:clamp(34px,4vw,52px);line-height:1.06;letter-spacing:-.05em}
+  .section-head p{margin:0;font-size:15px;line-height:1.82;color:#666}
+  .section.dark .section-head p{color:rgba(255,255,255,.7)}
+
+  .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+  .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .card{background:var(--card);border:1px solid #e3e3e3;border-radius:24px;padding:24px;box-shadow:var(--shadow)}
+  .section.dark .card{background:var(--panel);border-color:var(--line);box-shadow:none}
+  .card .k{display:inline-flex;margin-bottom:12px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:#c02024}
+  .card h3{margin:0 0 10px;font-size:24px;line-height:1.24;letter-spacing:-.03em}
+  .card p{margin:0;color:#666;line-height:1.8;font-size:15px}
+  .section.dark .card p{color:rgba(255,255,255,.72)}
+  .bullet{margin:16px 0 0;padding-left:18px;color:#666;display:grid;gap:8px}
+  .section.dark .bullet{color:rgba(255,255,255,.72)}
+
+  .image-card{overflow:hidden;border-radius:24px;border:1px solid #ddd;background:#fff;box-shadow:var(--shadow)}
+  .image-card.dark{background:var(--panel);border-color:var(--line);box-shadow:none}
+  .image-surface{padding:18px;background:#ededed}
+  .image-card.dark .image-surface{background:#101015}
+  .image-surface img{width:100%;height:auto;border-radius:14px}
+  .caption{padding:20px 22px;background:#fff}
+  .image-card.dark .caption{background:var(--panel)}
+  .caption h3{margin:0 0 8px;font-size:22px;letter-spacing:-.03em}
+  .caption p{margin:0;color:#666;line-height:1.76;font-size:14px}
+  .image-card.dark .caption p{color:rgba(255,255,255,.72)}
+
+  .split-block{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:18px;align-items:start}
+  .mini-stack{display:grid;gap:18px}
+  .gallery-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+
+  .highlight-band{margin-top:22px;padding:26px;border-radius:24px;background:linear-gradient(135deg,#1d59ff,#3e72ff 40%, #6d7df7 100%);color:#fff;display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:center;box-shadow:var(--shadow)}
+  .highlight-band h3{margin:0 0 10px;font-size:30px;line-height:1.16;letter-spacing:-.04em}
+  .highlight-band p{margin:0;color:rgba(255,255,255,.9);line-height:1.82;font-size:15px}
+  .highlight-band .mini{display:grid;gap:12px}
+  .highlight-band .mini .box{padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.18);font-size:14px;line-height:1.72}
+
+  .journey-note{padding:22px;border-radius:22px;background:#fff;border:1px solid #ddd;box-shadow:var(--shadow);margin-top:18px}
+  .journey-note strong{display:block;margin-bottom:8px;font-size:18px}
+  .journey-note p{margin:0;color:#666;line-height:1.8}
+
+  .output-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .output-grid .wide{grid-column:span 2}
+  .style-slab{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start}
+  .style-note{background:#fff;border:1px solid #ddd;border-radius:24px;padding:24px;box-shadow:var(--shadow)}
+  .style-note h3{margin:0 0 14px;font-size:24px}
+  .style-note p{margin:0;color:#666;line-height:1.84}
+  .style-list{margin:18px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+  .style-list li{padding:14px 16px;border-radius:16px;background:#f3f3f3;font-size:14px;line-height:1.68}
+  .style-list b{display:inline-block;min-width:66px}
+
+  .footer{padding:34px 0 42px;background:#111114;color:rgba(255,255,255,.7);border-top:1px solid rgba(255,255,255,.08)}
+  .footer .wrap{display:flex;justify-content:space-between;gap:20px;align-items:center}
+  .footer b{color:#fff}
+
+  @media (max-width:1100px){
+    .hero-inner,.section-head,.split-block,.style-slab,.highlight-band{grid-template-columns:1fr}
+    .meta{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:760px){
+    .wrap{width:min(calc(100% - 28px), var(--max))}
+    .topbar .wrap{height:64px}
+    .hero-inner{padding:108px 0 50px;min-height:auto}
+    .hero h1{font-size:50px;max-width:none}
+    .hero .lead{font-size:15px;line-height:1.72}
+    .hero-side-grid,.grid-3,.grid-2,.gallery-2,.output-grid,.meta{grid-template-columns:1fr}
+    .output-grid .wide{grid-column:auto}
+    .focus-row{grid-template-columns:1fr}
+    .focus-row .head{padding-top:0}
+    .section{padding:88px 0!important}
+    .title-ko{font-size:44px}
+    .title-en{font-size:20px}
+    .desc{font-size:15px;line-height:1.8}
+    .footer .wrap{flex-direction:column;align-items:flex-start}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .hero::before{animation:none}
+  }
+
+:root{--apple-hero-image:url('assets/portfolio-media/e51dffb096a281bbcd0d792e.webp')}
+
+/* Apple TV only — hero matches Haevichi detail-page composition */
+.topbar{background:#28282b!important;border-bottom:0!important}
+.topbar .wrap{height:53px!important;width:min(100% - 60px,1360px)!important}
+.topbar .chip-back{padding:0!important;background:none!important;border:0!important;border-radius:0!important;font-size:12px!important;font-weight:600!important}
+.topbar .brand{font-size:14px!important}.topbar .crumb{display:none!important}
+.intro{position:relative!important;padding:76px 0 90px!important;background:#f5f5f3!important;isolation:isolate}
+.intro::before{content:"";position:absolute;inset:0 0 auto;height:900px;background-image:linear-gradient(90deg,rgba(255,255,255,.9) 0%,rgba(255,255,255,.87) 47%,rgba(255,255,255,.75) 100%),var(--apple-hero-image);background-position:center;background-size:cover;filter:grayscale(1);z-index:-1;pointer-events:none}
+.intro::after{content:"";position:absolute;inset:550px 0 auto;height:350px;background:linear-gradient(transparent,#f5f5f3);z-index:-1;pointer-events:none}
+.intro .wrap{width:min(calc(100% - 76px),1360px)!important}
+.intro .label-row{margin-bottom:20px!important;font-size:11px!important;color:#2164a5!important;font-weight:700!important;letter-spacing:.13em!important}
+.intro .title-ko{margin:0 0 10px!important;font-size:clamp(34px,3vw,49px)!important;line-height:1.18!important;color:#151515!important;letter-spacing:-.055em!important;font-weight:850!important}
+.intro .title-en{margin:0 0 28px!important;color:#7b7b7b!important;font-size:14px!important}
+.intro .desc{max-width:670px!important;font-size:15px!important;line-height:1.9!important;color:#4c4c4c!important;margin:0 0 36px!important}
+.intro .meta{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:24px!important;border-top:1px solid rgba(36,36,36,.12)!important;padding:27px 0 24px!important;margin:0!important;background:none!important}
+.intro .meta .item{background:transparent!important;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none!important;color:#252525!important}
+.intro .meta .item small{color:#7b7b7b!important;font-weight:700!important;font-size:11px!important;letter-spacing:.1em!important}
+.intro .meta .item div{margin-top:10px!important;font-size:13px!important;line-height:1.65!important}
+.intro .focus-row{display:flex!important;align-items:center!important;gap:24px!important;margin:0 0 35px!important;padding:0!important}
+.intro .focus-row .head{min-width:max-content!important;font-size:11px!important;color:#777!important}
+.intro .focus-chips{display:flex!important;flex-wrap:wrap!important;gap:8px!important}
+.intro .focus-chip{padding:12px 16px!important;border:1px solid #e1e1e1!important;border-radius:12px!important;background:rgba(255,255,255,.84)!important;box-shadow:none!important}
+.intro .focus-chip b{font-size:12px!important;color:#171717!important}
+.intro .focus-chip span{font-size:10px!important;color:#666!important}
+.intro .browser{margin:0 -2.5% 0!important;width:105%!important;border-radius:0!important;border:1px solid #252525!important;box-shadow:0 25px 48px rgba(30,30,30,.1)!important;overflow:hidden!important;background:#151515!important}
+.intro .browser-bar{background:#272727!important;color:#d5d5d5!important;min-height:40px!important}
+.intro .browser>img{display:block!important;width:100%!important;max-height:780px!important;object-fit:cover!important;object-position:top!important}
+@media(max-width:760px){.intro{padding:44px 0 50px!important}.intro .wrap{width:calc(100% - 32px)!important}.intro .meta{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:20px!important}.intro .focus-row{display:block!important}.intro .focus-chips{margin-top:12px!important}.intro .browser{width:100%!important;margin:0!important}.topbar .wrap{width:calc(100% - 32px)!important}}
+</style>
+<style id="apple-header-match-haevichi">
+/* Same top navigation geometry as the Haevichi case: left Works, right Da-som. */
+.topbar{height:70px!important;min-height:70px!important;background:#252527!important;backdrop-filter:none!important;border-bottom:0!important}
+.topbar .wrap{width:74%!important;max-width:none!important;height:70px!important;margin-inline:auto!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:space-between!important}
+.topbar .chip-back{font-size:13px!important;font-weight:600!important;color:#fff!important;padding:0!important;margin:0!important;line-height:1!important;background:none!important;border:0!important;box-shadow:none!important}
+.topbar .brand{font-size:14px!important;font-weight:800!important;color:#fff!important;line-height:1!important}
+@media(max-width:760px){.topbar,.topbar .wrap{height:60px!important;min-height:60px!important}.topbar .wrap{width:calc(100% - 126px)!important;margin-left:100px!important;margin-right:26px!important}.topbar .brand{font-size:12px!important}}
+</style>
+<style>
+.ux-avatar img{width:100%;height:100%;object-fit:cover;display:block}.ux-avatar{background:#2b2c31!important;overflow:hidden}
+/* Apple-only case-study refinements: no impact on other portfolio projects */
+#apple-problem{border-top:1px solid #e5e5e8} .ux-journeys{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:25px}.ux-journey{padding:22px;border:1px solid #424348;border-radius:16px;background:#1b1c21}.ux-journey>b{font-size:12px;color:#fff}.ux-journey p{font-size:12px;color:#aaacb5;margin:12px 0 0}.ux-steps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;margin-top:16px}.ux-steps span{border-radius:8px;background:#303139;text-align:center;font-size:11px;padding:11px 4px;color:#f9f9fb;position:relative}
+.ux-match-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(240px,.65fr);gap:44px;align-items:center}.ux-match-stage{background:#151518;border-radius:17px;overflow:hidden;border:1px solid #44454a;box-shadow:0 26px 60px #0005}.ux-browser-top{height:38px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:0 16px;background:#26272b;color:#9e9fa6;font-size:10px}.ux-browser-dots{display:flex;gap:5px}.ux-browser-dots i{height:7px;width:7px;background:#777;border-radius:50%}.ux-match-slide{display:none;margin:0}.ux-match-slide.is-active{display:block}.ux-match-slide img{width:100%;height:390px;object-fit:contain;object-position:center;background:#08080a}.ux-match-slide figcaption{display:flex;justify-content:space-between;gap:20px;padding:15px 23px;color:#fff;font-size:12px}.ux-match-slide figcaption span{color:#aeb0b9}.ux-slider-nav{display:flex;gap:18px;justify-content:flex-end;align-items:center;padding:0 22px 20px}.ux-slider-nav button{width:39px;height:39px;border-radius:50%;border:1px solid #56565c;background:#232329;color:#fff;cursor:pointer;font-size:19px}.ux-slider-nav button:hover{background:#f5f5f7;color:#161616}.ux-slide-indicator{font-size:13px;color:#aaa}.ux-slide-indicator strong{color:white}.ux-match-notes h3{font-size:clamp(29px,3.2vw,45px);line-height:1.24;color:white;letter-spacing:-.055em}.ux-match-notes p{max-width:390px;font-size:14px;color:#aaaeb7;line-height:1.8}.ux-smallcap{font-size:10px;letter-spacing:.18em;font-weight:800;color:#70b8ff}.ux-note-steps{margin-top:28px;border-top:1px solid #484950}.ux-note-steps div{display:grid;grid-template-columns:35px 1fr 1.3fr;padding:13px 0;border-bottom:1px solid #484950;gap:10px;font-size:12px;color:#bbb}.ux-note-steps small{color:#70b8ff}.ux-note-steps b{color:#fff}
+.ux-personas{display:grid;grid-template-columns:1fr 1fr;gap:16px}.ux-persona{background:#232329;border:1px solid #414149;border-radius:18px;padding:25px;display:flex;gap:18px;align-items:flex-start}.ux-avatar{width:76px;height:76px;min-width:76px;display:grid;place-items:center;border-radius:50%;border:3px solid #9fa5b3;background:radial-gradient(circle at 50% 28%,#d7d9e3 0 18%,#707b94 19% 24%,#47516b 25% 63%,#272d3e 64%);overflow:hidden}.ux-avatar-b{background:radial-gradient(circle at 50% 28%,#d1c4b9 0 18%,#6f666b 19% 24%,#465565 25% 63%,#27303a 64%)}.ux-avatar span{align-self:end;font-size:9px;background:#0009;color:white;padding:4px 12px;border-radius:12px}.ux-persona h3{font-size:22px;color:white;margin:7px 0}.ux-persona h3 small{display:block;font-size:12px;font-weight:500;color:#b1b5c0;margin-top:4px}.ux-persona blockquote{margin:18px 0;font-size:15px;font-weight:650;line-height:1.6;color:#fff}.ux-persona p{font-size:12px;color:#c0c1c9;line-height:1.7}.ux-tags{display:flex;flex-wrap:wrap;gap:7px}.ux-tags span{background:#493132;color:#ffb6b6;border:1px solid #6a4142;border-radius:20px;font-size:10px;padding:7px 10px}.ux-diagram-title{margin:62px 0 23px}.ux-diagram-title span,.ux-guide-heading>span,.ux-guide-panel>span{font-size:10px;letter-spacing:.16em;color:#73b8fb;font-weight:800}.ux-diagram-title h3{font-size:25px;color:white;letter-spacing:-.035em;margin:9px 0}.ux-ia-tree{background:#17181e;border:1px solid #42434d;border-radius:22px;padding:28px}.ux-tree-root{margin:0 auto 36px;background:#fff;color:#16171a;max-width:280px;border-radius:12px;padding:15px;font-size:24px;font-weight:800;text-align:center;position:relative}.ux-tree-root small{display:block;font-size:9px;font-weight:600;letter-spacing:.1em}.ux-tree-root:after{content:'';position:absolute;top:100%;left:50%;height:36px;border-left:1px solid #636776}.ux-tree-branches{display:grid;grid-template-columns:1fr 1fr;gap:25px}.ux-tree-branch{border:1px solid #666772;border-radius:16px;padding:18px}.ux-tree-h{background:#414247;border-radius:10px;color:white;padding:17px;font-weight:800;display:flex;justify-content:space-between}.ux-tree-branch.sports .ux-tree-h{background:#5d2833}.ux-tree-h em{font-size:9px;font-style:normal;color:#d4d6dc}.ux-tree-items{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.ux-tree-items>div{background:#272831;padding:18px 13px;border-radius:10px;color:white;font-size:13px;font-weight:700}.ux-tree-items small{display:block;color:#9fa2b3;font-weight:400;font-size:11px;margin-top:5px}.ux-tree-footer{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px;color:#afb1bf;font-size:10px;font-weight:800;letter-spacing:.06em}.ux-tree-footer span{border:1px solid #50515c;border-radius:8px;padding:9px 14px;color:white;font-size:11px;font-weight:500}.ux-flow-pair{display:grid;grid-template-columns:1fr 1fr;gap:18px}.ux-flow-pair article{background:#1b1c22;border:1px solid #42434a;border-radius:18px;padding:22px}.ux-flow-label{color:#79bdfb;font-size:11px;font-weight:800;letter-spacing:.1em}.ux-flow-label b{display:block;color:#fff;font-size:20px;letter-spacing:0;margin-top:7px}.ux-flow-line{display:flex;flex-direction:column;align-items:center;margin-top:18px}.ux-flow-line>div:not(.ux-flow-branch){width:min(100%,350px);padding:11px 15px;border:1px solid #52535f;border-radius:9px;color:#fff;text-align:center;font-size:13px;background:#2d2e37}.ux-flow-line i{font-style:normal;color:#838695;font-size:16px;line-height:25px}.ux-flow-line>.ux-decision{background:#3c3445!important;border-color:#81668d!important;border-radius:30px!important}.ux-flow-branch{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:min(100%,350px);margin-top:14px}.ux-flow-branch div{padding:14px 8px;border-radius:9px;text-align:center;background:#20372f;color:#fff;font-size:12px}.ux-flow-branch div+div{background:#3b2f34}.ux-flow-branch small{display:block;font-weight:800;font-size:10px;margin-bottom:5px;color:#a8f4c7}.ux-sitemap{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.ux-sitemap div{border:1px solid #53545d;border-radius:13px;padding:20px 13px;background:#24252c}.ux-sitemap b{font-size:12px;color:white}.ux-sitemap small{display:block;font-size:11px;color:#aeb0bb;margin-top:10px;line-height:1.6}
+.ux-guide{padding:34px;border:1px solid #e4e4e8;border-radius:20px;background:#fbfbfc}.ux-guide-heading h3{font-size:32px;margin:8px 0}.ux-guide-heading p{font-size:13px;color:#6a6b73}.ux-swatches{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:28px 0 36px}.ux-swatch{min-height:138px;display:flex;flex-direction:column;justify-content:flex-end;padding:15px;border-radius:12px;background:var(--sw)}.ux-swatch b{font-size:12px}.ux-swatch small{font-size:11px;opacity:.7;margin-top:5px}.ux-guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.ux-guide-panel{padding:27px;border-radius:15px;border:1px solid #e3e3e6;background:white}.ux-guide-panel h3{margin:10px 0 23px}.ux-type-hero{font-size:68px;letter-spacing:-.09em;font-weight:900;margin:14px 0}.ux-type-row{display:flex;align-items:baseline;justify-content:space-between;border-top:1px solid #e9e9ed;padding:14px 0}.ux-type-row small{color:#90919b}.ux-components>div{border-top:1px solid #e8e8ed;padding:18px 0}.ux-components label{display:block;font-size:10px;color:#90919b;letter-spacing:.12em;margin-bottom:12px}.ux-components button{padding:11px 15px;border-radius:9px;border:0;margin-right:8px;font-size:12px}.ux-demo-primary{background:#161619;color:white}.ux-demo-second{background:#e9e9ed;color:#161619}.ux-live,.ux-upcoming,.ux-ended{display:inline-block;border-radius:7px;padding:7px 10px;margin:2px;font-size:11px;background:#fce8e8;color:#bc1225}.ux-upcoming{background:#e6eefb;color:#3765b6}.ux-ended{background:#eeeff2;color:#5a5a60}.ux-demo-tabs{display:flex;gap:13px;border-bottom:1px solid #d8d8df;padding:12px 0;font-size:13px}.ux-demo-tabs b{border-bottom:3px solid #15151a;padding-bottom:12px}.ux-demo-radii{display:flex;gap:8px;align-items:center}.ux-demo-radii span{border:1px solid #c8c8cf;padding:11px;font-size:11px}.ux-demo-radii span:nth-child(1){border-radius:8px}.ux-demo-radii span:nth-child(2){border-radius:12px}.ux-demo-radii span:nth-child(3){border-radius:16px}.ux-demo-radii span:nth-child(4){border-radius:24px}.ux-guide-footer{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;border-top:1px solid #e7e7eb;margin-top:24px;padding-top:20px}.ux-guide-footer div{display:flex;flex-direction:column;gap:5px}.ux-guide-footer b{font-size:10px;letter-spacing:.12em}.ux-guide-footer span{font-size:12px;color:#666875;line-height:1.6}
+@media(max-width:850px){.ux-match-layout,.ux-personas,.ux-flow-pair,.ux-guide-grid,.ux-journeys{grid-template-columns:1fr}.ux-sitemap{grid-template-columns:repeat(2,1fr)}.ux-swatches{grid-template-columns:repeat(3,1fr)}.ux-match-slide img{height:300px}.ux-tree-branches{grid-template-columns:1fr}.ux-steps{grid-template-columns:repeat(3,1fr)}}@media(max-width:550px){.ux-persona{flex-direction:column}.ux-swatches{grid-template-columns:repeat(2,1fr)}.ux-sitemap{grid-template-columns:1fr}.ux-guide{padding:16px}.ux-guide-panel{padding:16px}.ux-match-slide figcaption{flex-direction:column;gap:5px}.ux-match-slide img{height:240px}.ux-tree-items{grid-template-columns:1fr}.ux-guide-footer{grid-template-columns:1fr}}
+</style><style id="apple-haevichi-structural-match">
+/* Apple-only: Haevichi hero markup, type scale and measurements */
+.hv-matched-nav,.hv-matched-nav.is-scrolled{position:sticky;top:0;z-index:100;background:rgba(11,11,14,.88);color:#f6f6f4;border:0;border-bottom:1px solid rgba(255,255,255,.1);box-shadow:0 10px 30px rgba(0,0,0,.08);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.hv-matched-nav .nav-inner{width:min(1600px,calc(100vw - 80px));margin:0 auto;padding:24px 0;display:flex;align-items:center;justify-content:space-between;box-sizing:border-box}
+.hv-matched-nav .back-link,.hv-matched-nav .back-link:hover{font-size:14px;font-weight:500;color:#f6f6f4;text-decoration:none;display:flex;align-items:center;gap:8px}
+.hv-matched-nav .nav-mark{font-size:19px;font-weight:800;letter-spacing:-.06em;color:#f6f6f4}
+@media(max-width:900px){.hv-matched-nav .nav-inner{width:calc(100vw - 40px)}}
+@media(max-width:600px){.hv-matched-nav .nav-inner{width:calc(100vw - 28px);padding:18px 0}}
+.apple-haevichi-hero{width:100%;position:relative;overflow:hidden;padding:104px 0 72px;background:#f7f6f2;color:#171717}
+.apple-haevichi-hero .p-hero-inner{width:min(1600px,calc(100% - 96px));margin:0 auto;position:relative;z-index:2}
+.apple-haevichi-hero .p-hero-inner > :not(.live-embed){margin-left:24px;margin-right:80px}
+.apple-haevichi-hero .hero-ocean{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.apple-haevichi-hero .ocean-photo{position:absolute;inset:-5%;width:110%;height:110%;background-image:var(--apple-hero-image);background-size:cover;background-position:center 38%;filter:grayscale(100%) contrast(.88) brightness(1.52);opacity:.82;animation:appleOceanDrift 38s ease-in-out infinite alternate;will-change:transform;transform-origin:center center}
+@keyframes appleOceanDrift{0%{transform:scale(1.02) translate3d(0,0,0)}50%{transform:scale(1.06) translate3d(-1.2%,-0.5%,0)}100%{transform:scale(1.09) translate3d(-2.2%,-1.4%,0)}}
+.apple-haevichi-hero .hero-ocean:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(247,246,242,.48),rgba(247,246,242,.64) 45%,rgba(247,246,242,.93))}
+.apple-haevichi-hero .apple-logo-mark{font-size:28px;font-weight:800;line-height:34px;height:34px;margin-bottom:18px;letter-spacing:-.07em}
+.apple-haevichi-hero .p-eyebrow{display:flex;align-items:center;gap:12px;font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#1a5fa1;margin-bottom:24px}
+.apple-haevichi-hero .p-eyebrow:before{content:"";width:28px;height:1px;background:#1a5fa1}
+.apple-haevichi-hero .status-badge{font-size:11.5px;font-weight:700;letter-spacing:.04em;border:1px solid #1a5fa1;border-radius:999px;padding:4px 11px}
+.apple-haevichi-hero .p-title{font-size:56px;font-weight:700;letter-spacing:-.02em;line-height:1.16;margin:0 0 10px;color:#171717}
+.apple-haevichi-hero .p-title-en{font-size:17px;font-weight:500;color:#888;margin-bottom:40px}
+.apple-haevichi-hero .p-hook{max-width:700px;font-size:17px;font-weight:400;line-height:1.85;margin:0 0 48px;color:#4b4d48}
+.apple-haevichi-hero .apple-accent{font-weight:600;color:#1a5fa1}
+.apple-haevichi-hero .meta-row{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;padding-top:32px;border-top:1px solid #d6d6d4}
+.apple-haevichi-hero .meta-row strong{display:block;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:#888;font-weight:700;margin-bottom:10px}
+.apple-haevichi-hero .meta-row span{display:block;font-size:15px;font-weight:400;line-height:1.65}
+.apple-haevichi-hero .meta-links{display:flex;gap:10px;margin-top:8px}
+.apple-haevichi-hero .meta-links a{font-size:13px;font-weight:500;border:1px solid #d6d6d4;padding:7px 14px;border-radius:999px;text-decoration:none;color:#171717}
+.apple-haevichi-hero .hv-mypart{display:flex;align-items:stretch;flex-wrap:wrap;gap:10px;margin:38px 0 34px}
+.apple-haevichi-hero .hv-mypart-label{display:inline-flex;align-items:center;font-size:11px;font-weight:800;letter-spacing:.12em;color:#858585;margin-right:6px}
+.apple-haevichi-hero .hv-part{display:flex;flex-direction:column;gap:3px;padding:11px 18px 12px;border-radius:14px;background:#145c9c;color:#fff;text-decoration:none}
+.apple-haevichi-hero .hv-part.is-shared{background:#fff;color:#444;border:1px solid #ddd}
+.apple-haevichi-hero .hv-part b{font-size:13px}.apple-haevichi-hero .hv-part em{font-size:10px;font-style:normal;opacity:.82}
+.apple-haevichi-hero .hv-mypart-more{align-self:center;font-size:13px;font-weight:600;text-decoration:none;color:#145c9c;margin-left:6px}
+.apple-haevichi-hero .live-embed{border:1px solid #dededa;background:#1c1c1a;width:min(1840px,calc(100vw - 80px));margin:36px 50% 0;transform:translateX(-50%);max-width:none}
+.apple-haevichi-hero .live-embed-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:#2a2a28;border-bottom:1px solid #3a3a38}
+.apple-haevichi-hero .dots{display:flex;gap:6px}.apple-haevichi-hero .dots span{width:9px;height:9px;border-radius:50%;background:#4a4a48}
+.apple-haevichi-hero .url{flex:1;text-align:center;font-size:12px;font-weight:500;color:#b8b8b4}
+.apple-haevichi-hero .open-new{font-size:12px;font-weight:600;color:#fff;background:#1a5fa1;padding:5px 12px;border-radius:999px;text-decoration:none}
+.apple-haevichi-hero .apple-browser-content{height:940px;background:#0e0e10;overflow:hidden}
+.apple-haevichi-hero .apple-hero-shot{display:block;width:100%;height:auto;min-height:100%;object-fit:cover;object-position:top center;max-width:none}
+@media(max-width:850px){.apple-haevichi-hero{padding:80px 0 60px}.apple-haevichi-hero .live-embed{width:calc(100vw - 32px);margin-top:30px}.apple-haevichi-hero .p-title{font-size:clamp(34px,6vw,56px)}.apple-haevichi-hero .meta-row{grid-template-columns:repeat(2,1fr)}.apple-haevichi-hero .apple-browser-content{height:600px}}
+@media(max-width:540px){.hv-matched-nav .nav-inner,.apple-haevichi-hero .p-hero-inner{width:calc(100% - 36px)}.apple-haevichi-hero .meta-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.apple-haevichi-hero .p-hero-inner > :not(.live-embed){margin-left:0;margin-right:0}.apple-haevichi-hero .p-hook{font-size:15px}.apple-haevichi-hero .hv-mypart{gap:7px}.apple-haevichi-hero .apple-browser-content{height:450px}}
+@media(prefers-reduced-motion:reduce){.apple-haevichi-hero .ocean-photo{position:absolute;inset:-5%;width:110%;height:110%;background-image:var(--apple-hero-image);background-size:cover;background-position:center 38%;filter:grayscale(100%) contrast(.88) brightness(1.52);opacity:.82;animation:appleOceanDrift 38s ease-in-out infinite alternate;will-change:transform;transform-origin:center center}}
+</style><style id="haevichi-footer-parity">
+footer.hv-shared-footer{box-sizing:border-box;margin:0!important;padding:64px 0 48px!important;border:0!important;border-top:1px solid rgba(255,255,255,.14)!important;background:#111114!important;color:#fff!important;width:100%!important;min-height:145px!important}
+footer.hv-shared-footer .footer-inner{width:min(1600px,calc(100% - 80px));max-width:1600px;margin:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:25px;flex-wrap:wrap}
+footer.hv-shared-footer .footer-mark{font:700 15px/1.5 system-ui,sans-serif;color:rgba(255,255,255,.5)!important}
+footer.hv-shared-footer .footer-mark a{color:white!important;text-decoration:none!important}
+footer.hv-shared-footer .footer-links{display:flex;gap:28px;flex-wrap:wrap;font:500 13px/1.6 system-ui,sans-serif}
+footer.hv-shared-footer .footer-links a{color:rgba(255,255,255,.72)!important;text-decoration:none!important}
+footer.hv-shared-footer .footer-links a:hover{color:#8fb9dc!important}
+@media(max-width:680px){footer.hv-shared-footer .footer-inner{width:calc(100% - 40px)}}
+</style><style id="editorial-middle-only-2026">
+/* Intentionally scoped to content sections; no changes to hero/header/footer. */
+.design-middle{--dm-ink:#18222f;--dm-accent:#0056b3;--dm-surface:#f5f8fc;--dm-line:rgba(25,62,99,.14);color:var(--dm-ink)}
+.design-middle.dm-apple{--dm-ink:#f3f5f8;--dm-accent:#a8c5ed;--dm-surface:#181b23;--dm-line:rgba(255,255,255,.15)}
+.design-middle.dm-wells{--dm-ink:#1c3025;--dm-accent:#286340;--dm-surface:#f0f5f0;--dm-line:rgba(43,95,62,.2)}
+.design-middle h2{font-size:clamp(32px,4vw,58px)!important;line-height:1.16!important;letter-spacing:-.055em!important;text-wrap:balance;margin-bottom:22px!important}
+.design-middle h3{line-height:1.3!important;letter-spacing:-.03em!important}
+.design-middle p,.design-middle li,.design-middle dd{line-height:1.85!important;letter-spacing:-.008em!important}
+.design-middle .lh-lead,.design-middle .lead,.design-middle .muted{opacity:1!important;color:inherit!important;max-width:740px!important}
+.design-middle .ux-grid,.design-middle .grid-2,.design-middle .persona-grid{gap:24px!important}
+.design-middle .ux-card,.design-middle .card{border-radius:18px!important;box-shadow:none!important;transition:box-shadow .8s ease,border-color .8s ease!important}
+.design-middle .ux-card:hover,.design-middle .card:hover{transform:none!important;box-shadow:0 12px 30px rgba(0,0,0,.06)!important}
+.design-middle .dm-persona{display:grid!important;grid-template-columns:minmax(150px,26%) minmax(0,1fr)!important;align-items:stretch!important;gap:0!important;overflow:hidden!important;border:1px solid var(--dm-line)!important;border-radius:18px!important;background:var(--dm-surface)!important;min-height:248px!important;padding:0!important;box-shadow:none!important;transform:none!important}
+.design-middle .dm-persona-portrait{display:flex;align-items:center;justify-content:center;min-height:248px;background:color-mix(in srgb,var(--dm-accent) 12%,var(--dm-surface));padding:24px}
+.design-middle .dm-persona-portrait svg{width:min(100%,132px);height:auto;opacity:.8}
+.design-middle .dm-persona-copy{padding:clamp(22px,3.2vw,46px)!important;min-width:0}
+.design-middle .dm-persona-copy h3{font-size:clamp(20px,2vw,30px)!important;margin:5px 0 14px!important;color:var(--dm-ink)!important}
+.design-middle .dm-persona-copy blockquote{font-size:clamp(17px,1.6vw,23px)!important;font-weight:650!important;line-height:1.55!important;margin:12px 0 20px!important;padding:0!important;color:var(--dm-ink)!important;background:none!important;border:none!important}
+.design-middle .dm-persona-copy p{font-size:14px!important;max-width:680px!important;color:var(--dm-ink)!important;opacity:.85!important}
+.design-middle .dm-persona-copy dl{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))!important;gap:14px!important;margin-top:20px!important}
+.design-middle .dm-persona-copy dt{font-size:11px!important;letter-spacing:.05em!important;font-weight:750!important;color:var(--dm-accent)!important}
+.design-middle .dm-persona-copy dd{font-size:13px!important;margin:7px 0 0!important;color:var(--dm-ink)!important}
+.design-middle .dm-persona-copy .ux-kicker{color:var(--dm-accent)!important}
+.design-middle img{max-width:100%}
+.design-middle.dm-wells p,.design-middle.dm-wells small,.design-middle.dm-wells .muted{color:#294335!important;opacity:1!important}
+.design-middle.dm-wells .reveal,.design-middle.dm-wells .fade-up{transition:opacity 1.15s cubic-bezier(.22,1,.36,1), transform 1.15s cubic-bezier(.22,1,.36,1)!important;transition-delay:0ms!important}
+.design-middle.dm-wells .card:hover,.design-middle.dm-wells img:hover{transform:none!important;filter:none!important}
+@media(max-width:680px){.design-middle .dm-persona{grid-template-columns:110px minmax(0,1fr)!important}.design-middle .dm-persona-portrait{min-height:230px;padding:12px}.design-middle .dm-persona-copy{padding:16px!important}.design-middle .dm-persona-copy h3{font-size:18px!important}.design-middle .dm-persona-copy blockquote{font-size:15px!important}}
+@media(prefers-reduced-motion:reduce){.design-middle *{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style></head>
+<body>
+<header class="hv-matched-nav"><div class="nav-inner"><a class="back-link" href="#" id="apple-case-back">← Works</a><div class="nav-mark">Da-som</div></div></header>
+<section class="p-hero apple-haevichi-hero" id="apple-hero"><div aria-hidden="true" class="hero-ocean"><div class="ocean-photo"></div></div><div class="p-hero-inner">
+<div class="apple-logo-mark hero-anim"><img src="assets/portfolio-media/deef988d451657a4600e4a58.webp" alt="Apple TV" width="47" height="24" /></div>
+<div class="p-eyebrow hero-anim">OTT · TEAM PROJECT <span class="status-badge">UX/UI REDESIGN</span></div>
+<h1 class="p-title hero-anim">Apple TV OTT 리뉴얼</h1>
+<div class="p-title-en hero-anim">Apple TV — UX/UI Redesign</div>
+<p class="p-hook hero-anim">영화·시리즈의 몰입감과 MLS 스포츠의 실시간성을 하나의 Apple TV 경험으로 연결했습니다. <span class="apple-accent">발견은 더 쉽게, 시청은 더 깊게.</span></p>
+<div class="meta-row hero-anim-2">
+<div><strong>Role</strong><span>팀 프로젝트 · UX/UI 설계</span><span>스포츠 상세 구조 정리</span></div>
+<div><strong>Period</strong><span>2026.09 – 2026.10</span></div>
+<div><strong>Tools</strong><span>Figma · Wireframe · Hi-fi UI</span><span>IA · User Journey Map · Style Guide</span></div>
+<div><strong>Links</strong><div class="meta-links"><a href="#apple-problem">Process</a><a href="#apple-match-detail">Sports Detail</a></div></div>
+</div>
+<div class="hv-mypart hero-anim-2">
+<span class="hv-mypart-label">핵심 설계</span>
+<a class="hv-part is-mine" href="#apple-problem"><b>Content Discovery</b><em>영화·시리즈 탐색 경험</em></a>
+<a class="hv-part is-mine" href="#apple-match-detail"><b>Sports Detail</b><em>경기 정보 · 중계 · 기록</em></a>
+<a class="hv-part is-shared" href="#apple-ia"><b>UX Structure</b><em>페르소나 · IA · 디자인 시스템</em></a>
+<a class="hv-mypart-more" href="#apple-problem">자세히 ↓</a>
+</div>
+<div class="live-embed hero-anim-2">
+<div class="live-embed-bar"><div class="dots"><span></span><span></span><span></span></div><div class="url">Apple TV · Sports Home Preview</div><a class="open-new" href="#apple-match-detail">상세 보기 ↗</a></div>
+<div class="apple-browser-content"><img alt="Apple TV 스포츠 메인 화면" class="apple-hero-shot" src="assets/portfolio-media/5dced8524a8309e10de8d48e.webp"/></div>
+</div>
+</div></section>
+<section class="design-middle dm-apple section" id="apple-problem">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="ey">Problem</div>
+<h2>무엇이 불편했고, 무엇을 바꿨는가</h2>
+</div>
+<p>영화·시리즈는 발견과 구독 가치 전달, 스포츠는 경기 정보와 시청 흐름에서 각각 다른 불편이 있었습니다. 두 경험을 하나의 설계 원칙으로 해결했습니다.</p>
+</div>
+<div class="grid-3">
+<article class="card">
+<div class="k">Pain Point 01</div>
+<h3>탐색 구조가 복잡함</h3>
+<p>어떤 콘텐츠가 있는지 한눈에 파악하기 어렵고, 프로모션 중심 배치가 많아 목적지까지 도달하는 경로가 길었습니다.</p>
+</article>
+<article class="card">
+<div class="k">Pain Point 02</div>
+<h3>시청 직전 정보가 부족함</h3>
+<p>회차 정보, 진행률, 경기 상태, 재생 오류 원인 같은 상세 안내가 약해 사용자가 중요한 순간에 망설이게 됩니다.</p>
+</article>
+<article class="card">
+<div class="k">Pain Point 03</div>
+<h3>재방문 동력이 약함</h3>
+<p>이어보기, 관심 구단 알림, 다음 콘텐츠 추천의 연결이 느슨해 반복 사용 흐름이 자연스럽게 이어지지 않았습니다.</p>
+</article>
+</div>
+<div class="highlight-band">
+<div>
+<h3>핵심 전략은 “쉽게 이해하고, 바로 보고, 다시 오게 만드는 것”</h3>
+<p>브랜드 감성은 유지하되 구조는 더 선명하게 만들었습니다. 신규 유저에게는 서비스의 가치가 바로 보이도록, 기존 유저에게는 이어보기와 다음 탐색이 끊기지 않도록 설계했습니다.</p>
+</div>
+<div class="mini">
+<div class="box"><b>Discovery</b> 카테고리보다 사용자의 행동 흐름이 먼저 보이게 구조화</div>
+<div class="box"><b>Watching</b> 경기 시청과 상세 정보 탐색이 동시에 가능한 탭 설계</div>
+<div class="box"><b>Return</b> 관심 구단 · 추천 · 다시보기로 재방문 동선 강화</div>
+</div>
+</div>
+</div>
+</section>
+<section class="design-middle dm-apple section dark">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="ey">Persona &amp; Journey</div>
+<h2>누구를 위한 구조인지 먼저 정리</h2>
+</div>
+<p>신규 사용자와 기존 사용자의 목적이 다르기 때문에, 여정맵과 페르소나를 통해 화면 구조의 우선순위를 구분했습니다.</p>
+</div>
+<div class="grid-2">
+<article class="card">
+<div class="k">Persona 01</div>
+<h3>신규 · 비구독 탐색 사용자</h3>
+<p><b>김서윤, 29세</b> — 작품에 관심은 있지만 서비스 가치와 작품 차별성이 명확하지 않으면 구독 결정을 망설이는 사용자입니다.</p>
+<ul class="bullet">
+<li>필요: 서비스 가치와 작품 차별성 파악</li>
+<li>문제: 프로모션 위주의 진입과 긴 탐색 흐름</li>
+<li>전략: Guided Discovery + Value Communication</li>
+</ul>
+</article>
+<article class="card">
+<div class="k">Persona 02</div>
+<h3>기존 구독 · 반복 시청 사용자</h3>
+<p><b>이준호, 34세</b> — 보던 작품을 바로 이어보고, 다음 콘텐츠도 고민 없이 찾고 싶은 충성 사용자입니다.</p>
+<ul class="bullet">
+<li>필요: 빠른 이어보기와 다음 추천</li>
+<li>문제: 이어보기와 기록/탐색 흐름의 단절</li>
+<li>전략: Continue → Next Discovery 흐름 강화</li>
+</ul>
+</article>
+</div>
+</div>
+<div class="ux-journeys"><div class="ux-journey"><b>01 / 신규 탐색</b><div class="ux-steps"><span>서비스 발견</span><span>작품 탐색</span><span>가치 확인</span><span>구독 판단</span><span>첫 시청</span><span>재방문</span></div><p>구독 전에 가치가 분명히 보이도록 콘텐츠 발견과 안내를 강화합니다.</p></div><div class="ux-journey"><b>02 / 기존 구독</b><div class="ux-steps"><span>앱 재진입</span><span>이어보기</span><span>작품 몰입</span><span>다음 작품</span><span>후보 비교</span><span>새 시청</span></div><p>재진입부터 다음 콘텐츠까지 끊기지 않는 흐름을 설계합니다.</p></div></div></section>
+<section class="design-middle dm-apple section">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="ey">Home Design</div>
+<h2>홈 화면은 ‘검증된 구조’에서 ‘최종 경험’으로</h2>
+</div>
+<p>사진을 단순히 나열하지 않고, 어떤 과정을 거쳐 화면이 발전했는지 이해되도록 lo-fi → hi-fi 흐름으로 재배치했습니다.</p>
+</div>
+<div class="gallery-2">
+<article class="image-card">
+<div class="image-surface"><img alt="Lo-fi 와이어프레임" src="assets/portfolio-media/5ade83b61dd8198bf6f6099d.webp"/></div>
+<div class="caption">
+<h3>Lo-fi · 핵심 섹션 구조 검증</h3>
+<p>진행중 경기, 예정 경기, 숏츠, 리그 순위, 하이라이트가 어떤 순서와 밀도로 배치되어야 하는지 먼저 검증했습니다.</p>
+</div>
+</article>
+<article class="image-card">
+<div class="image-surface"><img alt="Hi-fi 스포츠 홈" src="assets/portfolio-media/5dced8524a8309e10de8d48e.webp"/></div>
+<div class="caption">
+<h3>Hi-fi · Sports Home 최종 방향</h3>
+<p>시네마틱한 히어로 이미지와 카드형 콘텐츠를 결합해 브랜드 감성은 유지하면서 정보의 우선순위는 더 선명하게 드러냈습니다.</p>
+</div>
+</article>
+</div>
+</div>
+</section>
+<section class="design-middle dm-apple section dark" id="apple-match-detail"><div class="wrap"><div class="section-head"><div><div class="ey">04 / MATCH DETAIL</div><h2>경기를 보면서, 필요한 정보는 바로</h2></div><p>하나의 컴팩트한 웹 목업 안에서 중계·기록·채팅·다시보기를 좌우로 넘겨 확인할 수 있습니다.</p></div><div class="ux-match-layout"><div class="ux-match-stage"><div class="ux-browser-top"><div class="ux-browser-dots"><i></i><i></i><i></i></div><span>tv.apple.com / sports / match</span><span>APPLE TV · MLS</span></div><div class="ux-slides"><figure class="ux-match-slide is-active" data-index="0"><img alt="경기 중계 · 타임라인 UI 화면" src="assets/portfolio-media/76bfc9b3342494e55f6c0898.webp"/><figcaption><b>01 / 경기 중계 · 타임라인</b><span>득점과 주요 이벤트의 시간대 확인</span></figcaption></figure><figure class="ux-match-slide" data-index="1"><img alt="경기 기록 · 통계 UI 화면" src="assets/portfolio-media/b508256c566fbbf7b5704581.webp"/><figcaption><b>02 / 경기 기록 · 통계</b><span>스코어와 주요 기록 빠른 비교</span></figcaption></figure><figure class="ux-match-slide" data-index="2"><img alt="실시간 채팅 UI 화면" src="assets/portfolio-media/e524a7117aee512ebacafbca.webp"/><figcaption><b>03 / 실시간 채팅</b><span>시청 중 팬 반응을 함께 탐색</span></figcaption></figure><figure class="ux-match-slide" data-index="3"><img alt="영상 다시보기 UI 화면" src="assets/portfolio-media/1bb32c9bf4c9a3d2a28bfc18.webp"/><figcaption><b>04 / 영상 다시보기</b><span>종료 후에도 다시 시청으로 연결</span></figcaption></figure></div><div class="ux-slider-nav"><button aria-label="이전 화면" class="ux-slide-prev" type="button">←</button><div class="ux-slide-indicator"><strong>01</strong><span> / 04</span></div><button aria-label="다음 화면" class="ux-slide-next" type="button">→</button></div></div><div class="ux-match-notes"><div class="ux-smallcap">DESIGN INTENT</div><h3>시청은 유지하고<br/>탐색만 가볍게.</h3><p>경기 시청의 맥락을 잃지 않고 필요한 정보로 이동할 수 있도록 탭·기록·리플레이를 한 경험으로 설계했습니다.</p><div class="ux-note-steps"><div><small>01</small><span>Live</span><b>경기 상태 파악</b></div><div><small>02</small><span>Detail</span><b>스코어·기록 탐색</b></div><div><small>03</small><span>Social</span><b>실시간 팬 소통</b></div><div><small>04</small><span>Replay</span><b>종료 후 다시보기</b></div></div></div></div></div></section>
+<section class="design-middle dm-apple section">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="ey">Discovery &amp; Return</div>
+<h2>시청 이후의 확장 탐색과 재방문 흐름</h2>
+</div>
+<p>사용자가 한 경기만 보고 끝나지 않도록 리그 이해, 관심 구단 등록, 다음 탐색의 흐름을 함께 설계했습니다.</p>
+</div>
+<div class="gallery-2">
+<article class="image-card">
+<div class="image-surface"><img alt="리그 순위" src="assets/portfolio-media/0a9dacd28636a9cbf01cd40a.webp"/></div>
+<div class="caption"><h3>리그 순위 · 선수 랭킹</h3><p>경기 소비 이후 더 깊게 탐색할 수 있도록 팀 순위와 선수 순위를 한 화면 흐름으로 연결했습니다.</p></div>
+</article>
+<article class="image-card">
+<div class="image-surface"><img alt="관심 구단 등록" src="assets/portfolio-media/51e8bbab6a04205c3b1fb8d0.webp"/></div>
+<div class="caption"><h3>관심 구단 등록</h3><p>선호 팀을 등록하면 일정과 알림을 받을 수 있도록 하여 개인화와 재방문 동기를 강화했습니다.</p></div>
+</article>
+</div>
+</div>
+</section>
+<section class="design-middle dm-apple section dark" id="apple-ia"><div class="wrap"><div class="section-head"><div><div class="ey">06 / IA &amp; OUTPUTS</div><h2>사용자의 목적에서 화면 구조까지</h2></div><p>페르소나 → 불편한 경험 → 필요한 기능 → 정보구조와 플로우차트로 이어지는 설계 과정입니다. 모든 다이어그램은 웹 요소로 직접 구성했습니다.</p></div>
+<div class="ux-personas"><article class="ux-persona"><div class="ux-avatar ux-avatar-a"><img alt="김서윤 페르소나 프로필 사진" src="assets/portfolio-media/742ab0dde915b7cf556a73f7.jpg"/></div><div class="ux-persona-body"><span class="ux-smallcap">PERSONA 01 · NEW VIEWER</span><h3>김서윤 <small>29세 · 마케팅 직장인</small></h3><blockquote>“볼 만한 작품이 있는지 알기도 전에 구독부터 결정하라고 해서 망설여져요.”</blockquote><div class="ux-tags"><span>작품 비교 어려움</span><span>구독 가치 불명확</span></div><p><b>설계 대응</b> — 영화·시리즈 콘텐츠의 발견 경로와 작품의 추천 이유, 구독 가치 안내를 명확하게.</p></div></article><article class="ux-persona"><div class="ux-avatar ux-avatar-b"><img alt="이준호 페르소나 프로필 사진" src="assets/portfolio-media/380540d5b7ab3d9051b7cdc2.jpg"/></div><div class="ux-persona-body"><span class="ux-smallcap">PERSONA 02 · RETURNING VIEWER</span><h3>이준호 <small>34세 · 콘텐츠 소비가 잦은 직장인</small></h3><blockquote>“어디까지 봤는지 찾고, 다음에 뭘 볼지 다시 고르는 과정이 번거로워요.”</blockquote><div class="ux-tags"><span>이어보기 동선</span><span>다음 작품 발견</span></div><p><b>설계 대응</b> — 이어보기와 다음 작품 추천을 연결하고 스포츠는 관심 구단의 경기·다시보기로 재방문 유도.</p></div></article></div>
+<div class="ux-diagram-title"><span>01 / INFORMATION ARCHITECTURE</span><h3>영화·시리즈와 스포츠, 두 갈래의 명료한 IA</h3></div>
+<div class="ux-ia-tree"><div class="ux-tree-root">Apple TV <small>CONTENT EXPERIENCE</small></div><div class="ux-tree-branches"><div class="ux-tree-branch"><div class="ux-tree-h">영화 · 시리즈 <em>DISCOVER</em></div><div class="ux-tree-items"><div>추천 및 탐색 <small>장르 · 테마 · 큐레이션</small></div><div>작품 상세 <small>줄거리 · 예고편 · 회차</small></div><div>이어보기 <small>시청 진도 · 다음 에피소드</small></div><div>MY 리스트 <small>찜 · 개인화 추천</small></div></div></div><div class="ux-tree-branch sports"><div class="ux-tree-h">MLS 스포츠 <em>WATCH LIVE</em></div><div class="ux-tree-items"><div>스포츠 홈 <small>라이브 · 예정 · 하이라이트</small></div><div>경기 상세 <small>중계 · 기록 · 채팅</small></div><div>리그 정보 <small>순위 · 경기 일정 · 구단</small></div><div>나의 구단 <small>관심 팀 · 알림 · 다시보기</small></div></div></div></div><div class="ux-tree-footer">COMMON LAYER <span>통합 검색</span><span>프로필 · 설정</span><span>구독 · 결제</span><span>TV+ Assistant</span></div></div>
+<div class="ux-diagram-title"><span>02 / USER FLOW</span><h3>방문 목적에 따라 동선을 다르게 설계</h3></div>
+<div class="ux-flow-pair"><article><div class="ux-flow-label">FLOW A <b>영화·시리즈 발견</b></div><div class="ux-flow-line"><div>Apple TV 진입</div><i>↓</i><div>추천 · 카테고리</div><i>↓</i><div>작품 상세 및 가치 확인</div><i>↓</i><div class="ux-decision">지금 시청 가능한가?</div><div class="ux-flow-branch"><div><small>YES</small>시청 시작</div><div><small>NO</small>구독 안내</div></div></div></article><article><div class="ux-flow-label">FLOW B <b>MLS 경기 탐색</b></div><div class="ux-flow-line"><div>스포츠 탭 진입</div><i>↓</i><div>라이브 · 예정 경기</div><i>↓</i><div>경기 상세 정보 확인</div><i>↓</i><div class="ux-decision">경기가 진행 중인가?</div><div class="ux-flow-branch"><div><small>LIVE</small>중계·기록·채팅</div><div><small>ENDED</small>하이라이트·다시보기</div></div></div></article></div>
+<div class="ux-diagram-title"><span>03 / SITEMAP</span><h3>실제 메뉴와 상세 진입점을 한 번 더 검증</h3></div><div class="ux-sitemap"><div><b>HOME</b><small>개인화 추천 · 큐레이션</small></div><div><b>MOVIE / SERIES</b><small>추천 · 장르 · 작품 상세 · 회차</small></div><div><b>SPORTS</b><small>라이브 · 일정 · 순위 · 숏츠 · 다시보기</small></div><div><b>MY</b><small>찜 · 시청 기록 · 관심 구단</small></div><div><b>ACCOUNT</b><small>로그인 · 구독 · 설정 · 고객지원</small></div></div>
+</div></section>
+<section class="design-middle dm-apple section" id="apple-style-guide"><div class="wrap"><div class="section-head"><div><div class="ey">07 / STYLE GUIDE</div><h2>영화의 몰입감, 스포츠의 가독성을 함께</h2></div><p>해비치·청약플러스 프로젝트처럼 토큰과 컴포넌트를 표준화해 화면마다 일관된 시각 언어를 사용했습니다.</p></div><div class="ux-guide"><div class="ux-guide-heading"><span>01 / COLOR TOKENS</span><h3>Black First. Clear Accent.</h3><p>콘텐츠 이미지를 가장 앞에 두고, 상태 정보와 중요한 버튼에만 강조색을 사용합니다.</p></div><div class="ux-swatches"><div class="ux-swatch" style="--sw:#09090b;color:#fff"><b>Primary Black</b><small>#09090B</small></div><div class="ux-swatch" style="--sw:#1c1c1e;color:#fff"><b>Surface</b><small>#1C1C1E</small></div><div class="ux-swatch" style="--sw:#3a3a3c;color:#fff"><b>Elevated</b><small>#3A3A3C</small></div><div class="ux-swatch" style="--sw:#f5f5f7;color:#171717"><b>Off White</b><small>#F5F5F7</small></div><div class="ux-swatch" style="--sw:#e5252a;color:#fff"><b>Live / Alert</b><small>#E5252A</small></div><div class="ux-swatch" style="--sw:#70b8ff;color:#10151b"><b>Focus / Info</b><small>#70B8FF</small></div></div>
+<div class="ux-guide-grid"><div class="ux-guide-panel"><span>02 / TYPOGRAPHY</span><div class="ux-type-hero">Aa 가</div><h3>Inter / Pretendard</h3><div class="ux-type-row"><strong style="font-size:27px">Display 32</strong><small>작품·섹션 제목</small></div><div class="ux-type-row"><strong style="font-size:19px">Heading 20</strong><small>카드·모듈 헤딩</small></div><div class="ux-type-row"><strong style="font-size:14px">Body 14–16</strong><small>내용·설명 텍스트</small></div><div class="ux-type-row"><strong style="font-size:12px">Caption 12</strong><small>상태·보조 정보</small></div></div><div class="ux-guide-panel"><span>03 / COMPONENTS</span><h3>콘텐츠를 방해하지 않는 UI</h3><div class="ux-components"><div><label>BUTTONS</label><button class="ux-demo-primary" type="button">▶ 지금 시청하기</button><button class="ux-demo-second" type="button">＋ 찜하기</button></div><div><label>STATUS</label><span class="ux-live">● LIVE</span><span class="ux-upcoming">예정된 경기</span><span class="ux-ended">다시보기</span></div><div><label>SPORTS TAB</label><div class="ux-demo-tabs"><b>중계</b><span>기록</span><span>채팅</span><span>라인업</span></div></div><div><label>CARD RADIUS / SPACING</label><div class="ux-demo-radii"><span>8 px</span><span>12 px</span><span>16 px</span><span>24 px</span></div></div></div></div></div><div class="ux-guide-footer"><div><b>GRID</b><span>12 columns · Desktop / 4 columns · Mobile</span></div><div><b>SPACING</b><span>8px base unit · 8 / 16 / 24 / 32 / 48</span></div><div><b>UX RULE</b><span>명확한 포커스 · 충분한 대비 · 상태를 색상만으로 구분하지 않기</span></div></div></div></div></section>
+<section class="design-middle dm-apple section dark">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="ey">Review &amp; Next</div>
+<h2>장단점 분석과 다음 개선 방향</h2>
+</div>
+<p>무엇이 좋았고 어떤 점은 더 보완해야 하는지 명확하게 드러나도록 마지막 리뷰 섹션을 구성했습니다.</p>
+</div>
+<div class="grid-2">
+<article class="card">
+<div class="k">Strengths</div>
+<h3>브랜드 감성과 실용성의 균형</h3>
+<p>시네마틱한 무드와 여백의 미를 유지하면서도 탐색, 이어보기, 가치 이해 같은 실제 페인 포인트를 구조적으로 해결했습니다.</p>
+<ul class="bullet">
+<li>신규/기존 사용자 목적 분리</li>
+<li>경기 상세의 정보 구조 명확화</li>
+<li>리그/구단/다시보기로 확장 탐색 강화</li>
+</ul>
+</article>
+<article class="card">
+<div class="k">Weaknesses</div>
+<h3>AI 의존성과 정보 과부하 가능성</h3>
+<p>TV+ Assistant와 다양한 정보 계층이 과해지면 시각적 브라우징을 선호하는 사용자에게 오히려 부담이 될 수 있습니다.</p>
+<ul class="bullet">
+<li>챗봇은 플로팅/위젯 형태로 최소 노출</li>
+<li>추천에는 짧은 근거 태그 제공</li>
+<li>에러/구독 상태는 원클릭 해결 방식 강화</li>
+</ul>
+</article>
+</div>
+</div>
+</section>
+<footer class="hv-shared-footer"><div class="footer-inner"><div class="footer-mark"><a href="#" onclick="event.preventDefault();parent.postMessage({type:'apple-case-close'},'*')">← 뒤로가기</a></div><div class="footer-links">
+      <a href="https://github.com/dlwndmsindiyo-juju/AppleTV.git" target="_blank" rel="noopener">GitHub</a>
+      <a href="#" aria-disabled="true" onclick="event.preventDefault()" target="_blank" rel="noopener">Live Site</a>
+    </div></div></footer>
+<script>
+document.getElementById('apple-case-back').addEventListener('click',function(e){e.preventDefault();try{parent.postMessage({type:'apple-case-close'},'*')}catch(error){} });
+</script><script>
+(function(){
+const area=document.getElementById('apple-match-detail');if(!area)return;
+let index=0;const slides=[...area.querySelectorAll('.ux-match-slide')];const number=area.querySelector('.ux-slide-indicator strong');
+function show(n){index=(n+slides.length)%slides.length;slides.forEach((el,i)=>{el.classList.toggle('is-active',i===index);el.setAttribute('aria-hidden',i===index?'false':'true')});number.textContent=String(index+1).padStart(2,'0')}
+area.querySelector('.ux-slide-prev').addEventListener('click',()=>show(index-1));area.querySelector('.ux-slide-next').addEventListener('click',()=>show(index+1));show(0);
+})();
+</script>
+<style id="apple-only-scroll-reveal-v5">
+/* Apple TV below-hero reveal only; header, hero, and external project routing unchanged. */
+body.ap-motion-ready section.section .ap-motion-item{opacity:0;transform:translate3d(0,70px,0);transition:opacity .95s cubic-bezier(.22,.68,.2,1),transform .95s cubic-bezier(.18,.76,.2,1);will-change:opacity,transform}
+body.ap-motion-ready section.section .ap-motion-item.ap-in-view{opacity:1;transform:translate3d(0,0,0)}
+@media(prefers-reduced-motion:reduce){body.ap-motion-ready section.section .ap-motion-item{opacity:1!important;transform:none!important;transition:none!important}}
+</style>
+<script id="apple-only-scroll-reveal-script">
+(function(){
+  function init(){
+    var sections=Array.from(document.querySelectorAll('section.section'));
+    var elements=[];
+    sections.forEach(function(section){
+      if(section.id==='apple-hero'||section.classList.contains('apple-haevichi-hero'))return;
+      var wrap=section.querySelector(':scope > .wrap');
+      var children=wrap ? Array.from(wrap.children) : Array.from(section.children);
+      children.filter(function(el){return el.tagName!=='SCRIPT' && el.tagName!=='STYLE';}).forEach(function(el){
+        el.classList.add('ap-motion-item');
+        elements.push(el);
+      });
+    });
+    if(!elements.length)return;
+    if(!('IntersectionObserver' in window)||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    // Set visible elements before enabling the hidden state; never hide the currently displayed content.
+    elements.forEach(function(el){if(el.getBoundingClientRect().top<window.innerHeight*.92){el.classList.add('ap-in-view');}});
+    document.body.classList.add('ap-motion-ready');
+    var observer=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){entry.target.classList.add('ap-in-view');observer.unobserve(entry.target);}
+      });
+    },{threshold:.06,rootMargin:'0px 0px -8% 0px'});
+    elements.forEach(function(el){observer.observe(el);});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+})();
+</script>
+</body>
+</html>

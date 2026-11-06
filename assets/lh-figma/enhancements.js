@@ -114,7 +114,6 @@
     resizeTask = requestAnimationFrame(fitPage);
   }, {passive:true});
 
-  const pending = new WeakMap();
   const sizes = new ResizeObserver(entries => {
     for (const {target} of entries) fitScreen(target);
   });
@@ -183,15 +182,14 @@
         if (viewport.dataset.state !== 'ready') glass.dataset.liveState = 'unavailable';
       }, 18000);
     };
-    pending.set(viewport, load);
-    screenObserver.observe(viewport);
+    // Preserve the exact Figma fallback until this phone is actually explored.
+    // Scrolling past a section must not boot many complete apps in parallel.
+    glass.tabIndex=0;
+    glass.setAttribute('aria-label',frame.title);
+    glass.addEventListener('pointerenter',load,{once:true});
+    glass.addEventListener('focusin',load,{once:true});
+    glass.addEventListener('pointerdown',load,{once:true});
   }
-  const screenObserver = new IntersectionObserver(entries => {
-    for (const entry of entries) if (entry.isIntersecting) {
-      pending.get(entry.target)?.();
-      screenObserver.unobserve(entry.target);
-    }
-  }, {rootMargin:'450px 0px'});
   for (const status of root.querySelectorAll('.lh-design-frame [data-name="Status bar"]')) {
     // Family Signature uses the original shared Canvas state, never independent app pages.
     if (status.closest('[data-frame-id="124:16712"]')) continue;
@@ -301,11 +299,16 @@
     const node = id => signatureSection.querySelector(`[data-node-id="${id}"]`);
     const setText = (id,text) => { const el=node(id); if(el && el.textContent!==text) el.textContent=text; };
     const dialog=document.getElementById('signatureDemo');
-    const showDemo=() => {
-      if(!dialog.open) dialog.showModal();
-      signature.refresh();
-      requestAnimationFrame(() => document.getElementById('signStage').scrollIntoView({block:'nearest'}));
-    };
+    // Move the original, single editable Canvas into the existing Figma phone.
+    // No duplicate screen, dialog, new window or new phone shell is created.
+    const inlinePhone=document.getElementById('phoneB');
+    const familyGlass=node('124:16845');
+    familyGlass.classList.add('lh-inline-signature');
+    familyGlass.append(inlinePhone);
+    const fitInlinePhone=()=>inlinePhone.style.setProperty('--s',String(familyGlass.clientWidth/390));
+    new ResizeObserver(fitInlinePhone).observe(familyGlass);
+    fitInlinePhone();
+    const showDemo=() => { signature.refresh(); };
     const control=(id,label,action) => {
       const el=node(id); if(!el) return;
       el.setAttribute('role','button'); el.setAttribute('aria-label',label); el.tabIndex=0;
@@ -335,6 +338,7 @@
     let previous=signature.state();
     function sync(st) {
       signatureSection.dataset.signatureState=st.signed?'complete':st.sent?'waiting':'request';
+      inlinePhone.hidden=!st.sent;
       node('124:16816').style.visibility=st.sent?'hidden':'visible';
       node('124:16817').style.visibility=st.sent?'hidden':'visible';
       setText('I124:16804;538:7116',st.signed?'✓ 서명 완료':st.sent?'◷ 서명 대기':'! 가족 서명 필요');
@@ -372,6 +376,7 @@
             if(index>=4){signature.reset();return;}
             document.querySelector(`#signSteps [data-step="${index}"]`).click();
             if(index>0 && !signature.state().sent) return;
+            if(index>0 && !signature.state().opened) signature.open();
             showDemo();
           });
         }

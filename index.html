@@ -1778,6 +1778,19 @@ body.wave-main-active .character-img.wave.active{
   }
   #works .v-project-card.project-tile { opacity: 1 !important; }
 </style>
+<style id="dasom-character-guide-2026">
+/* Dedicated non-interactive guide bubble. No modifications to card artwork/layout. */
+#dasom-guide-caption{position:fixed;z-index:29;pointer-events:none;display:flex;flex-direction:column;max-width:235px;gap:5px;opacity:0;transition:opacity .3s ease;padding:13px 16px;border:1px solid rgba(46,38,31,.18);border-radius:17px 17px 17px 4px;background:rgba(255,252,247,.94);box-shadow:0 12px 35px rgba(26,20,16,.10);backdrop-filter:blur(10px);color:#2b241e}
+#dasom-guide-caption .guide-eyebrow{font:750 9px/1.4 'DM Sans',sans-serif;letter-spacing:.13em;color:#ba6b48}
+#dasom-guide-caption .guide-line{font:700 12px/1.5 'Pretendard Variable','DM Sans',sans-serif;letter-spacing:-.03em}
+#dasom-guide-caption .guide-hint{font:450 10px/1.5 'Pretendard Variable','DM Sans',sans-serif;color:#85766b}
+@media(max-width:760px){
+ #dasom-guide-caption{max-width:175px;padding:9px 11px;border-radius:12px}
+ #dasom-guide-caption .guide-line{font-size:10px}
+ #dasom-guide-caption .guide-hint{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){#dasom-guide-caption{transition:none!important}}
+</style>
 </head>
 <body>
   <main class="intro" id="intro">
@@ -5468,6 +5481,22 @@ function apply(p){
  const observe=new IntersectionObserver(entries=>{activeScroll=entries[0].isIntersecting?1:0;},{threshold:.01});observe.observe(stage);
  // Scroll choreography runs independently of the intro observer once portfolio is open.
  let travelP=0, smoothedP=0, lastPhase=-1, traveling=false;
+ // Guide states are based on the actual project title's viewport position.
+ let guideStrength=0, guideEntered=false, greeted=false, lastGuideCard=0;
+ const workSection=document.getElementById('works');
+ const workTitle=workSection?.querySelector('.project-title');
+ const guideCaption=document.createElement('div');
+ guideCaption.id='dasom-guide-caption';
+ guideCaption.setAttribute('aria-live','off');
+ guideCaption.innerHTML='<span class="guide-eyebrow">DASOM GUIDE ↗</span><span class="guide-line">여기서 제 프로젝트들을 만나보세요!</span><span class="guide-hint">카드를 선택하면 자세히 볼 수 있어요.</span>';
+ document.body.appendChild(guideCaption);
+ // Initial hello only once the studio is actually revealed.
+ const greetOnce=()=>{
+   if(greeted||!document.body.classList.contains('vertical-ready'))return;
+   greeted=true;setTimeout(()=>{if(!document.hidden&&!traveling)play(emotes.Wave,.35)},350);
+ };
+ const greetObserver=new MutationObserver(greetOnce);
+ greetObserver.observe(document.body,{attributes:true,attributeFilter:['class']}); greetOnce();
  // Content-first travel: stay quiet as project cards become the focal point.
  const route=[
    [0, 0, .04, .72, 0, 0],
@@ -5554,10 +5583,13 @@ function apply(p){
  document.querySelectorAll('#works .v-project-card.project-tile').forEach(card=>{
    card.addEventListener('pointerenter',()=>{
      const t=performance.now();
-     if(t-lastReaction>1600 && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+     lastGuideCard=t;
+     if(t-lastReaction>1300 && !matchMedia('(prefers-reduced-motion: reduce)').matches){
        lastReaction=t; if(typeof play==='function')play(emotes.Yes,.18);
      }
+     guideCaption.querySelector('.guide-line').textContent='이 프로젝트를 살펴볼까요?';
    });
+   card.addEventListener('pointerleave',()=>{guideCaption.querySelector('.guide-line').textContent='여기서 제 프로젝트들을 만나보세요!';});
  });
  let lastClick=0;
  const clock=new THREE.Clock();
@@ -5567,21 +5599,60 @@ function apply(p){
    if(traveling){
     smoothedP+= (travelP-smoothedP)*.1;
     const m=choreograph(smoothedP);
-    host.style.left=(50+m.x*100)+'%';
-    host.style.top=(49+m.y*100)+'%';
-    host.style.transform='translate(-50%,-50%) scale('+m.scale.toFixed(4)+')';
-    const worksRect=document.getElementById('works')?.getBoundingClientRect();
-    const cardsOnScreen=!!worksRect&&worksRect.top<innerHeight*.82&&worksRect.bottom>innerHeight*.12;
-    host.style.opacity=cardsOnScreen?'.15':(smoothedP<.10?.92:smoothedP<.22?.92-(smoothedP-.10)*4.7:.27).toString();
-    host.style.pointerEvents=(cardsOnScreen||smoothedP>.15)?'none':'auto';
-    const phase=smoothedP<.13?1:0;
-    if(phase!==lastPhase){lastPhase=phase;setState(phase?'Walking':'Idle');}
-    model.rotation.z=m.tilt;
+    const worksRect=workSection?.getBoundingClientRect();
+    const titleRect=workTitle?.getBoundingClientRect();
+    const inWorks=!!worksRect&&worksRect.top<innerHeight*.88&&worksRect.bottom>innerHeight*.10;
+    // Land beside the actual PROJECT heading, never over the project cards.
+    const titleOnScreen=!!titleRect&&titleRect.top<innerHeight*.80&&titleRect.bottom>innerHeight*.04;
+    const destinationX=titleOnScreen
+      ?Math.min(innerWidth-(innerWidth<760?65:105),Math.max(innerWidth<760?innerWidth*.78:innerWidth*.72,titleRect.right+35))
+      :Math.max(innerWidth<760?innerWidth-68:innerWidth-135,0);
+    const destinationY=titleOnScreen
+      ?Math.max(78,Math.min(innerHeight-90,titleRect.top+titleRect.height*.38))
+      :Math.max(105,Math.min(innerHeight-140,worksRect?worksRect.top+120:innerHeight*.27));
+    guideStrength+=( (inWorks?1:0)-guideStrength)*.10;
+    const idleX=(.50+m.x)*innerWidth;
+    const idleY=(.49+m.y)*innerHeight;
+    const x=mix(idleX,destinationX,guideStrength),y=mix(idleY,destinationY,guideStrength);
+    const guideScale=innerWidth<760?.24:.32;
+    const scale=mix(m.scale,guideScale,guideStrength);
+    host.style.left=x.toFixed(1)+'px';
+    host.style.top=y.toFixed(1)+'px';
+    host.style.transform='translate(-50%,-50%) scale('+scale.toFixed(4)+')';
+    host.style.opacity=String(mix(smoothedP<.10?.92:smoothedP<.22?.92-(smoothedP-.10)*4.7:.30,.99,guideStrength));
+    host.style.pointerEvents=guideStrength>.05||smoothedP>.15?'none':'auto';
+    guideCaption.style.left=Math.min(innerWidth-220,Math.max(12,x+(innerWidth<760?-134:58)))+'px';
+    guideCaption.style.top=Math.min(innerHeight-90,Math.max(15,y+(innerWidth<760?64:-14)))+'px';
+    guideCaption.style.opacity=String(inWorks&&titleOnScreen?Math.min(1,guideStrength*2.5):0);
+    if(inWorks&&!guideEntered&&guideStrength>.75){
+      guideEntered=true;play(emotes.Wave,.28);
+    }
+    if(!inWorks&&guideStrength<.08)guideEntered=false;
+    const phase=guideStrength>.25?2:smoothedP<.13?1:0;
+    if(phase!==lastPhase){
+      lastPhase=phase;
+      setState(phase===1?'Walking':'Idle');
+    }
+    model.rotation.z=m.tilt*(1-guideStrength);
     model.userData.scrollSpin=m.spin;
     model.userData.scrollJump=m.jump;
-   }else{model.rotation.z=0;model.userData.scrollSpin=0;model.userData.scrollJump=0;}
+   }else{model.rotation.z=0;model.userData.scrollSpin=0;model.userData.scrollJump=0;guideCaption.style.opacity='0';guideStrength=0;}
    if(layer.def.d&&!layer.ended&&now-layer.start>layer.def.d){layer.ended=true;play(states[stateName],.2);}
    apply(pose());
+   // Organic guide acting: head follows the work, shoulder raises and the hand points down.
+   // This modifies bones only (original model, mesh and texture are untouched).
+   if(guideStrength>.015){
+     const w=guideStrength;
+     const nudge=Math.sin(now*2.1)*.065;
+     const reach=-1.42+Math.sin(now*1.8)*.13;
+     armR.rotation.x=mix(armR.rotation.x,reach,w);
+     armR.rotation.z=mix(armR.rotation.z,-.55+Math.sin(now*1.45)*.06,w);
+     armL.rotation.x=mix(armL.rotation.x,-.30+Math.sin(now*1.1)*.08,w);
+     head.rotation.x=mix(head.rotation.x,.13+Math.sin(now*.85)*.075,w);
+     head.rotation.y=mix(head.rotation.y,-.18+nudge,w);
+     head.rotation.z=mix(head.rotation.z,.10*Math.sin(now*1.4),w);
+     body.rotation.x+=w*.075;
+   }
    if(!dragActive){
      userYaw+=yawVelocity;userPitch=Math.max(-.85,Math.min(.85,userPitch+pitchVelocity));
      yawVelocity*=.9;pitchVelocity*=.86;
@@ -5592,9 +5663,9 @@ function apply(p){
    // remains accessible even during the cinematic scripted spins.
    desiredRot=dragActive?0:(hover?pointerX*.13:Math.sin(now*.28)*.012);
    rotation+=(desiredRot-rotation)*.045;
-   model.rotation.y=userYaw+rotation+(model.userData.scrollSpin||0);
-   model.rotation.x+=( (userPitch+(dragActive?0:(hover?-pointerY*.065:0)))-model.rotation.x)*.12;
-   model.position.y=Math.sin(now*.85)*.018+(model.userData.scrollJump||0)*.12;
+   model.rotation.y=userYaw*(1-guideStrength)+rotation+(model.userData.scrollSpin||0)*(1-guideStrength)-guideStrength*.20;
+   model.rotation.x+=( ((userPitch+(dragActive?0:(hover?-pointerY*.065:0)))*(1-guideStrength))-model.rotation.x)*.12;
+   model.position.y=Math.sin(now*(guideStrength>.4?1.25:.85))*(guideStrength>.4?.032:.018)+(model.userData.scrollJump||0)*.12;
    renderer.render(scene,camera);
  });
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)resize()});

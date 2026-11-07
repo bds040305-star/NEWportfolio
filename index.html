@@ -5493,7 +5493,7 @@ function apply(p){
  // Initial hello only once the studio is actually revealed.
  const greetOnce=()=>{
    if(greeted||!document.body.classList.contains('vertical-ready'))return;
-   greeted=true;setTimeout(()=>{if(!document.hidden&&!traveling)play(emotes.Wave,.35)},350);
+   greeted=true;setTimeout(()=>{if(!document.hidden&&stage.getBoundingClientRect().bottom>0)play(emotes.Wave,.35)},350);
  };
  const greetObserver=new MutationObserver(greetOnce);
  greetObserver.observe(document.body,{attributes:true,attributeFilter:['class']}); greetOnce();
@@ -5614,13 +5614,13 @@ function apply(p){
     const idleX=(.50+m.x)*innerWidth;
     const idleY=(.49+m.y)*innerHeight;
     const x=mix(idleX,destinationX,guideStrength),y=mix(idleY,destinationY,guideStrength);
-    const guideScale=innerWidth<760?.24:.32;
+    const guideScale=innerWidth<760?.33:.43;
     const scale=mix(m.scale,guideScale,guideStrength);
     host.style.left=x.toFixed(1)+'px';
     host.style.top=y.toFixed(1)+'px';
     host.style.transform='translate(-50%,-50%) scale('+scale.toFixed(4)+')';
     host.style.opacity=String(mix(smoothedP<.10?.92:smoothedP<.22?.92-(smoothedP-.10)*4.7:.30,.99,guideStrength));
-    host.style.pointerEvents=guideStrength>.05||smoothedP>.15?'none':'auto';
+    host.style.setProperty('pointer-events',guideStrength>.05||smoothedP>.15?'none':'auto','important');
     guideCaption.style.left=Math.min(innerWidth-220,Math.max(12,x+(innerWidth<760?-134:58)))+'px';
     guideCaption.style.top=Math.min(innerHeight-90,Math.max(15,y+(innerWidth<760?64:-14)))+'px';
     guideCaption.style.opacity=String(inWorks&&titleOnScreen?Math.min(1,guideStrength*2.5):0);

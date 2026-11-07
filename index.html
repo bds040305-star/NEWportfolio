@@ -1791,6 +1791,25 @@ body.wave-main-active .character-img.wave.active{
 }
 @media(prefers-reduced-motion:reduce){#dasom-guide-caption{transition:none!important}}
 </style>
+<style id="dasom-monkey-solid-guide-fix">
+/* Fix: The guide must never lose contrast between Project and Keyword. */
+html body #dasom-monkey-3d.scroll-companion,
+html body #dasom-monkey-3d.scroll-companion.loaded {
+  opacity:1!important;
+  visibility:visible!important;
+  filter:none!important;
+  -webkit-filter:none!important;
+  mix-blend-mode:normal!important;
+  z-index:999!important;
+  transition:none!important;
+}
+html body #dasom-monkey-3d.scroll-companion canvas {
+  opacity:1!important;
+  visibility:visible!important;
+  filter:none!important;
+  mix-blend-mode:normal!important;
+}
+</style>
 </head>
 <body>
   <main class="intro" id="intro">
@@ -5354,7 +5373,7 @@ h2 {
 #dasom-monkey-3d.scroll-companion{position:fixed!important;left:50%;top:49%;width:min(40vw,530px)!important;height:min(55vh,540px)!important;z-index:30!important;pointer-events:auto!important;translate:none!important;transform-origin:center center!important;will-change:transform,left,top,opacity;transition:none!important;overflow:visible!important;}
 #dasom-monkey-3d.scroll-companion canvas{pointer-events:auto!important;}
 @media(max-width:760px){#dasom-monkey-3d.scroll-companion{width:65vw!important;height:44vh!important;z-index:28!important}}
-@media(prefers-reduced-motion:reduce){#dasom-monkey-3d.scroll-companion{opacity:.35!important}}
+@media(prefers-reduced-motion:reduce){#dasom-monkey-3d.scroll-companion{opacity:1!important;transition:none!important}}
 </style>
 <script src="assets/vendor/three-r128.min.js"></script>
 <script>

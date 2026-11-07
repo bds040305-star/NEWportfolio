@@ -5483,8 +5483,18 @@ function apply(p){
  let travelP=0, smoothedP=0, lastPhase=-1, traveling=false;
  // Guide states are based on the actual project title's viewport position.
  let guideStrength=0, guideEntered=false, greeted=false, lastGuideCard=0;
+ // The guide anchors to actual on-screen headings, not a single scroll percentage.
+ const guideStops=[
+  {section:document.getElementById('works'),title:document.querySelector('#works .project-title'),message:'이 프로젝트들을 소개할게요!'},
+  {section:document.getElementById('keywords'),title:document.querySelector('#keywords .v-title'),message:'제가 사용하는 키워드를 보여드릴게요!'},
+  {section:document.getElementById('process'),title:document.querySelector('#process .v-title'),message:'문제를 해결하는 과정도 소개할게요!'}
+ ].filter(o=>o.section&&o.title);
  const workSection=document.getElementById('works');
  const workTitle=workSection?.querySelector('.project-title');
+ const prefersCalm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+ let guideX=innerWidth*.5,guideY=innerHeight*.38,guideScale=.65;
+ let guideMood='travel',guideStop=null,guideBecameActive=0;
  const guideCaption=document.createElement('div');
  guideCaption.id='dasom-guide-caption';
  guideCaption.setAttribute('aria-live','off');
@@ -5599,43 +5609,73 @@ function apply(p){
    if(traveling){
     smoothedP+= (travelP-smoothedP)*.1;
     const m=choreograph(smoothedP);
-    const worksRect=workSection?.getBoundingClientRect();
-    const titleRect=workTitle?.getBoundingClientRect();
-    const inWorks=!!worksRect&&worksRect.top<innerHeight*.88&&worksRect.bottom>innerHeight*.10;
-    // Land beside the actual PROJECT heading, never over the project cards.
-    const titleOnScreen=!!titleRect&&titleRect.top<innerHeight*.80&&titleRect.bottom>innerHeight*.04;
-    const destinationX=titleOnScreen
-      ?Math.min(innerWidth-(innerWidth<760?65:105),Math.max(innerWidth<760?innerWidth*.78:innerWidth*.72,titleRect.right+35))
-      :Math.max(innerWidth<760?innerWidth-68:innerWidth-135,0);
-    const destinationY=titleOnScreen
-      ?Math.max(78,Math.min(innerHeight-90,titleRect.top+titleRect.height*.38))
-      :Math.max(105,Math.min(innerHeight-140,worksRect?worksRect.top+120:innerHeight*.27));
-    guideStrength+=( (inWorks?1:0)-guideStrength)*.10;
-    const idleX=(.50+m.x)*innerWidth;
-    const idleY=(.49+m.y)*innerHeight;
-    const x=mix(idleX,destinationX,guideStrength),y=mix(idleY,destinationY,guideStrength);
-    const guideScale=innerWidth<760?.33:.43;
-    const scale=mix(m.scale,guideScale,guideStrength);
-    host.style.left=x.toFixed(1)+'px';
-    host.style.top=y.toFixed(1)+'px';
-    host.style.transform='translate(-50%,-50%) scale('+scale.toFixed(4)+')';
-    host.style.opacity=String(mix(smoothedP<.10?.92:smoothedP<.22?.92-(smoothedP-.10)*4.7:.30,.99,guideStrength));
-    host.style.setProperty('pointer-events',guideStrength>.05||smoothedP>.15?'none':'auto','important');
-    guideCaption.style.left=Math.min(innerWidth-220,Math.max(12,x+(innerWidth<760?-134:58)))+'px';
-    guideCaption.style.top=Math.min(innerHeight-90,Math.max(15,y+(innerWidth<760?64:-14)))+'px';
-    guideCaption.style.opacity=String(inWorks&&titleOnScreen?Math.min(1,guideStrength*2.5):0);
-    if(inWorks&&!guideEntered&&guideStrength>.75){
-      guideEntered=true;play(emotes.Wave,.28);
+    const isMobile=innerWidth<=760;
+    const centerY=innerHeight*.38;
+    const sectionBoxes=guideStops.map((stop)=>{
+      const section=stop.section.getBoundingClientRect();
+      const title=stop.title.getBoundingClientRect();
+      const center=title.top+title.height*.5;
+      return {stop,section,title,center,distance:Math.abs(center-innerHeight*.36)};
+    });
+    const candidate=sectionBoxes.filter(o=>o.section.top<innerHeight*.94&&o.section.bottom>innerHeight*.08)
+      .sort((a,b)=>a.distance-b.distance)[0];
+    // The character shrinks alongside a title, travels toward center between sections,
+    // and sits on the far right when cards or dense text would be obscured.
+    const headingVisible=!!candidate&&candidate.title.bottom>innerHeight*.08&&candidate.title.top<innerHeight*.82;
+    const titleHold=headingVisible && candidate.distance<innerHeight*.33;
+    const workCards=workSection?.querySelector('.project-marquee-viewport')?.getBoundingClientRect();
+    const cardsVisible=!!workCards&&workCards.top<innerHeight*.83&&workCards.bottom>innerHeight*.10;
+    const denseContent=!!candidate&&(candidate.section.top<innerHeight*.20&&candidate.section.bottom>innerHeight*.35);
+    const transitionGap=!titleHold&&!cardsVisible&&!denseContent;
+    const targetMode=titleHold?'title':transitionGap?'travel':'edge';
+    let tx,ty,ts;
+    if(targetMode==='title'){
+      const title=candidate.title;
+      tx=clamp(title.right+(isMobile?24:80),isMobile?innerWidth*.66:innerWidth*.61,innerWidth-(isMobile?49:96));
+      ty=clamp(title.top+title.height*.44,isMobile?80:105,innerHeight*.72);
+      ts=isMobile?.26:.34;
+    }else if(targetMode==='edge'){
+      tx=innerWidth-(isMobile?58:120);
+      ty=clamp(candidate?candidate.section.top+155:innerHeight*.30,innerHeight*.19,innerHeight*.49);
+      ts=isMobile?.20:.25;
+    }else{
+      tx=innerWidth*.50;
+      ty=centerY;
+      ts=isMobile?.54:.64;
     }
-    if(!inWorks&&guideStrength<.08)guideEntered=false;
-    const phase=guideStrength>.25?2:smoothedP<.13?1:0;
-    if(phase!==lastPhase){
-      lastPhase=phase;
-      setState(phase===1?'Walking':'Idle');
+    // Lerp using time-corrected easing for gentle transitions at any refresh rate.
+    const ease=prefersCalm?1:1-Math.exp(-.095*16.7);
+    guideX+=(tx-guideX)*ease;
+    guideY+=(ty-guideY)*ease;
+    guideScale+=(ts-guideScale)*ease;
+    const nextGuideStrength=targetMode==='travel'?0:1;
+    guideStrength+=(nextGuideStrength-guideStrength)*(prefersCalm?1:.09);
+    host.style.left=guideX.toFixed(1)+'px';
+    host.style.top=guideY.toFixed(1)+'px';
+    host.style.transform='translate(-50%,-50%) scale('+guideScale.toFixed(4)+')';
+    // No fading, blurring or flash: the guide remains solid and legible.
+    host.style.setProperty('opacity','1','important');
+    host.style.setProperty('filter','none','important');
+    host.style.setProperty('pointer-events',targetMode==='travel'&&!isMobile?'auto':'none','important');
+    if(targetMode!==guideMood){
+      guideMood=targetMode;
+      guideBecameActive=now;
+      if(targetMode==='title' && candidate?.stop!==guideStop){
+        guideStop=candidate.stop;
+        guideCaption.querySelector('.guide-line').textContent=candidate.stop.message;
+        if(!prefersCalm)play(emotes.Wave,.28);
+      }
     }
-    model.rotation.z=m.tilt*(1-guideStrength);
-    model.userData.scrollSpin=m.spin;
-    model.userData.scrollJump=m.jump;
+    // A subtle caption next to title stops; never over the project artwork.
+    guideCaption.style.left=clamp(guideX+(isMobile?-158:80),12,innerWidth-(isMobile?182:255))+'px';
+    guideCaption.style.top=clamp(guideY+(isMobile?65:34),15,innerHeight-105)+'px';
+    guideCaption.style.opacity=String(targetMode==='title'&&candidate?.title.top>innerHeight*.06?1:0);
+    if(targetMode!=='title')guideStop=null;
+    const phase=targetMode==='travel'?1:2;
+    if(phase!==lastPhase){lastPhase=phase;setState(phase===1?'Walking':'Idle');}
+    model.rotation.z=(targetMode==='travel'?Math.sin(now*.65)*.045:Math.sin(now*.8)*.018);
+    model.userData.scrollSpin=0;
+    model.userData.scrollJump=targetMode==='travel'?.11:0;
    }else{model.rotation.z=0;model.userData.scrollSpin=0;model.userData.scrollJump=0;guideCaption.style.opacity='0';guideStrength=0;}
    if(layer.def.d&&!layer.ended&&now-layer.start>layer.def.d){layer.ended=true;play(states[stateName],.2);}
    apply(pose());
@@ -5663,9 +5703,9 @@ function apply(p){
    // remains accessible even during the cinematic scripted spins.
    desiredRot=dragActive?0:(hover?pointerX*.13:Math.sin(now*.28)*.012);
    rotation+=(desiredRot-rotation)*.045;
-   model.rotation.y=userYaw*(1-guideStrength)+rotation+(model.userData.scrollSpin||0)*(1-guideStrength)-guideStrength*.20;
+   model.rotation.y=userYaw*(1-guideStrength)+rotation*(1-guideStrength*.72)-guideStrength*.18;
    model.rotation.x+=( ((userPitch+(dragActive?0:(hover?-pointerY*.065:0)))*(1-guideStrength))-model.rotation.x)*.12;
-   model.position.y=Math.sin(now*(guideStrength>.4?1.25:.85))*(guideStrength>.4?.032:.018)+(model.userData.scrollJump||0)*.12;
+   model.position.y=Math.sin(now*(guideStrength>.4?1.05:.9))*(guideStrength>.4?.021:.055)+(model.userData.scrollJump||0)*.12;
    renderer.render(scene,camera);
  });
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)resize()});

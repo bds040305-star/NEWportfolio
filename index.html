@@ -5570,8 +5570,10 @@ function apply(p){
     host.style.left=(50+m.x*100)+'%';
     host.style.top=(49+m.y*100)+'%';
     host.style.transform='translate(-50%,-50%) scale('+m.scale.toFixed(4)+')';
-    host.style.opacity=(smoothedP<.10?.92:smoothedP<.22?.92-(smoothedP-.10)*4.7:.27).toString();
-    host.style.pointerEvents=smoothedP>.15?'none':'auto';
+    const worksRect=document.getElementById('works')?.getBoundingClientRect();
+    const cardsOnScreen=!!worksRect&&worksRect.top<innerHeight*.82&&worksRect.bottom>innerHeight*.12;
+    host.style.opacity=cardsOnScreen?'.15':(smoothedP<.10?.92:smoothedP<.22?.92-(smoothedP-.10)*4.7:.27).toString();
+    host.style.pointerEvents=(cardsOnScreen||smoothedP>.15)?'none':'auto';
     const phase=smoothedP<.13?1:0;
     if(phase!==lastPhase){lastPhase=phase;setState(phase?'Walking':'Idle');}
     model.rotation.z=m.tilt;

@@ -5468,21 +5468,21 @@ function apply(p){
  const observe=new IntersectionObserver(entries=>{activeScroll=entries[0].isIntersecting?1:0;},{threshold:.01});observe.observe(stage);
  // Scroll choreography runs independently of the intro observer once portfolio is open.
  let travelP=0, smoothedP=0, lastPhase=-1, traveling=false;
+ // Content-first travel: stay quiet as project cards become the focal point.
  const route=[
    [0, 0, .04, .72, 0, 0],
-   [.12,-.29,-.07,.51,.55,-.15],
-   [.25,.31,.12,.84,6.283, .24],
-   [.40,.30,-.22,.48,7.4,-.18],
-   [.57,-.33,.04,.95,12.566,.18],
-   [.72,-.29,-.21,.43,13.0,-.28],
-   [.88,.28,.09,.75,18.85,.16],
-   [1,0,-.21,.35,19.15,0]
+   [.10,.19,-.04,.56,.12,-.06],
+   [.22,.30,-.10,.38,.20,-.04],
+   [.42,.32,-.13,.30,.18,0],
+   [.65,.32,-.14,.28,.12,0],
+   [.84,.32,-.16,.25,.08,0],
+   [1,.32,-.17,.23,0,0]
  ];
  const mix=(a,b,t)=>a+(b-a)*t;
  function choreograph(p){
   let i=0;while(i<route.length-2&&route[i+1][0]<p)i++;
   const a=route[i],b=route[i+1],u=Math.max(0,Math.min(1,(p-a[0])/(b[0]-a[0]))),e=u*u*(3-2*u);
-  const bounce=Math.pow(Math.sin(Math.PI*u),2);
+  const bounce=0;
   return {x:mix(a[1],b[1],e),y:mix(a[2],b[2],e)-bounce*.12,scale:mix(a[3],b[3],e)*(1+bounce*.09),spin:mix(a[4],b[4],e),tilt:mix(a[5],b[5],e),jump:bounce};
  }
  function updateTravel(){
@@ -5504,6 +5504,14 @@ function apply(p){
  updateTravel();
  function resize(){const w=host.clientWidth||600,h=host.clientHeight||600;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false)}
  const ro=new ResizeObserver(resize);ro.observe(host);resize();
+ // Cap pixel workload for large displays while preserving the model and its texture.
+ const lowPower=matchMedia('(max-width: 760px), (prefers-reduced-motion: reduce)').matches;
+ renderer.setPixelRatio(Math.min(devicePixelRatio||1,lowPower?1:1.5));
+ // Pause work when the entire portfolio is outside the viewport.
+ const visibilityObserver=new IntersectionObserver(entries=>{
+   host.dataset.visible=entries[0].isIntersecting?'1':'0';
+ },{threshold:0});visibilityObserver.observe(host);
+ host.dataset.visible='1';
  const zone=host;
  // Direct manipulation: unlimited 360-degree yaw, clamped pitch, persistent orientation.
  // Pointer capture keeps the rotation fluid when the pointer leaves the canvas.
@@ -5541,10 +5549,20 @@ function apply(p){
  zone.addEventListener('pointermove',e=>{const r=zone.getBoundingClientRect();pointerX=((e.clientX-r.left)/r.width-.5)*2;pointerY=((e.clientY-r.top)/r.height-.5)*2;hover=true;});
  zone.addEventListener('pointerleave',()=>{hover=false;pointerX=0;pointerY=0;});
  zone.addEventListener('click',()=>{if(performance.now()<suppressWaveUntil)return;if(typeof play==='function')play(emotes.Wave,.2);});
+ // Project hover acknowledges the selected work without stealing focus or blocking cards.
+ let lastReaction=0;
+ document.querySelectorAll('#works .v-project-card.project-tile').forEach(card=>{
+   card.addEventListener('pointerenter',()=>{
+     const t=performance.now();
+     if(t-lastReaction>1600 && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+       lastReaction=t; if(typeof play==='function')play(emotes.Yes,.18);
+     }
+   });
+ });
  let lastClick=0;
  const clock=new THREE.Clock();
  renderer.setAnimationLoop(()=>{
-   if(document.hidden || document.body.classList.contains('case-overlay-open') || (!activeScroll && !traveling))return;
+   if(document.hidden || host.dataset.visible==='0' || document.body.classList.contains('case-overlay-open') || (!activeScroll && !traveling))return;
    now=clock.getElapsedTime();
    if(traveling){
     smoothedP+= (travelP-smoothedP)*.1;
@@ -5552,10 +5570,11 @@ function apply(p){
     host.style.left=(50+m.x*100)+'%';
     host.style.top=(49+m.y*100)+'%';
     host.style.transform='translate(-50%,-50%) scale('+m.scale.toFixed(4)+')';
-    host.style.opacity=(smoothedP>.96?Math.max(0.15,1-(smoothedP-.96)*16):.94).toString();
-    const phase=Math.min(6,Math.floor(smoothedP*7));
-    if(phase!==lastPhase){lastPhase=phase;const names=['Walking','Running','Walking','Running','Dance','Running','Walking'];setState(names[phase]);}
-    model.rotation.z=m.tilt+Math.sin(smoothedP*47)*m.jump*.07;
+    host.style.opacity=(smoothedP<.10?.92:smoothedP<.22?.92-(smoothedP-.10)*4.7:.27).toString();
+    host.style.pointerEvents=smoothedP>.15?'none':'auto';
+    const phase=smoothedP<.13?1:0;
+    if(phase!==lastPhase){lastPhase=phase;setState(phase?'Walking':'Idle');}
+    model.rotation.z=m.tilt;
     model.userData.scrollSpin=m.spin;
     model.userData.scrollJump=m.jump;
    }else{model.rotation.z=0;model.userData.scrollSpin=0;model.userData.scrollJump=0;}
@@ -5569,11 +5588,11 @@ function apply(p){
    }
    // The user's angle is additive to the scroll choreography, so front/back view
    // remains accessible even during the cinematic scripted spins.
-   desiredRot=dragActive?0:(hover?pointerX*.04:Math.sin(now*.35)*.025);
+   desiredRot=dragActive?0:(hover?pointerX*.13:Math.sin(now*.28)*.012);
    rotation+=(desiredRot-rotation)*.045;
    model.rotation.y=userYaw+rotation+(model.userData.scrollSpin||0);
-   model.rotation.x+=( (userPitch+(dragActive?0:(hover?-pointerY*.025:0)))-model.rotation.x)*.14;
-   model.position.y=Math.sin(now*1.2)*.035+(model.userData.scrollJump||0)*.32;
+   model.rotation.x+=( (userPitch+(dragActive?0:(hover?-pointerY*.065:0)))-model.rotation.x)*.12;
+   model.position.y=Math.sin(now*.85)*.018+(model.userData.scrollJump||0)*.12;
    renderer.render(scene,camera);
  });
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)resize()});
@@ -5589,5 +5608,35 @@ body.vertical-ready #dasom-monkey-drag-cue{display:block}
 @media(max-width:760px){#dasom-monkey-drag-cue{right:10px;bottom:12px;font-size:10px}}
 </style>
 <div id="dasom-monkey-drag-cue" aria-hidden="true">↻ 원숭이를 드래그해 360° 회전 · 뒷모습 보기</div>
+<style id="dasom-monkey-ux-refinement-2026">
+/* Accessible CTA; existing shutter, backdrop, 3D mesh and project artwork unchanged. */
+#dasom-intro-guidance{position:absolute;z-index:20;right:clamp(22px,5.5vw,90px);bottom:clamp(58px,12vh,130px);width:min(330px,35vw);color:#302721;opacity:0;transform:translateY(15px);transition:opacity .65s ease,transform .65s ease;pointer-events:none}
+body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-events:auto}
+#dasom-intro-guidance .eyebrow{font:700 11px/1.5 sans-serif;letter-spacing:.24em;color:#9f5835;margin:0 0 11px}
+#dasom-intro-guidance .intro-sentence{font:600 clamp(14px,1.4vw,19px)/1.7 'Pretendard Variable',sans-serif;letter-spacing:-.035em;margin:0 0 22px;text-wrap:pretty}
+#dasom-view-projects{display:inline-flex;gap:18px;align-items:center;justify-content:space-between;min-height:48px;padding:12px 19px;border-radius:999px;background:#26211f;color:#fff;text-decoration:none;font:700 11px/1.4 sans-serif;letter-spacing:.13em;transition:background .2s,transform .2s}
+#dasom-view-projects:hover,#dasom-view-projects:focus-visible{background:#a34f2e;transform:translateY(-2px)}
+#dasom-view-projects:focus-visible,#works .v-project-card:focus-visible{outline:3px solid #ff814b;outline-offset:5px}
+#works .v-project-card.project-tile{transition:transform .28s ease,box-shadow .28s ease}
+@media(hover:hover) and (pointer:fine){#works .v-project-card.project-tile:hover{transform:translateY(-7px)!important;box-shadow:0 23px 44px rgba(10,10,10,.19)!important}}
+@media(max-width:760px){#dasom-intro-guidance{left:22px;right:22px;bottom:66px;width:auto;max-width:300px}#dasom-intro-guidance .intro-sentence{font-size:14px;margin-bottom:12px}#dasom-view-projects{min-height:44px}#dasom-monkey-3d.scroll-companion{pointer-events:none!important}#dasom-monkey-drag-cue{display:none!important}}
+@media(prefers-reduced-motion:reduce){#dasom-intro-guidance,#dasom-view-projects,#works .v-project-card.project-tile{transition:none!important;animation:none!important}}
+</style>
+<script id="dasom-ux-bridge-2026">
+document.addEventListener('DOMContentLoaded',()=>{
+ const studio=document.querySelector('.intro > .studio');
+ const works=document.getElementById('works');
+ if(!studio||!works)return;
+ const block=document.createElement('aside');
+ block.id='dasom-intro-guidance';
+ block.setAttribute('aria-label','포트폴리오 소개와 프로젝트 이동');
+ block.innerHTML='<p class="eyebrow">DESIGN WITH PURPOSE</p><p class="intro-sentence">사용자의 불편을 발견하고,<br>움직이는 경험으로 해결합니다.</p><a id="dasom-view-projects" href="#works">VIEW PROJECTS <span aria-hidden="true">↗</span></a>';
+ studio.appendChild(block);
+ block.querySelector('a').addEventListener('click',e=>{
+   e.preventDefault();
+   works.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
+ });
+});
+</script>
 </body>
 </html>

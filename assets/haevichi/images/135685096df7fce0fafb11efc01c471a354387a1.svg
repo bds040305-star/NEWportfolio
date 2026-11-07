@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="1640" height="260" viewBox="0 0 1640 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="&#236;&#152;&#136;&#236;&#131;&#129; &#234;&#176;&#144;&#236;&#160;&#149;&#236;&#132;&#160; &#194;&#183; &#236;&#160;&#149;&#235;&#159;&#137; &#235;&#141;&#176;&#236;&#157;&#180;&#237;&#132;&#176; &#236;&#149;&#132;&#235;&#139;&#152;" clip-path="url(#clip0_210_3549)">
+<path id="Vector" d="M0 50L410 90L820 160L1230 190L1640 210V260H0V50Z" fill="#17649A" fill-opacity="0.06" stroke="black"/>
+<path id="Vector_2" d="M0 50L410 90L820 160L1230 190L1640 210" stroke-width="3" stroke="#17649A"/>
+<circle id="Ellipse" cy="50" r="6" fill="#17649A"/>
+<circle id="Ellipse_2" cx="410" cy="90" r="6" fill="#17649A"/>
+<circle id="Ellipse_3" cx="820" cy="160" r="6" fill="#17649A"/>
+<circle id="Ellipse_4" cx="1230" cy="190" r="6" fill="#17649A"/>
+<circle id="Ellipse_5" cx="1640" cy="210" r="6" fill="#17649A"/>
+</g>
+<defs>
+<clipPath id="clip0_210_3549">
+<rect width="1640" height="260" fill="white"/>
+</clipPath>
+</defs>
+</svg>

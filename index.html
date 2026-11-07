@@ -2818,6 +2818,18 @@ body.case-overlay-open,body.project-confirm-open{overflow:hidden!important}
   const APPLE_CASE_STANDALONE = "apple-detail.html?v=20261106-1";
   const WELLS_CASE_STANDALONE = "wells-detail.html?v=20261106-1";
   async function openCase(key){
+    if(key==='haevichi'){
+      overlay.classList.remove('is-loaded');
+      overlay.style.display='block';
+      requestAnimationFrame(()=>overlay.classList.add('is-open'));
+      overlay.setAttribute('aria-hidden','false');
+      document.body.classList.add('case-overlay-open');
+      closeBtn.style.display='';
+      frame.onload=()=>{overlay.classList.add('is-loaded');try{frame.contentWindow.scrollTo(0,0)}catch(err){}};
+      frame.removeAttribute('srcdoc');
+      frame.src=new URL('haevichi-detail.html?v=20261107-1',document.baseURI).href;
+      return;
+    }
     if(key==='lh'){
       overlay.classList.remove('is-loaded');
       overlay.style.display='block';
@@ -2881,6 +2893,7 @@ body.case-overlay-open,body.project-confirm-open{overflow:hidden!important}
   }
 
   window.addEventListener('message',(e)=>{if(e.source===frame.contentWindow && e.data && e.data.type==='apple-case-close'){ const btn=document.getElementById('caseStudyClose'); if(btn)btn.click(); }});
+  window.addEventListener('message',(e)=>{if(e.origin===location.origin && e.source===frame.contentWindow && e.data && e.data.type==='haevichi-case-close')closeBtn.click();});
   window.addEventListener('message',(e)=>{if(e.source===frame.contentWindow && e.data && e.data.type==='wells-case-close'){ const btn=document.getElementById('caseStudyClose'); if(btn)btn.click(); }});
   window.addEventListener('message',event=>{
     if(event.origin===location.origin && event.source===frame.contentWindow && event.data?.type==='lh-case-close') closeBtn.click();

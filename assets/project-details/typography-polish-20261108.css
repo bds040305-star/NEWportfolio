@@ -1,0 +1,61 @@
+/* 2026-11-08: conservative type legibility pass.
+   No geometric scaling, section transforms, mockup text, carousel dimensions
+   or existing GSAP/ScrollTrigger animation values are changed. */
+
+/* Main portfolio: readable section context and controls. */
+body .v-kicker{font-size:12px;letter-spacing:.14em}
+body .v-desc{font-size:clamp(15px,1.12vw,17px);line-height:1.8;color:#504943}
+body .v-keywords .v-desc{color:#494949!important}
+body .project-card-badge{font-size:13px;letter-spacing:.035em}
+body .v-contact-row p{font-size:clamp(15px,1.18vw,17px);line-height:1.75}
+body .v-contact-button{font-size:13px;letter-spacing:.08em}
+body .v-contact-bottom{font-size:12px;opacity:1}
+body .soi-modal-top{font-size:11px}
+@media(max-width:600px){
+ body .v-kicker{font-size:11px}
+ body .v-desc{font-size:15px}
+ body .v-contact-button{font-size:12px}
+}
+
+/* Apple TV: improve smaller explanatory copy, status labels and IA labels. */
+body .design-middle .section-head p{font-size:16px;line-height:1.75}
+body .design-middle .section-head .ey{font-size:13px}
+body .design-middle .card p{font-size:16px;line-height:1.72}
+body .design-middle .caption p{font-size:15px;line-height:1.72}
+body .design-middle .k{font-size:12px;letter-spacing:.12em}
+body .design-middle .ux-smallcap{font-size:12px;letter-spacing:.11em}
+body .design-middle .ux-note-steps div{font-size:14px;line-height:1.6}
+body .design-middle .ux-flow-label{font-size:12px}
+body .design-middle .apple-feature-ey{font-size:12px;letter-spacing:.12em;color:#d2d3dc}
+body .design-middle .apple-feature-panel p,
+body .design-middle .apple-feature-panel li{font-size:16px;line-height:1.7}
+body .design-middle .apple-switch button{font-size:14px}
+body .apple-haevichi-hero .meta-row strong{font-size:13px;color:#626262}
+body .apple-haevichi-hero .meta-row span{font-size:16px}
+@media(max-width:760px){
+ body .design-middle .section-head p,body .design-middle .card p{font-size:15px}
+ body .design-middle .apple-feature-panel p,body .design-middle .apple-feature-panel li{font-size:15px}
+}
+
+/* Fixed-coordinate Figma exports: only high-value explanatory metadata.
+   Explicit node IDs prevent enlarging phone UI, diagrams or illustrations. */
+#view-lh [data-node-id="124:17530"],
+#view-lh [data-node-id="124:17533"]{font-size:14.5px!important;font-weight:500!important;line-height:1.45!important}
+#view-lh [data-node-id="124:17533"] p{line-height:1.45!important}
+#view-lh [data-node-id="124:17529"],
+#view-lh [data-node-id="124:17532"]{font-weight:600!important}
+
+#wf-page [data-node-id="113:8866"],
+#wf-page [data-node-id="113:8869"],
+#wf-page [data-node-id="113:8875"]{font-size:15px!important;font-weight:500!important;line-height:1.45!important}
+#wf-page [data-node-id="113:8875"] p{line-height:1.45!important}
+#wf-page [data-node-id="113:8865"],
+#wf-page [data-node-id="113:8868"],
+#wf-page [data-node-id="113:8874"]{font-weight:600!important}
+
+/* Haevichi: enhance the already-visible target paragraph, not its fixed box.
+   Keep STAY PLANNER stationary and the room carousel untouched. */
+#haevichi-section-3 [data-node-id="113:8986"]{color:#e6e6e6!important;font-weight:500!important;line-height:1.45!important}
+#haevichi-section-0 [data-node-id="113:8826"],
+#haevichi-section-0 [data-node-id="113:8835"],
+#haevichi-section-0 [data-node-id="113:8840"]{font-weight:600!important}

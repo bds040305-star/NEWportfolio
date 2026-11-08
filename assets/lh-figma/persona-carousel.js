@@ -1,109 +1,54 @@
-/* LH persona: sequential two-row six-card loop with individual fades.
-   Does not change headline, backgrounds, portrait assets or signature interactions. */
-(function(){
- 'use strict';
- function initialize(){
-  const section=document.querySelector('[data-frame-id="124:16332"]');
-  const design=section?.querySelector('[data-node-id="124:16332"]');
-  const gs=window.gsap;
-  if(!design||!gs||design.querySelector('#lh-persona-carousel-layer'))return;
-  const names=['박민정','김도윤','최은정','이수진','이준호','정지훈'];
-  const ids=['124:16365','124:16373','124:16381','124:16337','124:16345','124:16354'];
-  const cards=ids.map(id=>design.querySelector('[data-node-id="'+id+'"]'));
-  if(cards.some(card=>!card))return;
-  const layer=document.createElement('div');
-  layer.id='lh-persona-carousel-layer';
-  layer.setAttribute('aria-label','페르소나 6명 자동 순환');
-  layer.setAttribute('role','group');
-  design.append(layer);
-  // Top is slightly offset from bottom, following the original Figma design.
-  const slots=[
-   {x:56,y:327},{x:653,y:327},{x:1250,y:327},
-   {x:200,y:525},{x:797,y:525},{x:1394,y:525}
-  ];
-  const wrappers=cards.map((card,i)=>{
-   const wrap=document.createElement('div');
-   wrap.className='lh-persona-slide';
-   wrap.dataset.persona=names[i];
-   wrap.setAttribute('aria-label',names[i]);
-   wrap.appendChild(card);layer.appendChild(wrap);
-   gs.set(wrap,{x:slots[i].x,y:slots[i].y,opacity:1,force3D:true});
-   return wrap;
-  });
-  let current=wrappers.slice(),active=false,visible=false,scheduled=null,timeline=null;
-  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-  const cancel=()=>{scheduled?.kill();scheduled=null};
-  const schedule=()=>{
-    cancel();if(active||!visible||document.hidden||reduced.matches)return;
-    scheduled=gs.delayedCall(1.4,step);
-  };
-  const step=()=>{
-    scheduled=null;
-    if(active||!visible||document.hidden||reduced.matches)return;
-    active=true;
-    const prior=current.slice(),next=prior.slice(1).concat(prior[0]);
-    const tl=gs.timeline({paused:true,onComplete:()=>{
-       current=next;active=false;timeline=null;schedule();
-    }});
-    // Four visible leftward movements: staggered so they do not all start at once.
-    // Prior top-left and bottom-left exit softly and re-enter in the opposite row.
-    const internal=[1,2,4,5]; // remaining four cards travel one visible slot
-    internal.forEach((oldIndex,j)=>{
-      let destinationIndex;
-      if(oldIndex===1)destinationIndex=0;
-      if(oldIndex===2)destinationIndex=1;
-      if(oldIndex===4)destinationIndex=3;
-      if(oldIndex===5)destinationIndex=4;
-      tl.to(prior[oldIndex],{x:slots[destinationIndex].x,y:slots[destinationIndex].y,duration:1.45,ease:'power2.inOut',force3D:true},j*.20);
-    });
-    // Bottom left becomes top right; upper left becomes bottom right.
-    // Each disappears before the physical boundary and reappears from beyond the right edge.
-    const wraps=[
-      {item:prior[3],from:slots[3],target:slots[2],delay:.12},
-      {item:prior[0],from:slots[0],target:slots[5],delay:0}
-    ];
-    wraps.forEach(({item,from,target,delay})=>{
-      tl.to(item,{x:-570,duration:1.47,ease:'power4.in'},delay)
-        .to(item,{opacity:0,duration:.72,ease:'sine.inOut'},delay+.10)
-        .set(item,{x:2020,y:target.y,opacity:0},delay+1.51)
-        .to(item,{x:target.x,duration:1.38,ease:'power2.out'},delay+1.54)
-        .to(item,{opacity:1,duration:.92,ease:'sine.inOut'},delay+1.97);
-    });
-    timeline=tl;tl.play();
-  };
-  // Viewport detection works with the 1920px Figma canvas and CSS zoom.
-  // Hover does NOT freeze automatic movement (a stationary cursor caused the bug).
-  // First step is scheduled as soon as the section visibly enters the screen.
-  const updateVisibility=()=>{
-    const rect=section.getBoundingClientRect();
-    const inView=rect.top<innerHeight*.94&&rect.bottom>innerHeight*.06;
-    if(inView===visible)return;
-    visible=inView;
-    if(!visible){cancel();timeline?.pause();}
-    else if(timeline)timeline.resume();
-    else schedule();
-  };
-  const io=new IntersectionObserver(updateVisibility,{threshold:0,rootMargin:'15% 0px'});
-  io.observe(section);
-  window.addEventListener('scroll',updateVisibility,{passive:true});
-  window.addEventListener('resize',updateVisibility,{passive:true});
-  requestAnimationFrame(updateVisibility);
-  document.addEventListener('visibilitychange',()=>{
-    if(document.hidden){cancel();timeline?.pause();}
-    else {updateVisibility();if(visible){if(timeline)timeline.resume();else schedule();}}
-  });
-  reduced.addEventListener('change',()=>{
-    if(reduced.matches){cancel();timeline?.pause();}
-    else {updateVisibility();if(visible){if(timeline)timeline.resume();else schedule();}}
-  });
-  window.__lhPersonaCarousel={
-    getNames:()=>current.map(el=>el.dataset.persona),
-    getStatus:()=>({visible,active,scheduled:!!scheduled,progress:timeline?.progress()??null}),
-    pause:()=>{cancel();timeline?.pause()},
-    resume:()=>{updateVisibility();if(timeline)timeline.resume();else if(visible)schedule()},
-    next:()=>{cancel();if(!active){visible=true;step()}}
-  };
+/* Persona carousel: no GSAP or viewport observer dependency. */
+(()=>{
+'use strict';
+function init(){
+ const section=document.querySelector('[data-frame-id="124:16332"]');
+ const root=section?.querySelector('[data-node-id="124:16332"]');
+ if(!root||root.querySelector('#lh-persona-carousel-layer'))return;
+ const ids=['124:16365','124:16373','124:16381','124:16337','124:16345','124:16354'];
+ const names=['박민정','김도윤','최은정','이수진','이준호','정지훈'];
+ const cards=ids.map(id=>root.querySelector('[data-node-id="'+id+'"]'));
+ if(cards.some(el=>!el))return;
+ const layer=document.createElement('div');layer.id='lh-persona-carousel-layer';layer.setAttribute('aria-label','페르소나 자동 카드 순환');root.append(layer);
+ const spots=[{x:56,y:327},{x:653,y:327},{x:1250,y:327},{x:200,y:525},{x:797,y:525},{x:1394,y:525}];
+ const cardsUI=cards.map((card,i)=>{
+   // Legacy reveal on these cards can leave them invisible after reparenting.
+   card.classList.remove('lh-motion-target');card.style.removeProperty('opacity');
+   const w=document.createElement('div');w.className='lh-persona-slide';w.dataset.persona=names[i];w.append(card);layer.append(w);return w;
+ });
+ const position=(el,p)=>{el.style.transform='translate3d('+p.x+'px,'+p.y+'px,0)'};
+ cardsUI.forEach((w,i)=>{position(w,spots[i]);w.style.opacity='1'});
+ let order=cardsUI.slice(),busy=false,timer=null;
+ const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+ const animate=(el,frames,options)=>el.animate(frames,{fill:'forwards',...options}).finished.catch(()=>{});
+ async function move(){
+   if(busy||document.hidden||reduce.matches)return;
+   busy=true;
+   const before=order.slice(),after=before.slice(1).concat(before[0]);
+   const tasks=before.map(async (el,i)=>{
+     const from=spots[i],dest=spots[(i+5)%6];
+     if(i!==0&&i!==3){
+       await animate(el,[{transform:'translate3d('+from.x+'px,'+from.y+'px,0)'},{transform:'translate3d('+dest.x+'px,'+dest.y+'px,0)'}],{duration:1550,delay:i*140,easing:'cubic-bezier(.42,0,.2,1)'});
+     }else{
+       await animate(el,[{transform:'translate3d('+from.x+'px,'+from.y+'px,0)',opacity:1},{transform:'translate3d(-550px,'+from.y+'px,0)',opacity:0}],{duration:1070,delay:i===3?180:0,easing:'ease-in-out'});
+       el.style.opacity='0';position(el,{x:2020,y:dest.y});
+       await animate(el,[{transform:'translate3d(2020px,'+dest.y+'px,0)',opacity:0},{transform:'translate3d('+dest.x+'px,'+dest.y+'px,0)',opacity:1}],{duration:1250,easing:'ease-out'});
+     }
+   });
+   await Promise.all(tasks);
+   order=after;
+   order.forEach((el,i)=>{position(el,spots[i]);el.style.opacity='1'});
+   busy=false;
  }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initialize,{once:true});
- else initialize();
+ async function loop(){
+   clearTimeout(timer);
+   if(document.hidden||reduce.matches)return;
+   timer=setTimeout(async()=>{await move();loop()},2400);
+ }
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)clearTimeout(timer);else loop()});
+ reduce.addEventListener?.('change',()=>{clearTimeout(timer);if(!reduce.matches)loop()});
+ window.__lhPersonaCarousel={next:move,getNames:()=>order.map(w=>w.dataset.persona),getStatus:()=>({busy,scheduled:!!timer})};
+ loop();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();

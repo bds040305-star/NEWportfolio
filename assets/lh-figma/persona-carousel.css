@@ -1,0 +1,7 @@
+/* LH Persona: independent card carousel, no opaque masks or hard-edge overlays. */
+[data-frame-id="124:16332"] [data-node-id="124:16332"]{isolation:isolate}
+#lh-persona-carousel-layer{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:visible}
+#lh-persona-carousel-layer .lh-persona-slide{position:absolute;top:0;left:0;width:509px;height:149px;will-change:transform,opacity;pointer-events:auto;backface-visibility:hidden}
+#lh-persona-carousel-layer .lh-persona-slide>[data-node-id]{position:relative!important;top:auto!important;left:auto!important;width:100%!important;height:100%!important;opacity:1!important;visibility:visible!important;filter:none!important;transform:none!important;translate:none!important}
+#lh-persona-carousel-layer .lh-persona-slide img{opacity:1!important;filter:none!important}
+@media(prefers-reduced-motion:reduce){#lh-persona-carousel-layer .lh-persona-slide{will-change:auto}}

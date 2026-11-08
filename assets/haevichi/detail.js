@@ -260,7 +260,10 @@
   }
   initMotion();
   if (!reduced && !designMode && window.gsap) ['113:9006', '113:9013', '113:9020', '113:9728', '113:9782', '113:10411'].forEach(id => {
-    const root = node(id), image = root?.querySelector('img'); if (!root || !image) return;
+    const root = node(id), image = root && [...root.querySelectorAll('img')]
+      .filter(el => !/\.svg(?:$|\?)/.test(el.getAttribute('src') || ''))
+      .sort((a, b) => { const ar = a.getBoundingClientRect(), br = b.getBoundingClientRect(); return br.width * br.height - ar.width * ar.height; })[0];
+    if (!root || !image) return;
     let raf = 0;
     on(root, 'pointermove', e => {
       if (e.pointerType === 'touch' || active?.host.parentElement === root) return;

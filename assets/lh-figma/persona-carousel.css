@@ -4,7 +4,7 @@
 #lh-persona-carousel-layer{position:absolute;inset:0;z-index:4;pointer-events:none}
 #lh-persona-carousel-layer .lh-persona-lane{position:absolute;left:0;width:1920px;height:150px;overflow:hidden;pointer-events:auto}
 #lh-persona-carousel-layer .lh-persona-track{display:flex;align-items:center;width:max-content;will-change:transform;animation:lhPersonaFlow 43s linear infinite}
-#lh-persona-carousel-layer [data-lane="bottom"] .lh-persona-track{margin-left:200px;animation-delay:-21.5s}
+#lh-persona-carousel-layer [data-lane="bottom"] .lh-persona-track{margin-left:200px;animation-duration:55s;animation-delay:-13s}
 #lh-persona-carousel-layer [data-lane="top"] .lh-persona-track{margin-left:56px}
 #lh-persona-carousel-layer .lh-persona-group{display:flex;align-items:center;gap:88px;padding-right:88px;flex:none}
 #lh-persona-carousel-layer .lh-persona-card{width:509px;height:149px;flex:none}

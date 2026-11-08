@@ -27,7 +27,11 @@ function start(){
     const track=document.createElement('div');track.className='lh-persona-track';
     for(let duplicate=0;duplicate<2;duplicate++){
       const group=document.createElement('div');group.className='lh-persona-group';
-      originals.forEach((original,i)=>{
+      // Bottom lane begins with card #3 (최은정), while the top begins with #1 (박민정).
+      // Rotate DATA order, not just animation time: prevents the same persona
+      // from appearing directly above and below at matching positions.
+      const laneCards=name==='bottom'?originals.slice(2).concat(originals.slice(0,2)):originals;
+      laneCards.forEach((original,i)=>{
         const outer=document.createElement('div');outer.className='lh-persona-card';
         const card=(makeOriginals && duplicate===0)?original:cloneCard(original);
         if(!(makeOriginals && duplicate===0)){outer.setAttribute('aria-hidden','true');outer.inert=true;}
@@ -42,8 +46,8 @@ function start(){
     }
     viewport.append(track);layer.append(viewport);
   }
-  // Each row is its own endless strip; bottom starts halfway through the cycle.
-  // The two tracks travel left at the same linear speed with no jump at wrap.
+  // Two truly different card sequences at the same linear speed.
+  // Top: 박민정, 김도윤, 최은정... / Bottom: 최은정, 이수진, 이준호...
   lane('top',327,true);
   lane('bottom',525,false);
   root.append(layer);

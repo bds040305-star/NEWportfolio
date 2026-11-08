@@ -304,9 +304,29 @@ footer.hv-shared-footer .footer-links a:hover{color:#8fb9dc!important}
 .design-middle.dm-wells .card:hover,.design-middle.dm-wells img:hover{transform:none!important;filter:none!important}
 @media(max-width:680px){.design-middle .dm-persona{grid-template-columns:110px minmax(0,1fr)!important}.design-middle .dm-persona-portrait{min-height:230px;padding:12px}.design-middle .dm-persona-copy{padding:16px!important}.design-middle .dm-persona-copy h3{font-size:18px!important}.design-middle .dm-persona-copy blockquote{font-size:15px!important}}
 @media(prefers-reduced-motion:reduce){.design-middle *{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Portfolio case-study clarity: preserve the existing Apple/Haevichi visual system. */
+.apple-feature-section{background:#101014!important;color:#f5f5f7!important}
+.apple-feature-section .section-head h2,.apple-feature-section .section-head p{color:#f5f5f7}
+.apple-feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.apple-feature-panel{min-width:0;padding:clamp(22px,3vw,38px);border:1px solid rgba(255,255,255,.13);border-radius:24px;background:#1c1c22}
+.apple-feature-panel h3{font-size:clamp(20px,2.3vw,29px);letter-spacing:-.035em;margin:8px 0 12px;color:#fff}
+.apple-feature-panel p,.apple-feature-panel li{font-size:15px;line-height:1.75;color:#c9c9d1}
+.apple-feature-ey{font-size:11px;letter-spacing:.18em;color:#aeb0bb;font-weight:700;text-transform:uppercase}
+.apple-switch{display:inline-flex;gap:4px;padding:5px;margin:16px 0 20px;border:1px solid rgba(255,255,255,.17);border-radius:999px;background:#0b0b0e}
+.apple-switch button{font:700 13px/1.2 inherit;font-family:inherit;font-size:13px;font-weight:700;border:0;border-radius:999px;background:transparent;color:#bcbcc7;padding:12px 22px;cursor:pointer;transition:background .2s,color .2s}
+.apple-switch button[aria-pressed="true"]{background:#f5f5f7;color:#111114}
+.apple-switch button:focus-visible{outline:2px solid #70b8ff;outline-offset:3px}
+.apple-switch-content{min-height:153px}
+.apple-switch-content[hidden]{display:none}
+.apple-feature-points{margin:12px 0 0;padding-left:19px}
+.apple-ai-example{margin-top:18px;padding:18px;border-radius:16px;background:#111115;border:1px solid rgba(255,255,255,.1)}
+.apple-ai-example strong{display:block;margin-bottom:7px;font-size:13px;color:#f5f5f7}
+.apple-ai-example p{margin:0;font-size:14px;color:#ced0d9}
+@media(max-width:760px){.apple-feature-grid{grid-template-columns:1fr}.apple-switch{max-width:100%}.apple-switch button{padding:11px 17px}.apple-feature-panel{border-radius:18px}}
 </style></head>
 <body>
-<header class="hv-matched-nav"><div class="nav-inner"><a class="back-link" href="#" id="apple-case-back">← Works</a><div class="nav-mark">Da-som</div></div></header>
+<header class="hv-matched-nav"><div class="nav-inner"><a class="back-link" href="index.html#works" id="apple-case-back">← Works</a><div class="nav-mark">Da-som</div></div></header>
 <section class="p-hero apple-haevichi-hero" id="apple-hero"><div aria-hidden="true" class="hero-ocean"><div class="ocean-photo"></div></div><div class="p-hero-inner">
 <div class="apple-logo-mark hero-anim"><img src="assets/portfolio-media/deef988d451657a4600e4a58.webp" alt="Apple TV" width="47" height="24" /></div>
 <div class="p-eyebrow hero-anim">OTT · TEAM PROJECT <span class="status-badge">UX/UI REDESIGN</span></div>
@@ -370,14 +390,37 @@ footer.hv-shared-footer .footer-links a:hover{color:#8fb9dc!important}
 </div>
 </div>
 </section>
+<section class="design-middle dm-apple section dark apple-feature-section" id="apple-core-features" aria-labelledby="apple-core-title">
+<div class="wrap">
+<div class="section-head"><div><div class="ey">CORE EXPERIENCE / 01—02</div><h2 id="apple-core-title">OTT와 MLS, 하나의 탐색 경험</h2></div><p>콘텐츠 감상과 실시간 경기 탐색의 목적을 분리하되, 상단 전환 구조로 이동 비용을 줄였습니다. 사용자가 필요할 때만 AI 어시스턴트를 호출하도록 설계했습니다.</p></div>
+<div class="apple-feature-grid">
+<article class="apple-feature-panel">
+<div class="apple-feature-ey">01 / OTT ↔ MLS Toggle</div>
+<h3>보고 싶은 콘텐츠의 맥락에 맞춰 전환</h3>
+<div class="apple-switch" role="group" aria-label="탐색 모드 미리보기">
+<button type="button" data-apple-mode="ott" aria-pressed="true">OTT</button>
+<button type="button" data-apple-mode="mls" aria-pressed="false">MLS 스포츠</button>
+</div>
+<div class="apple-switch-content" data-apple-panel="ott"><div class="apple-feature-ey">OTT / DISCOVER & WATCH</div><p>추천 작품 · 영화 · 시리즈에서 콘텐츠를 발견하고, 작품 상세와 이어보기를 통해 시청을 이어갑니다.</p><ul class="apple-feature-points"><li>추천 이유와 작품 정보로 선택 지원</li><li>이어보기에서 다음 콘텐츠로 자연스럽게 연결</li></ul></div>
+<div class="apple-switch-content" data-apple-panel="mls" hidden><div class="apple-feature-ey">MLS / LIVE & FOLLOW</div><p>진행 중 경기 · 예정 경기 · 리그 순위를 확인하고 중계, 기록, 다시보기로 이어집니다.</p><ul class="apple-feature-points"><li>LIVE 상태와 경기 일정의 우선순위 강화</li><li>관심 구단 중심으로 재방문 동선 설계</li></ul></div>
+</article>
+<article class="apple-feature-panel">
+<div class="apple-feature-ey">02 / TV+ AI Assistant</div>
+<h3>탐색을 방해하지 않는 보조 안내</h3>
+<p>어시스턴트는 콘텐츠 위에 항상 펼쳐놓는 패널이 아니라 필요할 때 호출하는 고정 진입점입니다. 영화 추천과 스포츠 정보 탐색을 같은 대화 흐름에서 지원하도록 구상했습니다.</p>
+<div class="apple-ai-example"><strong>사용 시나리오 · 영화 탐색</strong><p>“오늘 가볍게 볼 영화 추천해줘” → 취향에 맞는 후보와 간단한 추천 근거 제공</p></div>
+<div class="apple-ai-example"><strong>사용 시나리오 · MLS</strong><p>“관심 구단 다음 경기는 언제야?” → 예정 경기와 상세 화면으로 연결</p></div>
+</article>
+</div>
+</div></section>
 <section class="design-middle dm-apple section dark">
 <div class="wrap">
 <div class="section-head">
 <div>
 <div class="ey">Persona &amp; Journey</div>
-<h2>누구를 위한 구조인지 먼저 정리</h2>
+<h2>여정에서 발견한 두 가지 사용 목적</h2>
 </div>
-<p>신규 사용자와 기존 사용자의 목적이 다르기 때문에, 여정맵과 페르소나를 통해 화면 구조의 우선순위를 구분했습니다.</p>
+<p>신규·기존 사용자의 목표를 여정 흐름으로 먼저 비교했습니다. 아래 IA &amp; Outputs에서는 각 목적을 화면 구조에 어떻게 반영했는지 구체적으로 보여줍니다.</p>
 </div>
 <div class="grid-2">
 <article class="card">
@@ -495,12 +538,13 @@ footer.hv-shared-footer .footer-links a:hover{color:#8fb9dc!important}
 </div>
 </div>
 </section>
-<footer class="hv-shared-footer"><div class="footer-inner"><div class="footer-mark"><a href="#" onclick="event.preventDefault();parent.postMessage({type:'apple-case-close'},'*')">← 뒤로가기</a></div><div class="footer-links">
+<footer class="hv-shared-footer"><div class="footer-inner"><div class="footer-mark"><a href="index.html#works" onclick="if(window.parent!==window){event.preventDefault();parent.postMessage({type:'apple-case-close'},'*')}">← 뒤로가기</a></div><div class="footer-links">
       <a href="https://github.com/dlwndmsindiyo-juju/AppleTV.git" target="_blank" rel="noopener">GitHub</a>
-      <a href="#" aria-disabled="true" onclick="event.preventDefault()" target="_blank" rel="noopener">Live Site</a>
+      <span title="실제 사이트 주소가 연결되지 않았습니다" aria-label="Live Site 미배포">Live Site · 미배포</span>
     </div></div></footer>
 <script>
-document.getElementById('apple-case-back').addEventListener('click',function(e){e.preventDefault();try{parent.postMessage({type:'apple-case-close'},'*')}catch(error){} });
+(function(){const buttons=document.querySelectorAll('[data-apple-mode]');const panels=document.querySelectorAll('[data-apple-panel]');buttons.forEach(btn=>btn.addEventListener('click',()=>{const mode=btn.dataset.appleMode;buttons.forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));panels.forEach(p=>{p.hidden=p.dataset.applePanel!==mode;});}));})();
+ document.getElementById('apple-case-back').addEventListener('click',function(e){if(window.parent!==window){e.preventDefault();try{parent.postMessage({type:'apple-case-close'},'*')}catch(error){}} });
 </script><script>
 (function(){
 const area=document.getElementById('apple-match-detail');if(!area)return;

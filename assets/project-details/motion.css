@@ -1,0 +1,10 @@
+/* Individual transform priority preserves this channel when GSAP normalizes
+   its own transforms to inline translate/rotate/scale:none.
+   Optional motion layer. Layout, typography and source artwork remain in each case study. */
+.pm-motion{translate:calc(var(--pm-base-x,0px) + var(--pm-float-x,0px) + var(--pm-scroll-x,0px)) calc(var(--pm-base-y,0px) + var(--pm-float-y,0px) + var(--pm-scroll-y,0px) + var(--pm-reveal-y,0px) + var(--pm-hover-y,0px))!important;rotate:calc(var(--pm-base-angle,0deg) + var(--pm-float-angle,0deg))!important;scale:calc(var(--pm-base-scale,1) + var(--pm-hover-scale,0) + var(--pm-zoom,0))!important}
+.pm-marquee{overflow:hidden;isolation:isolate}.pm-marquee-track{display:flex;width:max-content;white-space:nowrap;align-items:baseline}.pm-marquee-tile{display:block;flex:none;padding-inline-end:1.45em;font:inherit;color:inherit;letter-spacing:inherit;line-height:inherit;white-space:nowrap}.pm-marquee-tile[aria-hidden=true]{pointer-events:none;user-select:none}
+.pm-ocean-backdrop{position:absolute;inset:0;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:cover;transform-origin:center;z-index:0}
+.pm-hover-surface{outline-offset:5px}.pm-hover-surface:focus-visible{outline:2px solid currentColor}
+.pm-decoration,.pm-decoration *{pointer-events:none!important}
+.pm-cta{transition:background-color .32s ease,color .32s ease,border-color .32s ease}
+@media(prefers-reduced-motion:reduce){.pm-motion{translate:var(--pm-base-x,0px) var(--pm-base-y,0px);rotate:var(--pm-base-angle,0deg);scale:var(--pm-base-scale,1)}.pm-marquee-track{transform:none!important}}

@@ -1,7 +1,15 @@
-/* LH Persona: independent card carousel, no opaque masks or hard-edge overlays. */
+/* LH Persona — identical motion principle to the main portfolio Keyword.
+   Continuous leftward linear strips, duplicated sets, no masking overlays. */
 [data-frame-id="124:16332"] [data-node-id="124:16332"]{isolation:isolate}
-#lh-persona-carousel-layer{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:visible}
-#lh-persona-carousel-layer .lh-persona-slide{position:absolute;top:0;left:0;width:509px;height:149px;will-change:transform,opacity;pointer-events:auto;backface-visibility:hidden}
-#lh-persona-carousel-layer .lh-persona-slide>[data-node-id]{position:relative!important;top:auto!important;left:auto!important;width:100%!important;height:100%!important;opacity:1!important;visibility:visible!important;filter:none!important;transform:none!important;translate:none!important}
-#lh-persona-carousel-layer .lh-persona-slide img{opacity:1!important;filter:none!important}
-@media(prefers-reduced-motion:reduce){#lh-persona-carousel-layer .lh-persona-slide{will-change:auto}}
+#lh-persona-carousel-layer{position:absolute;inset:0;z-index:4;pointer-events:none}
+#lh-persona-carousel-layer .lh-persona-lane{position:absolute;left:0;width:1920px;height:150px;overflow:hidden;pointer-events:auto}
+#lh-persona-carousel-layer .lh-persona-track{display:flex;align-items:center;width:max-content;will-change:transform;animation:lhPersonaFlow 43s linear infinite}
+#lh-persona-carousel-layer [data-lane="bottom"] .lh-persona-track{margin-left:200px;animation-delay:-21.5s}
+#lh-persona-carousel-layer [data-lane="top"] .lh-persona-track{margin-left:56px}
+#lh-persona-carousel-layer .lh-persona-group{display:flex;align-items:center;gap:88px;padding-right:88px;flex:none}
+#lh-persona-carousel-layer .lh-persona-card{width:509px;height:149px;flex:none}
+#lh-persona-carousel-layer .lh-persona-card>[data-node-id],
+#lh-persona-carousel-layer .lh-persona-card>div{position:relative!important;inset:auto!important;width:100%!important;height:100%!important;translate:none!important;transform:none!important;opacity:1!important;visibility:visible!important;filter:none!important}
+#lh-persona-carousel-layer .lh-persona-card img{visibility:visible!important;opacity:1!important}
+@keyframes lhPersonaFlow{to{transform:translate3d(-50%,0,0)}}
+@media(prefers-reduced-motion:reduce){#lh-persona-carousel-layer .lh-persona-track{animation:none!important}}

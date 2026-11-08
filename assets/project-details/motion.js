@@ -12,7 +12,7 @@ const excluded=el=>!el||!!el.closest(project==='lh'?'[data-frame-id="124:17447"]
 const node=id=>root.querySelector('[data-node-id="'+id+'"]');
 const config={
  lh:{amp:2.3,duration:7.6,reveal:14,hover:.009,marquee:[['124:17692',-1,4.2]],float:[],cards:['124:17691','124:17697','124:17705'],sequence:['124:16603','124:16388','124:16498']},
- haevichi:{amp:3.6,duration:12.4,reveal:18,hover:.012,marquee:[['113:8985',1,2.8]],float:['113:9293','113:9728','113:9782'],cards:['113:9728','113:9782'],sequence:[]},
+ haevichi:{amp:3.6,duration:12.4,reveal:18,hover:.012,marquee:[],float:['113:9293','113:9728','113:9782'],cards:['113:9728','113:9782'],sequence:[]},
  wells:{amp:3,duration:8.9,reveal:16,hover:.011,marquee:[['113:8996',-1,3.7]],float:['113:8876','113:9299','113:9312','113:9576'],cards:['113:9143','113:9149','113:9157'],sequence:['113:9052','113:9084','113:10760']}
 }[project];
 let dispose=()=>{},serial=0;

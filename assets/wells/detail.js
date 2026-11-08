@@ -74,7 +74,11 @@ if(!design&&!reduced&&window.gsap&&window.ScrollTrigger){gsap.registerPlugin(Scr
  for(const id of ['113:9316','113:9579','113:10703','113:10726','113:10348','113:10455']){const e=node(id);if(e)gsap.from(e,{y:35,opacity:.5,duration:.9,ease:'power3.out',clearProps:'transform,opacity',scrollTrigger:{trigger:e,start:'top 98%',once:true}});}
  const background=node('113:10341')?.querySelector('img');if(background)gsap.fromTo(background,{y:18},{y:0,ease:'none',scrollTrigger:{trigger:node('113:10338'),start:'top bottom',end:'bottom bottom',scrub:.5},onComplete:()=>gsap.set(background,{clearProps:'transform'})});
  if(productTimeline)ScrollTrigger.create({trigger:node('113:9300'),start:'top 75%',end:'bottom 25%',onUpdate:s=>{productTimeline.pause();productTimeline.progress(s.progress)}});
- const scene=node('113:9294');if(scene){pinMedia=gsap.matchMedia();pinMedia.add('(min-width:1200px)',()=>{ScrollTrigger.create({trigger:scene,start:'top top',end:'+=140',pin:true,pinSpacing:false,anticipatePin:1});});}
+ // The Wells hero (#wells-section-8) lives inside an absolute-positioned
+ // 1920px Figma canvas. Pinning its inner background with pinSpacing:false
+ // detached it from the adjacent white section on scroll, creating a hard cut.
+ // Keep the scene in its authored document position; no pin/transform applied.
+ // The rest of the scroll reveals and the interactive product remain intact.
 },page);}
 for(const id of ['113:9052','113:9143','113:9149','113:9157']){const e=node(id);if(e)e.classList.add('wf-card');}
 on(window,'keydown',e=>{if(e.key==='Escape')currentLive?.close()});

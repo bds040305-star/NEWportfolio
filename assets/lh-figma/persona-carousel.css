@@ -3,13 +3,15 @@
 [data-frame-id="124:16332"] [data-node-id="124:16332"]{isolation:isolate}
 #lh-persona-carousel-layer{position:absolute;inset:0;z-index:4;pointer-events:none}
 #lh-persona-carousel-layer .lh-persona-lane{position:absolute;left:0;width:1920px;height:150px;overflow:hidden;pointer-events:auto}
-#lh-persona-carousel-layer .lh-persona-track{display:flex;align-items:center;width:max-content;will-change:transform;animation:lhPersonaFlow 43s linear infinite}
-#lh-persona-carousel-layer [data-lane="bottom"] .lh-persona-track{margin-left:200px;animation-duration:55s;animation-delay:-13s}
-#lh-persona-carousel-layer [data-lane="top"] .lh-persona-track{margin-left:56px}
+#lh-persona-carousel-layer .lh-persona-track{display:flex;align-items:center;width:max-content;will-change:transform;animation-duration:80s;animation-timing-function:linear;animation-iteration-count:infinite}
+#lh-persona-carousel-layer [data-lane="bottom"] .lh-persona-track{margin-left:200px;animation-name:lhPersonaBottomAlternate}
+#lh-persona-carousel-layer [data-lane="top"] .lh-persona-track{margin-left:56px;animation-name:lhPersonaTopAlternate}
 #lh-persona-carousel-layer .lh-persona-group{display:flex;align-items:center;gap:88px;padding-right:88px;flex:none}
 #lh-persona-carousel-layer .lh-persona-card{width:509px;height:149px;flex:none}
 #lh-persona-carousel-layer .lh-persona-card>[data-node-id],
 #lh-persona-carousel-layer .lh-persona-card>div{position:relative!important;inset:auto!important;width:100%!important;height:100%!important;translate:none!important;transform:none!important;opacity:1!important;visibility:visible!important;filter:none!important}
 #lh-persona-carousel-layer .lh-persona-card img{visibility:visible!important;opacity:1!important}
-@keyframes lhPersonaFlow{to{transform:translate3d(-50%,0,0)}}
+/* Alternating non-overlapping 4-second travel windows; each lane is static while the other moves. */
+@keyframes lhPersonaTopAlternate{0%{transform:translate3d(0%,0,0)}5%{transform:translate3d(-5%,0,0)}10%{transform:translate3d(-5%,0,0)}15%{transform:translate3d(-10%,0,0)}20%{transform:translate3d(-10%,0,0)}25%{transform:translate3d(-15%,0,0)}30%{transform:translate3d(-15%,0,0)}35%{transform:translate3d(-20%,0,0)}40%{transform:translate3d(-20%,0,0)}45%{transform:translate3d(-25%,0,0)}50%{transform:translate3d(-25%,0,0)}55%{transform:translate3d(-30%,0,0)}60%{transform:translate3d(-30%,0,0)}65%{transform:translate3d(-35%,0,0)}70%{transform:translate3d(-35%,0,0)}75%{transform:translate3d(-40%,0,0)}80%{transform:translate3d(-40%,0,0)}85%{transform:translate3d(-45%,0,0)}90%{transform:translate3d(-45%,0,0)}95%{transform:translate3d(-50%,0,0)}100%{transform:translate3d(-50%,0,0)}}
+@keyframes lhPersonaBottomAlternate{0%{transform:translate3d(0%,0,0)}5%{transform:translate3d(0%,0,0)}10%{transform:translate3d(-5%,0,0)}15%{transform:translate3d(-5%,0,0)}20%{transform:translate3d(-10%,0,0)}25%{transform:translate3d(-10%,0,0)}30%{transform:translate3d(-15%,0,0)}35%{transform:translate3d(-15%,0,0)}40%{transform:translate3d(-20%,0,0)}45%{transform:translate3d(-20%,0,0)}50%{transform:translate3d(-25%,0,0)}55%{transform:translate3d(-25%,0,0)}60%{transform:translate3d(-30%,0,0)}65%{transform:translate3d(-30%,0,0)}70%{transform:translate3d(-35%,0,0)}75%{transform:translate3d(-35%,0,0)}80%{transform:translate3d(-40%,0,0)}85%{transform:translate3d(-40%,0,0)}90%{transform:translate3d(-45%,0,0)}95%{transform:translate3d(-45%,0,0)}100%{transform:translate3d(-50%,0,0)}}
 @media(prefers-reduced-motion:reduce){#lh-persona-carousel-layer .lh-persona-track{animation:none!important}}

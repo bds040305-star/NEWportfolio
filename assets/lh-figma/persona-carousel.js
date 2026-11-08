@@ -47,15 +47,14 @@
     }});
     // Four visible leftward movements: staggered so they do not all start at once.
     // Prior top-left and bottom-left exit softly and re-enter in the opposite row.
-    const destination=[slots[5],slots[0],slots[1],slots[2],slots[3],slots[4]];
-    const internal=[1,2,4,5]; // destination indices in next
+    const internal=[1,2,4,5]; // remaining four cards travel one visible slot
     internal.forEach((oldIndex,j)=>{
       let destinationIndex;
       if(oldIndex===1)destinationIndex=0;
       if(oldIndex===2)destinationIndex=1;
       if(oldIndex===4)destinationIndex=3;
       if(oldIndex===5)destinationIndex=4;
-      tl.to(prior[oldIndex],{x:slots[destinationIndex].x,y:slots[destinationIndex].y,duration:1.45,ease:'power2.inOut',force3D:true},j*.12);
+      tl.to(prior[oldIndex],{x:slots[destinationIndex].x,y:slots[destinationIndex].y,duration:1.45,ease:'power2.inOut',force3D:true},j*.20);
     });
     // Bottom left becomes top right; upper left becomes bottom right.
     // Each disappears before the physical boundary and reappears from beyond the right edge.
@@ -64,11 +63,11 @@
       {item:prior[0],from:slots[0],target:slots[5],delay:0}
     ];
     wraps.forEach(({item,from,target,delay})=>{
-      tl.to(item,{x:-570,duration:1.2,ease:'power2.inOut'},delay)
-        .to(item,{opacity:0,duration:.78,ease:'power2.in'},delay+.15)
-        .set(item,{x:2020,y:target.y,opacity:0},delay+1.24)
-        .to(item,{x:target.x,duration:1.27,ease:'power2.out'},delay+1.27)
-        .to(item,{opacity:1,duration:.85,ease:'sine.inOut'},delay+1.69);
+      tl.to(item,{x:-570,duration:1.47,ease:'power4.in'},delay)
+        .to(item,{opacity:0,duration:.72,ease:'sine.inOut'},delay+.10)
+        .set(item,{x:2020,y:target.y,opacity:0},delay+1.51)
+        .to(item,{x:target.x,duration:1.38,ease:'power2.out'},delay+1.54)
+        .to(item,{opacity:1,duration:.92,ease:'sine.inOut'},delay+1.97);
     });
     timeline=tl;tl.play();
   };

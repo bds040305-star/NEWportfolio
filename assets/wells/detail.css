@@ -44,3 +44,16 @@ html{scroll-behavior:smooth}body{margin:0;background:#fff;overflow-x:hidden}#wf-
 [class~="opacity-57"]{opacity:0.57}
 [class~="opacity-83"]{opacity:0.83}
 [class~="opacity-80"]{opacity:0.8}
+/* wf-wells-scene-fit-2026
+   Section 8 is 1080px tall while the original phone artwork used top:270px
+   and height:1180px (bottom:1450px). Its bottom 370px was clipped by the
+   section background's overflow:hidden. Keep the complete asset inside the
+   existing 1080px scene, preserving its aspect ratio and center alignment.
+   This targets only the dark green Wells showcase; all other Figma layers,
+   copy, and layout remain unchanged. */
+#wells-section-8 [data-node-id="113:9299"]{
+  left:calc(50% - 273px)!important;
+  top:208px!important;
+  width:546px!important;
+  height:820px!important;
+}

@@ -21,11 +21,11 @@
 /* Keep the original Figma card, colors and typography. Only replace its static room strip. */
 #haevichi-section-3 [data-node-id="113:8985"]{overflow:visible!important;white-space:nowrap!important;animation:none!important;translate:none!important}
 #haevichi-section-4 [data-node-id="113:8523"],#haevichi-section-4 [data-node-id="113:8519"]{visibility:hidden!important;pointer-events:none!important}
-.hae-room-carousel{position:absolute;z-index:35;left:1183px;top:1171px;width:552px;height:242px;color:#156aaf}
+.hae-room-carousel{position:absolute;z-index:35;left:1183px;top:1171px;width:606px;height:242px;color:#156aaf}
 .hae-room-viewport{width:100%;height:170px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;border-radius:24px;overscroll-behavior-x:contain;touch-action:pan-x;cursor:grab}
 .hae-room-viewport::-webkit-scrollbar{display:none}
 .hae-room-viewport.is-dragging{cursor:grabbing;scroll-snap-type:none}
-.hae-room-track{display:flex;align-items:center;gap:8px;width:max-content;height:170px}
+.hae-room-track{display:flex;align-items:center;gap:8px;width:max-content;height:170px;padding-right:183px;box-sizing:content-box}
 .hae-room-slide{flex:0 0 423px;width:423px;height:170px;margin:0!important;border-radius:24px;overflow:hidden;scroll-snap-align:start;scroll-snap-stop:always;background:#e8edf0}
 .hae-room-slide img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none}
 .hae-room-arrow{position:absolute;z-index:4;top:68px;display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:50%;background:#24272aaf;color:#fff;font:700 26px/1 Pretendard,sans-serif;cursor:pointer;transition:background .2s}
@@ -91,5 +91,7 @@ view.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'||e.button!==0
 view.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-startX;if(Math.abs(dx)>4)moved=true;view.scrollLeft=startScroll-dx;});
 function end(){if(!drag)return;drag=false;view.classList.remove('is-dragging');if(moved){let nearest=0,d=Infinity;slides.forEach((slide,i)=>{const t=Math.abs(view.scrollLeft-(slide.offsetLeft-slides[0].offsetLeft));if(t<d){d=t;nearest=i;}});go(nearest);}}
 view.addEventListener('pointerup',end);view.addEventListener('pointercancel',end);view.addEventListener('lostpointercapture',end);
+/* Ensure the first picture is aligned even after browser scroll restoration. */
+if(view.scrollLeft!==0)view.scrollLeft=0;update(0);
 })();
 </script></body></html>

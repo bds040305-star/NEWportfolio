@@ -4,14 +4,15 @@
 #lh-persona-carousel-layer{position:absolute;inset:0;z-index:4;pointer-events:none}
 #lh-persona-carousel-layer .lh-persona-lane{position:absolute;left:0;width:1920px;height:150px;overflow:hidden;pointer-events:auto}
 #lh-persona-carousel-layer .lh-persona-track{display:flex;align-items:center;width:max-content;will-change:transform;animation:lhPersonaFlow 43s linear infinite}
-#lh-persona-carousel-layer [data-lane="bottom"] .lh-persona-track{margin-left:200px;animation-duration:49s;animation-delay:-17s}
+#lh-persona-carousel-layer [data-lane="bottom"] .lh-persona-track{margin-left:200px;animation-duration:43s;animation-delay:-14.333333s}
 #lh-persona-carousel-layer [data-lane="top"] .lh-persona-track{margin-left:56px;animation-duration:43s;animation-delay:0s}
 #lh-persona-carousel-layer .lh-persona-group{display:flex;align-items:center;gap:88px;padding-right:88px;flex:none}
 #lh-persona-carousel-layer .lh-persona-card{width:509px;height:149px;flex:none}
 #lh-persona-carousel-layer .lh-persona-card>[data-node-id],
 #lh-persona-carousel-layer .lh-persona-card>div{position:relative!important;inset:auto!important;width:100%!important;height:100%!important;translate:none!important;transform:none!important;opacity:1!important;visibility:visible!important;filter:none!important}
 #lh-persona-carousel-layer .lh-persona-card img{visibility:visible!important;opacity:1!important}
-/* Both lanes move continuously. The lower lane starts at a different
-   point in its loop and uses a subtly different pace, like alternating feet. */
+/* Both lanes move at EXACTLY the same speed. The bottom lane is precisely
+   two 597px card pitches ahead (2/6 of a 43-second seamless loop).
+   This is a starting-position/phase offset, NOT a speed difference. */
 @keyframes lhPersonaFlow{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
 @media(prefers-reduced-motion:reduce){#lh-persona-carousel-layer .lh-persona-track{animation:none!important}}

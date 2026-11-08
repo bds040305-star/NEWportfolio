@@ -1810,6 +1810,13 @@ html body #dasom-monkey-3d.scroll-companion canvas {
   mix-blend-mode:normal!important;
 }
 </style>
+<style id="portfolio-20261108-motion-polish">
+/* Keep the two keyword bands deliberately out of phase without changing their cadence. */
+.v-keywords .keyword-row.reverse{animation-delay:-19s!important}
+.character-zone.flow-master .character-img.wave,.character-zone.flow-master .character-img.side{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+@media(max-width:760px){.v-keywords .keyword-cloud{overflow:hidden!important}.v-keywords .keyword-row{min-width:max-content}}
+@media(prefers-reduced-motion:reduce){.v-keywords .keyword-row,.v-keywords .keyword-row.reverse{animation:none!important;transform:none!important}}
+</style>
 </head>
 <body>
   <main class="intro" id="intro">
@@ -2848,8 +2855,8 @@ body.case-overlay-open,body.project-confirm-open{overflow:hidden!important}
     return raw + scrollFix;
   }
 
-  const APPLE_CASE_STANDALONE = "apple-detail.html?v=20261106-1";
-  const WELLS_CASE_STANDALONE = "wells-detail.html?v=20261106-1";
+  const APPLE_CASE_STANDALONE = "apple-detail.html?v=20261108-2";
+  const WELLS_CASE_STANDALONE = "wells-detail.html?v=20261108-2";
   async function openCase(key){
     if(key==='haevichi'){
       overlay.classList.remove('is-loaded');
@@ -2860,7 +2867,7 @@ body.case-overlay-open,body.project-confirm-open{overflow:hidden!important}
       closeBtn.style.display='';
       frame.onload=()=>{overlay.classList.add('is-loaded');try{frame.contentWindow.scrollTo(0,0)}catch(err){}};
       frame.removeAttribute('srcdoc');
-      frame.src=new URL('haevichi-detail.html?v=20261107-1',document.baseURI).href;
+      frame.src=new URL('haevichi-detail.html?v=20261108-2',document.baseURI).href;
       return;
     }
     if(key==='lh'){

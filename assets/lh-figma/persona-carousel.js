@@ -30,16 +30,16 @@
    gs.set(wrap,{x:slots[i].x,y:slots[i].y,opacity:1,force3D:true});
    return wrap;
   });
-  let current=wrappers.slice(),active=false,hover=false,visible=false,scheduled=null,timeline=null;
+  let current=wrappers.slice(),active=false,visible=false,scheduled=null,timeline=null;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const cancel=()=>{scheduled?.kill();scheduled=null};
   const schedule=()=>{
-    cancel();if(active||hover||!visible||document.hidden||reduced.matches)return;
-    scheduled=gs.delayedCall(3.1,step);
+    cancel();if(active||!visible||document.hidden||reduced.matches)return;
+    scheduled=gs.delayedCall(1.4,step);
   };
   const step=()=>{
     scheduled=null;
-    if(active||hover||!visible||document.hidden||reduced.matches)return;
+    if(active||!visible||document.hidden||reduced.matches)return;
     active=true;
     const prior=current.slice(),next=prior.slice(1).concat(prior[0]);
     const tl=gs.timeline({paused:true,onComplete:()=>{
@@ -71,25 +71,38 @@
     });
     timeline=tl;tl.play();
   };
-  // An off-screen animation consumes no frame time; hovering pauses the timeline.
-  const io=new IntersectionObserver(entries=>{
-    visible=entries[0].isIntersecting;
+  // Viewport detection works with the 1920px Figma canvas and CSS zoom.
+  // Hover does NOT freeze automatic movement (a stationary cursor caused the bug).
+  // First step is scheduled as soon as the section visibly enters the screen.
+  const updateVisibility=()=>{
+    const rect=section.getBoundingClientRect();
+    const inView=rect.top<innerHeight*.94&&rect.bottom>innerHeight*.06;
+    if(inView===visible)return;
+    visible=inView;
     if(!visible){cancel();timeline?.pause();}
-    else if(timeline) {if(!hover&&!document.hidden)timeline.resume();}
+    else if(timeline)timeline.resume();
     else schedule();
-  },{threshold:.08});
+  };
+  const io=new IntersectionObserver(updateVisibility,{threshold:0,rootMargin:'15% 0px'});
   io.observe(section);
-  layer.addEventListener('pointerenter',()=>{hover=true;cancel();timeline?.pause()});
-  layer.addEventListener('pointerleave',()=>{hover=false;if(timeline&&!document.hidden)timeline.resume();else schedule()});
+  window.addEventListener('scroll',updateVisibility,{passive:true});
+  window.addEventListener('resize',updateVisibility,{passive:true});
+  requestAnimationFrame(updateVisibility);
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden){cancel();timeline?.pause();}
-    else if(!hover&&visible){if(timeline)timeline.resume();else schedule();}
+    else {updateVisibility();if(visible){if(timeline)timeline.resume();else schedule();}}
   });
   reduced.addEventListener('change',()=>{
     if(reduced.matches){cancel();timeline?.pause();}
-    else if(!hover&&visible){if(timeline)timeline.resume();else schedule();}
+    else {updateVisibility();if(visible){if(timeline)timeline.resume();else schedule();}}
   });
-  window.__lhPersonaCarousel={getNames:()=>current.map(el=>el.dataset.persona),pause:()=>{hover=true;cancel();timeline?.pause()},resume:()=>{hover=false;if(timeline)timeline.resume();else schedule()}};
+  window.__lhPersonaCarousel={
+    getNames:()=>current.map(el=>el.dataset.persona),
+    getStatus:()=>({visible,active,scheduled:!!scheduled,progress:timeline?.progress()??null}),
+    pause:()=>{cancel();timeline?.pause()},
+    resume:()=>{updateVisibility();if(timeline)timeline.resume();else if(visible)schedule()},
+    next:()=>{cancel();if(!active){visible=true;step()}}
+  };
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initialize,{once:true});
  else initialize();

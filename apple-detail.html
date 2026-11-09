@@ -407,9 +407,9 @@ footer.hv-shared-footer .footer-links a:hover{color:#8fb9dc!important}
 <article class="apple-feature-panel">
 <div class="apple-feature-ey">02 / TV+ AI Assistant</div>
 <h3>탐색을 방해하지 않는 보조 안내</h3>
-<p>어시스턴트는 콘텐츠 위에 항상 펼쳐놓는 패널이 아니라 필요할 때 호출하는 고정 진입점입니다. 영화 추천과 스포츠 정보 탐색을 같은 대화 흐름에서 지원하도록 구상했습니다.</p>
+<p>AI 어시스턴트는 OTT 비구독 화면에서만 필요한 순간에 호출할 수 있도록 고정 진입점으로 설계했습니다. 구독 OTT 화면과 MLS 스포츠 화면에는 AI 기능을 제공하지 않습니다.</p>
 <div class="apple-ai-example"><strong>사용 시나리오 · 영화 탐색</strong><p>“오늘 가볍게 볼 영화 추천해줘” → 취향에 맞는 후보와 간단한 추천 근거 제공</p></div>
-<div class="apple-ai-example"><strong>사용 시나리오 · MLS</strong><p>“관심 구단 다음 경기는 언제야?” → 예정 경기와 상세 화면으로 연결</p></div>
+<div class="apple-ai-example"><strong>기능 적용 범위 · OTT 비구독 전용</strong><p>OTT 비구독 화면에는 안내·추천용 AI와 홍보 배너를 배치하고, 구독 화면에서는 홍보 배너를 제거합니다. MLS 스포츠 화면에는 AI를 제공하지 않습니다.</p></div>
 </article>
 </div>
 </div></section>
@@ -417,34 +417,12 @@ footer.hv-shared-footer .footer-links a:hover{color:#8fb9dc!important}
 <div class="wrap">
 <div class="section-head">
 <div>
-<div class="ey">Persona &amp; Journey</div>
+<div class="ey">User Journey</div>
 <h2>여정에서 발견한 두 가지 사용 목적</h2>
 </div>
-<p>신규·기존 사용자의 목표를 여정 흐름으로 먼저 비교했습니다. 아래 IA &amp; Outputs에서는 각 목적을 화면 구조에 어떻게 반영했는지 구체적으로 보여줍니다.</p>
+<p>비구독 사용자의 구독 판단과 구독 사용자의 이어보기 흐름을 구분했습니다. 구체적인 페르소나는 뒤의 IA &amp; Outputs에서 한 번만 보여줍니다.</p>
 </div>
-<div class="grid-2">
-<article class="card">
-<div class="k">Persona 01</div>
-<h3>신규 · 비구독 탐색 사용자</h3>
-<p><b>김서윤, 29세</b> — 작품에 관심은 있지만 서비스 가치와 작품 차별성이 명확하지 않으면 구독 결정을 망설이는 사용자입니다.</p>
-<ul class="bullet">
-<li>필요: 서비스 가치와 작품 차별성 파악</li>
-<li>문제: 프로모션 위주의 진입과 긴 탐색 흐름</li>
-<li>전략: Guided Discovery + Value Communication</li>
-</ul>
-</article>
-<article class="card">
-<div class="k">Persona 02</div>
-<h3>기존 구독 · 반복 시청 사용자</h3>
-<p><b>이준호, 34세</b> — 보던 작품을 바로 이어보고, 다음 콘텐츠도 고민 없이 찾고 싶은 충성 사용자입니다.</p>
-<ul class="bullet">
-<li>필요: 빠른 이어보기와 다음 추천</li>
-<li>문제: 이어보기와 기록/탐색 흐름의 단절</li>
-<li>전략: Continue → Next Discovery 흐름 강화</li>
-</ul>
-</article>
-</div>
-</div>
+
 <div class="ux-journeys"><div class="ux-journey"><b>01 / 신규 탐색</b><div class="ux-steps"><span>서비스 발견</span><span>작품 탐색</span><span>가치 확인</span><span>구독 판단</span><span>첫 시청</span><span>재방문</span></div><p>구독 전에 가치가 분명히 보이도록 콘텐츠 발견과 안내를 강화합니다.</p></div><div class="ux-journey"><b>02 / 기존 구독</b><div class="ux-steps"><span>앱 재진입</span><span>이어보기</span><span>작품 몰입</span><span>다음 작품</span><span>후보 비교</span><span>새 시청</span></div><p>재진입부터 다음 콘텐츠까지 끊기지 않는 흐름을 설계합니다.</p></div></div></section>
 <section class="design-middle dm-apple section">
 <div class="wrap">
@@ -498,7 +476,7 @@ footer.hv-shared-footer .footer-links a:hover{color:#8fb9dc!important}
 <section class="design-middle dm-apple section dark" id="apple-ia"><div class="wrap"><div class="section-head"><div><div class="ey">06 / IA &amp; OUTPUTS</div><h2>사용자의 목적에서 화면 구조까지</h2></div><p>페르소나 → 불편한 경험 → 필요한 기능 → 정보구조와 플로우차트로 이어지는 설계 과정입니다. 모든 다이어그램은 웹 요소로 직접 구성했습니다.</p></div>
 <div class="ux-personas"><article class="ux-persona"><div class="ux-avatar ux-avatar-a"><img alt="김서윤 페르소나 프로필 사진" src="assets/portfolio-media/742ab0dde915b7cf556a73f7.jpg"/></div><div class="ux-persona-body"><span class="ux-smallcap">PERSONA 01 · NEW VIEWER</span><h3>김서윤 <small>29세 · 마케팅 직장인</small></h3><blockquote>“볼 만한 작품이 있는지 알기도 전에 구독부터 결정하라고 해서 망설여져요.”</blockquote><div class="ux-tags"><span>작품 비교 어려움</span><span>구독 가치 불명확</span></div><p><b>설계 대응</b> — 영화·시리즈 콘텐츠의 발견 경로와 작품의 추천 이유, 구독 가치 안내를 명확하게.</p></div></article><article class="ux-persona"><div class="ux-avatar ux-avatar-b"><img alt="이준호 페르소나 프로필 사진" src="assets/portfolio-media/380540d5b7ab3d9051b7cdc2.jpg"/></div><div class="ux-persona-body"><span class="ux-smallcap">PERSONA 02 · RETURNING VIEWER</span><h3>이준호 <small>34세 · 콘텐츠 소비가 잦은 직장인</small></h3><blockquote>“어디까지 봤는지 찾고, 다음에 뭘 볼지 다시 고르는 과정이 번거로워요.”</blockquote><div class="ux-tags"><span>이어보기 동선</span><span>다음 작품 발견</span></div><p><b>설계 대응</b> — 이어보기와 다음 작품 추천을 연결하고 스포츠는 관심 구단의 경기·다시보기로 재방문 유도.</p></div></article></div>
 <div class="ux-diagram-title"><span>01 / INFORMATION ARCHITECTURE</span><h3>영화·시리즈와 스포츠, 두 갈래의 명료한 IA</h3></div>
-<div class="ux-ia-tree"><div class="ux-tree-root">Apple TV <small>CONTENT EXPERIENCE</small></div><div class="ux-tree-branches"><div class="ux-tree-branch"><div class="ux-tree-h">영화 · 시리즈 <em>DISCOVER</em></div><div class="ux-tree-items"><div>추천 및 탐색 <small>장르 · 테마 · 큐레이션</small></div><div>작품 상세 <small>줄거리 · 예고편 · 회차</small></div><div>이어보기 <small>시청 진도 · 다음 에피소드</small></div><div>MY 리스트 <small>찜 · 개인화 추천</small></div></div></div><div class="ux-tree-branch sports"><div class="ux-tree-h">MLS 스포츠 <em>WATCH LIVE</em></div><div class="ux-tree-items"><div>스포츠 홈 <small>라이브 · 예정 · 하이라이트</small></div><div>경기 상세 <small>중계 · 기록 · 채팅</small></div><div>리그 정보 <small>순위 · 경기 일정 · 구단</small></div><div>나의 구단 <small>관심 팀 · 알림 · 다시보기</small></div></div></div></div><div class="ux-tree-footer">COMMON LAYER <span>통합 검색</span><span>프로필 · 설정</span><span>구독 · 결제</span><span>TV+ Assistant</span></div></div>
+<div class="ux-ia-tree"><div class="ux-tree-root">Apple TV <small>CONTENT EXPERIENCE</small></div><div class="ux-tree-branches"><div class="ux-tree-branch"><div class="ux-tree-h">영화 · 시리즈 <em>DISCOVER</em></div><div class="ux-tree-items"><div>추천 및 탐색 <small>장르 · 테마 · 큐레이션</small></div><div>작품 상세 <small>줄거리 · 예고편 · 회차</small></div><div>이어보기 <small>시청 진도 · 다음 에피소드</small></div><div>MY 리스트 <small>찜 · 개인화 추천</small></div></div></div><div class="ux-tree-branch sports"><div class="ux-tree-h">MLS 스포츠 <em>WATCH LIVE</em></div><div class="ux-tree-items"><div>스포츠 홈 <small>라이브 · 예정 · 하이라이트</small></div><div>경기 상세 <small>중계 · 기록 · 채팅</small></div><div>리그 정보 <small>순위 · 경기 일정 · 구단</small></div><div>나의 구단 <small>관심 팀 · 알림 · 다시보기</small></div></div></div></div><div class="ux-tree-footer">COMMON LAYER <span>통합 검색</span><span>프로필 · 설정</span><span>구독 · 결제</span><span>OTT 비구독 전용 AI</span></div></div>
 <div class="ux-diagram-title"><span>02 / USER FLOW</span><h3>방문 목적에 따라 동선을 다르게 설계</h3></div>
 <div class="ux-flow-pair"><article><div class="ux-flow-label">FLOW A <b>영화·시리즈 발견</b></div><div class="ux-flow-line"><div>Apple TV 진입</div><i>↓</i><div>추천 · 카테고리</div><i>↓</i><div>작품 상세 및 가치 확인</div><i>↓</i><div class="ux-decision">지금 시청 가능한가?</div><div class="ux-flow-branch"><div><small>YES</small>시청 시작</div><div><small>NO</small>구독 안내</div></div></div></article><article><div class="ux-flow-label">FLOW B <b>MLS 경기 탐색</b></div><div class="ux-flow-line"><div>스포츠 탭 진입</div><i>↓</i><div>라이브 · 예정 경기</div><i>↓</i><div>경기 상세 정보 확인</div><i>↓</i><div class="ux-decision">경기가 진행 중인가?</div><div class="ux-flow-branch"><div><small>LIVE</small>중계·기록·채팅</div><div><small>ENDED</small>하이라이트·다시보기</div></div></div></article></div>
 <div class="ux-diagram-title"><span>03 / SITEMAP</span><h3>실제 메뉴와 상세 진입점을 한 번 더 검증</h3></div><div class="ux-sitemap"><div><b>HOME</b><small>개인화 추천 · 큐레이션</small></div><div><b>MOVIE / SERIES</b><small>추천 · 장르 · 작품 상세 · 회차</small></div><div><b>SPORTS</b><small>라이브 · 일정 · 순위 · 숏츠 · 다시보기</small></div><div><b>MY</b><small>찜 · 시청 기록 · 관심 구단</small></div><div><b>ACCOUNT</b><small>로그인 · 구독 · 설정 · 고객지원</small></div></div>
@@ -530,7 +508,7 @@ footer.hv-shared-footer .footer-links a:hover{color:#8fb9dc!important}
 <h3>AI 의존성과 정보 과부하 가능성</h3>
 <p>TV+ Assistant와 다양한 정보 계층이 과해지면 시각적 브라우징을 선호하는 사용자에게 오히려 부담이 될 수 있습니다.</p>
 <ul class="bullet">
-<li>챗봇은 플로팅/위젯 형태로 최소 노출</li>
+<li>AI는 OTT 비구독 화면의 보조 진입점으로만 노출</li>
 <li>추천에는 짧은 근거 태그 제공</li>
 <li>에러/구독 상태는 원클릭 해결 방식 강화</li>
 </ul>
@@ -540,7 +518,7 @@ footer.hv-shared-footer .footer-links a:hover{color:#8fb9dc!important}
 </section>
 <footer class="hv-shared-footer"><div class="footer-inner"><div class="footer-mark"><a href="index.html#works" onclick="if(window.parent!==window){event.preventDefault();parent.postMessage({type:'apple-case-close'},'*')}">← 뒤로가기</a></div><div class="footer-links">
       <a href="https://github.com/dlwndmsindiyo-juju/AppleTV.git" target="_blank" rel="noopener">GitHub</a>
-      <span title="실제 사이트 주소가 연결되지 않았습니다" aria-label="Live Site 미배포">Live Site · 미배포</span>
+      <a href="https://apple-tv-khaki.vercel.app/" target="_blank" rel="noopener noreferrer" title="프로젝트에서 제공된 배포 주소">Live Site</a>
     </div></div></footer>
 <script>
 (function(){const buttons=document.querySelectorAll('[data-apple-mode]');const panels=document.querySelectorAll('[data-apple-panel]');buttons.forEach(btn=>btn.addEventListener('click',()=>{const mode=btn.dataset.appleMode;buttons.forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));panels.forEach(p=>{p.hidden=p.dataset.applePanel!==mode;});}));})();

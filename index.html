@@ -1864,7 +1864,38 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 @media(max-width:760px){.v-keywords .keyword-cloud{overflow:hidden!important}.v-keywords .keyword-row{min-width:max-content}}
 @media(prefers-reduced-motion:reduce){.v-keywords .keyword-row,.v-keywords .keyword-row.reverse{animation:none!important;transform:none!important}}
 </style>
-<link rel="stylesheet" href="assets/project-details/typography-polish-20261108.css?v=1"></head>
+<link rel="stylesheet" href="assets/project-details/typography-polish-20261108.css?v=1"><style id="dasom-handle-click-cue-20261110">
+/* Small, readable label INSIDE the existing recessed shutter grip.
+   The handle, pointer events, pull cue and opening animation are unchanged. */
+.shutter-curtain .css-grip .dasom-handle-click-label{
+  position:absolute;
+  z-index:5;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:9px;
+  white-space:nowrap;
+  pointer-events:none;
+  user-select:none;
+  color:#fff7ef;
+  font:800 11px/1 'DM Sans',sans-serif;
+  letter-spacing:.15em;
+  text-shadow:0 1px 3px rgba(53,9,0,.65);
+  transform:translateY(-1px);
+}
+.shutter-curtain .css-grip .dasom-handle-click-arrow{
+  display:inline-block;
+  font:700 17px/1 'DM Sans',sans-serif;
+  letter-spacing:0;
+  transform:translateY(-1px);
+}
+@media(max-width:760px){
+  .shutter-curtain .css-grip .dasom-handle-click-label{font-size:10px;gap:7px;letter-spacing:.12em}
+  .shutter-curtain .css-grip .dasom-handle-click-arrow{font-size:15px}
+}
+</style>
+</head>
 <body>
   <main class="intro" id="intro">
     <section class="studio" aria-label="다솜의 작업실">
@@ -1960,6 +1991,7 @@ html body #dasom-monkey-3d.scroll-companion canvas {
                     <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
                     <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
                   </span>
+                  <span class="dasom-handle-click-label" aria-hidden="true">CLICK ME <span class="dasom-handle-click-arrow">↑</span></span>
                 </span>
               </div>
             </div>

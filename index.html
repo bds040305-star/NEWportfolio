@@ -1895,13 +1895,14 @@ html body #dasom-monkey-3d.scroll-companion canvas {
   .shutter-curtain .css-grip .dasom-handle-click-arrow{font-size:15px}
 }
 </style>
-<link id="ds-nav-style" rel="stylesheet" href="assets/portfolio-header-20261110.css?v=20261110-2">
-<link rel="stylesheet" href="assets/portfolio-footer-20261110.css?v=2">
+<link id="ds-nav-style" rel="stylesheet" href="assets/portfolio-header-20261110.css?v=20261111-1">
+
+<link rel="stylesheet" href="assets/portfolio-chrome/chrome.css?v=20261111-1">
 </head>
 <body>
 <header id="ds-fixed-nav" aria-label="포트폴리오 메뉴">
  <div class="ds-bar">
-  <a href="#intro" data-ds-dest="intro" class="ds-logo" aria-label="포트폴리오 맨 위로 이동"><img class="ds-wordmark" width="112" height="30" alt="DASOM. 로고" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAAAeCAMAAADDwGpTAAAAYFBMVEUqFRXxYSYgHRjtZC5/AADsYi7/AAAnIBtqagAAAH8AVQBVVVX//wAAAAAlHRkkHRkjHBkjHRgkHRgkHRknGRkkHRkkJBQcGxsnJiYnIBs0NDQkIBnzZi8eHhlVAAD/fwCIoapQAAAAIHRSTlMJG0pZAqcB2wICAwMBAPfQK02vcBeSEg0I9gQy9CIDAt2H2JAAAANNSURBVHjavVfXdtswDJVH03RYHABJjcj+/78sCIAUpTiO254TPORYHLi4mEx3+WLp2o/r9YsBn5Bh+LVfmobh7wATWpEFcXP1mjfalWgdBHA4rUuYlwLMqJZ3+U7cQMSsOzWAzvRFTLC4nrSmH3uot6/W6ykoh6Lz/XYNszJvG7wEpOb78T4gSbDF/in07eUB1kO6aENz0bjERo70G6aN2WS32wOaLHpRT0f5Lkcdb3rPnELmI4wNrclJSMqw911DkPf2DH32M0WDsV2DQLrlcvRMP0YLegY9B8HZRDe9crRbK4tV7xiK1gl523M4YvYXbRlbPSM/eQNSJ8AS4om9S55WQF+SpNNAvAOMrUFQEDzUs/w5C3XyK3RsgavBYr4wodkCWPMJoDiYVs8ZCxgmbhleUowxXaCEslHtlwKoFMUNDwEzRUNMMGQA/jtX6t5uGBnXpn92qsuAxm/94h8CYpBtPorMA7paFWuh8n5bbxO7n5ePxS9MEOAhIBsKks1OCWO1JLMExlSDGnE1BpxB8LNY9RiQmcBl8RKyFOpphByMkUshsvrwDjAsTM5KIrDVgE8B8iLp68qPTN6ClriB+BBQ3SSJdn7GpatVs6/ZSdYsUuKULvMjlza+hC7BE0nDoXOzI+H6el3nU+RW6N0+aYY1aSybbYLY+gkgQ9ljvxHyXSJpStW4fVlwncxR7SgFD2e1hCr75ePCl4wcWdiDtnMhBNs64W7hIyqgtrRc/wp4vd3OH7U29qgMEB0i0GWQINM4huI847pta+sKoFJ01dd3XfpDBqpHjn9CEdeXBJCeo16/QB2CpLRt3gzIkePqZ8Dj5XA6HV7W8ZTTo4wnmyms8UkcLSupgkNyQXxVx5PdjSfJJRu8d6VHjcfDt7e3b4fLrR3A2kncrm1xzwJtbT74OjN11JUBbMoAlqsdzvKSEYanN5LT79fmiSHpEeaOEEYe3zUdRlIijaa8YOKdJ0asZ7cPvaxOAZXhqFcM9ckkw73NePLwSN/DHEx5aqk1yWnrIROsPqIIcNkBGnpENS5NlB1R8mMoxY3tU5DUIGYIelBSpG3EdicvufoyvOIScfcURVxI84HkHx7C/ycvXwWY/4e4HQ63L2dI8gfRVcGRknCIXQAAAABJRU5ErkJggg=="></a>
+  <a href="#intro" data-ds-dest="intro" class="ds-logo" aria-label="포트폴리오 맨 위로 이동"><img class="ds-robot-logo" src="assets/header-robot-logo.svg" width="101" height="77" alt="다솜 원숭이 로고"></a>
   <span class="ds-descriptor">UX/UI DESIGNER<br>PORTFOLIO · 2026</span>
   <button type="button" class="ds-toggle" aria-controls="ds-nav-items" aria-expanded="false" aria-label="메뉴 열기"><i></i><i></i></button>
   <nav id="ds-nav-items" class="ds-items" aria-label="페이지 섹션">
@@ -1918,11 +1919,11 @@ html body #dasom-monkey-3d.scroll-companion canvas {
   <main class="intro" id="intro">
     <section class="studio" aria-label="다솜의 작업실">
       <div class="sun-glow"></div>
-      <header class="studio-header">
+      <div class="studio-header" hidden aria-hidden="true">
         <a class="studio-logo" href="#" aria-label="DASOM home">D.</a>
         <p>UI/UX DESIGNER<br>FRONTEND CREATOR</p>
         <button class="replay" type="button">REPLAY <span>↻</span></button>
-      </header>
+      </div>
 
       <div class="shelf shelf-top">
         <div class="books"><i></i><i></i><i></i></div>
@@ -2086,42 +2087,46 @@ html body #dasom-monkey-3d.scroll-companion canvas {
             <article class="v-project-card project-tile apple" data-project="Apple TV" data-case="apple" data-url="#apple" tabindex="0" role="button" aria-label="Apple TV 프로젝트 열기">
               <img loading="lazy" decoding="async" class="project-card-art" src="assets/portfolio-media/d29a160b3d56c948110a3f6b.webp" alt="Apple TV 프로젝트 대표 이미지">
               <div class="project-tile-overlay">
-                <h3 class="project-tile-title">Apple TV</h3>
-                <div class="project-tile-meta">팀 프로젝트 10월~11월 초까지</div>
-                <p class="project-tile-desc">기존 OTT 사이트의 탐색성과 콘텐츠 위계를 재구성하고, Apple의 시네마틱한 경험을 살린 리디자인 프로젝트입니다.</p>
-                <div class="project-tile-tools">UX Research · IA · UI Design · Publishing</div>
-              </div>
-            </article>
+<h3 class="project-tile-title" style="--pc-order:0">Apple TV</h3>
+<div class="project-tile-meta" style="--pc-order:1">팀 프로젝트 10월~11월 초까지</div>
+<p class="project-tile-desc" style="--pc-order:2">콘텐츠 탐색의 복잡성과 영화·시리즈·스포츠 콘텐츠 간 정보 구조의 한계를 개선하고자 Apple TV를 리디자인했습니다. OTT와 MLS 스포츠를 전환하는 토글 구조를 도입하고, 실시간 경기 정보와 AI 어시스턴트를 통해 콘텐츠 발견성과 접근성을 강화했습니다. Apple 특유의 시네마틱한 디자인을 유지하면서 다양한 디바이스에서 일관된 시청 경험을 제공하도록 설계했습니다.</p>
+<div class="project-tile-tools" style="--pc-order:3">UX Research · IA · UI Design · Publishing (React)</div>
+<div class="project-tile-credit" style="--pc-order:4"><span>기여도: 79%</span><span>작업 기간: 한 달</span></div>
+</div><button type="button" class="project-info-toggle" aria-expanded="false" aria-label="Apple TV 설명 보기">설명 보기</button>
+</article>
 
             <article class="v-project-card project-tile haevichi" data-project="HAEVICHI Hotel &amp; Resort JEJU" data-case="haevichi" data-url="#haevichi" tabindex="0" role="button" aria-label="해비치 호텔 앤 리조트 제주 프로젝트 열기">
               <img loading="lazy" decoding="async" class="project-card-art" src="assets/portfolio-media/250179164bbbd7830801171b.webp" alt="해비치 호텔 앤 리조트 제주 프로젝트 대표 이미지">
               <div class="project-tile-overlay">
-                <h3 class="project-tile-title">HAEVICHI<br>Hotel &amp; Resort JEJU</h3>
-                <div class="project-tile-meta">팀 프로젝트 07월~08월 말까지</div>
-                <p class="project-tile-desc">분산된 객실 탐색·예약 흐름을 재구조화한 팀 프로젝트입니다. Facility 파트를 담당하고 스타일가이드와 프로토타입 전반을 함께 완성했습니다.</p>
-                <div class="project-tile-tools">UX/UI Design · Figma Prototype · HTML/CSS/JS</div>
-              </div>
-            </article>
+<h3 class="project-tile-title" style="--pc-order:0">HAEVICHI<br>Hotel &amp; Resort JEJU</h3>
+<div class="project-tile-meta" style="--pc-order:1">팀 프로젝트 07월~08월 말까지</div>
+<p class="project-tile-desc" style="--pc-order:2">객실 정보와 예약 기능이 분산되어 사용자가 원하는 객실을 탐색하고 비교하기 어렵다는 문제를 개선하고자 진행한 웹 리디자인 프로젝트입니다. 호텔과 리조트의 탐색 구조를 분리하고, 객실 비교 기능과 스티키 예약 바를 도입해 예약 과정의 편의성을 높였습니다. 제주의 자연과 해비치의 브랜드 정체성을 반영하면서 시각적 완성도와 사용성을 함께 고려했습니다.</p>
+<div class="project-tile-tools" style="--pc-order:3">UX/UI Design · Figma Prototype · HTML/CSS/JS</div>
+<div class="project-tile-credit" style="--pc-order:4"><span>기여도: 79%</span><span>작업 기간: 2달</span></div>
+</div><button type="button" class="project-info-toggle" aria-expanded="false" aria-label="HAEVICHI Hotel &amp; Resort JEJU 설명 보기">설명 보기</button>
+</article>
 
             <article class="v-project-card project-tile lh" data-project="LH청약 플러스" data-case="lh" data-url="#lh" tabindex="0" role="button" aria-label="LH 청약 플러스 프로젝트 열기">
               <img loading="lazy" decoding="async" class="project-card-art" src="assets/portfolio-media/84e202e4090f80577f2808d4.webp" alt="LH 청약 플러스 프로젝트 대표 이미지">
               <div class="project-tile-overlay">
-                <h3 class="project-tile-title">LH청약 플러스</h3>
-                <div class="project-tile-meta">개인 프로젝트 07월~08월 말까지</div>
-                <p class="project-tile-desc">행정 용어와 복잡한 탐색 때문에 어려웠던 청약 과정을 맞춤 공고 → 일정 → 서류 준비 흐름으로 재설계했습니다.</p>
-                <div class="project-tile-tools">UX Research · IA · UI Design · Publishing</div>
-              </div>
-            </article>
+<h3 class="project-tile-title" style="--pc-order:0">LH청약 플러스</h3>
+<div class="project-tile-meta" style="--pc-order:1">개인 프로젝트 07월~08월 말까지</div>
+<p class="project-tile-desc" style="--pc-order:2">복잡한 청약 정보와 어려운 행정 용어로 인해 사용자가 원하는 공고를 찾기 어렵다는 문제에서 시작했습니다. 사용자 관점에서 정보 구조를 재설계하고, 맞춤 공고 추천과 오늘 할 일, 서류 체크리스트 기능을 통해 청약 탐색부터 신청 준비까지 하나의 흐름으로 연결했습니다. 처음 이용하는 사용자도 쉽고 직관적으로 접근할 수 있는 모바일 서비스를 제안했습니다.</p>
+<div class="project-tile-tools" style="--pc-order:3">UX Research · IA · UI Design · Publishing</div>
+<div class="project-tile-credit" style="--pc-order:4"><span>기여도: 100%</span><span>작업 기간: 2달</span></div>
+</div><button type="button" class="project-info-toggle" aria-expanded="false" aria-label="LH청약 플러스 설명 보기">설명 보기</button>
+</article>
 
             <article class="v-project-card project-tile wells" data-project="교원 웰스 미니팜" data-case="wells" data-url="#" tabindex="0" role="button" aria-label="교원 웰스 미니팜 프로젝트 열기">
               <img loading="lazy" decoding="async" class="project-card-art" src="assets/portfolio-media/47468e611edbe807ceae06fe.webp" alt="교원 웰스 미니팜 프로젝트 대표 이미지">
               <div class="project-tile-overlay">
-                <h3 class="project-tile-title">교원 웰스 미니팜</h3>
-                <div class="project-tile-meta">2인 팀 프로젝트 09월 말~10월 말까지</div>
-                <p class="project-tile-desc">제품 구조를 자연스럽게 이해할 수 있도록 분해·조립 인터랙션과 가상 식물 재배 경험을 결합한 모바일 마이크로사이트입니다.</p>
-                <div class="project-tile-tools">UX Research · IA · UI Design · Publishing</div>
-              </div>
-            </article>
+<h3 class="project-tile-title" style="--pc-order:0">교원 웰스 미니팜</h3>
+<div class="project-tile-meta" style="--pc-order:1">2인 팀 프로젝트 09월 말~10월 말까지</div>
+<p class="project-tile-desc" style="--pc-order:2">제품의 특징과 사용 경험을 보다 직관적이고 흥미롭게 전달하기 위해 웰스팜 미니 마이크로사이트를 기획했습니다. 제품의 분해와 조립 과정을 스크롤 인터랙션으로 구현하고, 재배 과정과 식물 관리 정보를 시각적으로 구성했습니다. 브랜드의 친환경적인 이미지와 사용자의 탐색 경험을 연결해 제품을 직접 경험하는 듯한 인터랙티브 웹사이트를 설계했습니다.</p>
+<div class="project-tile-tools" style="--pc-order:3">UX Research · IA · UI Design · Publishing</div>
+<div class="project-tile-credit" style="--pc-order:4"><span>기여도: 100%</span><span>작업 기간: 2달</span></div>
+</div><button type="button" class="project-info-toggle" aria-expanded="false" aria-label="교원 웰스 미니팜 설명 보기">설명 보기</button>
+</article>
           </div>
         </div>
       </div>
@@ -2158,33 +2163,16 @@ html body #dasom-monkey-3d.scroll-companion canvas {
       </div>
     </section>
 
-    <section class="v-section v-contact ds-final-footer" id="contact" aria-labelledby="ds-footer-title">
-  <div class="dsf-top">
-    <p class="dsf-index"><span class="dsf-index-icon" aria-hidden="true">✳</span> 07 / CONTACT</p>
-    <p class="dsf-status">READY FOR WHAT'S NEXT · 2026</p>
+    <footer class="pc-footer" id="contact" aria-label="연락처 및 외부 링크">
+  <a class="pc-logo" href="#intro" data-pc-top aria-label="포트폴리오 맨 위로"><img src="assets/header-robot-logo.svg" width="101" height="77" alt="다솜 원숭이 로고"></a>
+  <div class="pc-footer-actions">
+    <a href="mailto:bds040305@gmail.com" data-pc-action="Email">Email <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M2 6h28v20H2Z M2 6l14 12L30 6"/></svg></a>
+    <a href="#contact" data-pc-action="Resume" data-unavailable aria-label="Resume, 연결 준비 중">Resume <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2v20m-8-8 8 8 8-8M4 21v9h24v-9"/></svg><small>준비 중</small></a>
+    <a href="https://github.com/bds040305-star" target="_blank" rel="noopener noreferrer" data-pc-action="GitHub">GitHub <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 24 25 7M8 7h17v17"/></svg></a>
+    <a href="#contact" data-pc-action="Figma" data-unavailable aria-label="Figma, 연결 준비 중">Figma <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 24 25 7M8 7h17v17"/></svg><small>준비 중</small></a>
   </div>
-  <div class="dsf-main">
-    <div class="dsf-headline">
-      <p class="dsf-lead">다른 경험, 하나의 시선.</p>
-      <h2 class="dsf-title" id="ds-footer-title">LET'S WORK<span class="dsf-title-last">TOGETHER<span class="dsf-period">.</span></span></h2>
-    </div>
-    <div class="dsf-side">
-      <p class="dsf-side-text">사용자에게 더 자연스러운 경험을 만들기 위해 관찰하고, 고민하고, 구현합니다.<br>다음 이야기를 함께 만들어가고 싶습니다.</p>
-      <a class="dsf-action" href="https://github.com/bds040305-star" target="_blank" rel="noopener noreferrer" aria-label="다솜의 GitHub 새 창에서 열기">EXPLORE GITHUB<span class="dsf-action-circle" aria-hidden="true">↗</span></a>
-    </div>
-  </div>
-  <div class="dsf-lower">
-    <div class="dsf-details">
-      <div class="dsf-link-group"><span class="dsf-label">01 / GITHUB</span><a class="dsf-text-link" href="https://github.com/bds040305-star" target="_blank" rel="noopener noreferrer">github.com/bds040305-star <span class="dsf-arrow" aria-hidden="true">↗</span></a></div>
-      <div class="dsf-link-group"><span class="dsf-label">02 / PORTFOLIO</span><a class="dsf-text-link" href="https://bds040305-star.github.io/NEWportfolio/" target="_blank" rel="noopener noreferrer">VIEW WEBSITE <span class="dsf-arrow" aria-hidden="true">↗</span></a></div>
-      <div class="dsf-link-group"><span class="dsf-label">03 / NAVIGATION</span><button class="dsf-top-button" id="ds-footer-back-to-top" type="button">BACK TO TOP <span aria-hidden="true">↑</span></button></div>
-    </div>
-    <div class="dsf-bottom">
-      <p class="dsf-wordmark" aria-label="DASOM">DASOM<span>.</span></p>
-      <div class="dsf-copyright"><span>DESIGNED &amp; BUILT BY DASOM</span><span>© 2026 DASOM. ALL RIGHTS RESERVED.</span></div>
-    </div>
-  </div>
-</section>
+  <p class="pc-copyright">© 2026 DASOM. ALL RIGHTS RESERVED.</p>
+</footer>
   </div>
 
   <div class="soi-project-modal" aria-hidden="true">
@@ -3162,6 +3150,10 @@ body.case-overlay-open,body.project-confirm-open{overflow:hidden!important}
       return;
     }
 
+    if (e.target.closest('.project-info-toggle')) {
+      e.preventDefault();e.stopImmediatePropagation();
+      window.portfolioChrome?.toggleDescription(card);return;
+    }
     const key = card.dataset.case;
     if (!['haevichi', 'lh', 'apple', 'wells'].includes(key)) return;
     e.preventDefault();
@@ -3248,7 +3240,7 @@ body.case-overlay-open,body.project-confirm-open{overflow:hidden!important}
   }
 
   function tick(){
-    if(!dragging && !paused && track.dataset.userHoverPause !== 'true'){
+    if(!dragging && !paused && track.dataset.userHoverPause !== 'true' && !track.querySelector('.pc-description-open,:focus-within')){
       offset -= AUTO_SPEED;
       normalize();
       render();
@@ -3281,7 +3273,7 @@ body.case-overlay-open,body.project-confirm-open{overflow:hidden!important}
   }
 
   viewport.addEventListener('pointerdown',(event)=>{
-    if(event.button!==0) return;
+    if(event.button!==0 || event.target.closest('.project-info-toggle') || event.target.closest('.pc-description-open .project-tile-overlay')) return;
     dragging=true;
     moved=false;
     paused=true;
@@ -3299,6 +3291,8 @@ body.case-overlay-open,body.project-confirm-open{overflow:hidden!important}
   viewport.addEventListener('pointercancel',endDrag);
   // Auto-scroll keeps moving on hover; only direct dragging/wheel temporarily pauses it.
   viewport.addEventListener('wheel',(event)=>{
+    const panel=event.target.closest('.project-tile-overlay');
+    if(panel && panel.scrollHeight>panel.clientHeight+1)return;
     event.preventDefault();
     paused=true;
     stopMomentum();
@@ -3310,6 +3304,7 @@ body.case-overlay-open,body.project-confirm-open{overflow:hidden!important}
 
   let marqueePressedCard=null;
   viewport.addEventListener('pointerdown',(event)=>{
+    if(event.target.closest('.project-info-toggle'))return;
     marqueePressedCard=event.target.closest && event.target.closest('.v-project-card');
   },true);
 
@@ -3339,7 +3334,7 @@ body.case-overlay-open,body.project-confirm-open{overflow:hidden!important}
 
   track.querySelectorAll('.v-project-card').forEach(card=>{
     card.addEventListener('keydown',(event)=>{
-      if(event.key==='Enter' || event.key===' '){
+      if((event.key==='Enter' || event.key===' ') && event.target===card){
         event.preventDefault();
         card.click();
       }
@@ -5925,13 +5920,13 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
  links.forEach(a=>a.addEventListener('click',e=>{
   const target=document.getElementById(a.dataset.dsDest);if(!target)return;
   e.preventDefault();close();
-  const top=a.dataset.dsDest==='intro'?0:Math.max(0,scrollY+target.getBoundingClientRect().top-92);
+  const top=a.dataset.dsDest==='intro'?0:Math.max(0,scrollY+target.getBoundingClientRect().top-header.getBoundingClientRect().height-18);
   window.dispatchEvent(new CustomEvent('portfolio:nav-target',{detail:{top}}));
   window.scrollTo({top,left:0,behavior:reduced.matches?'instant':'smooth'});
  }));
  header.querySelector('.ds-replay').addEventListener('click',()=>{close();document.querySelector('.studio-header .replay')?.click()});
  let raf=0;
- function activate(){raf=0;header.classList.toggle('is-scrolled', window.scrollY>24 || (document.getElementById('intro')?.getBoundingClientRect().top || 0)<-24);const mark=scrollY+Math.min(220,innerHeight*.28);let selected='';
+ function activate(){raf=0;const mark=scrollY+Math.min(220,innerHeight*.28);let selected='';
   navLinks.forEach(a=>{const section=document.getElementById(a.dataset.dsDest);if(section&&mark>=scrollY+section.getBoundingClientRect().top)selected=a.dataset.dsDest});
   navLinks.forEach(a=>{const active=a.dataset.dsDest===selected;a.classList.toggle('is-active',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')});
  }
@@ -5939,6 +5934,10 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
  activate();
 })();
 </script>
-<script defer src="assets/portfolio-footer-20261110.js?v=2"></script>
+<script defer src="assets/portfolio-chrome/chrome.js?v=20261111-1"></script>
+<button class="pc-top" type="button" data-pc-top aria-label="페이지 맨 위로 이동" tabindex="-1"><span class="pc-top-upper" aria-hidden="true">TOP</span><span class="pc-top-lower" aria-hidden="true"><img src="assets/header-robot-logo.svg" alt="" width="101" height="77"></span></button>
+<dialog class="pc-dialog" id="pc-link-confirm" aria-labelledby="pc-confirm-title" aria-describedby="pc-confirm-note">
+<div class="pc-dialog-content"><p class="pc-dialog-kicker">DASOM / <span id="pc-confirm-label"></span></p><h2 id="pc-confirm-title">해당 페이지로 이동하시겠습니까?</h2><p class="pc-dialog-note" id="pc-confirm-note"></p><div class="pc-dialog-actions"><button type="button" data-pc-cancel>아니오</button><button type="button" class="pc-confirm" data-pc-confirm>네</button></div></div>
+</dialog>
 </body>
 </html>

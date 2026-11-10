@@ -5826,21 +5826,6 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
 @media(max-width:760px){#dasom-intro-guidance{left:22px;right:22px;bottom:66px;width:auto;max-width:300px}#dasom-intro-guidance .intro-sentence{font-size:14px;margin-bottom:12px}#dasom-view-projects{min-height:44px}#dasom-monkey-3d.scroll-companion{pointer-events:none!important}#dasom-monkey-drag-cue{display:none!important}}
 @media(prefers-reduced-motion:reduce){#dasom-intro-guidance,#dasom-view-projects,#works .v-project-card.project-tile{transition:none!important;animation:none!important}}
 </style>
-<script id="dasom-ux-bridge-2026">
-document.addEventListener('DOMContentLoaded',()=>{
- const studio=document.querySelector('.intro > .studio');
- const works=document.getElementById('works');
- if(!studio||!works)return;
- const block=document.createElement('aside');
- block.id='dasom-intro-guidance';
- block.setAttribute('aria-label','포트폴리오 소개와 프로젝트 이동');
- block.innerHTML='<p class="eyebrow">DESIGN WITH PURPOSE</p><p class="intro-sentence">사용자의 불편을 발견하고,<br>움직이는 경험으로 해결합니다.</p><a id="dasom-view-projects" href="#works">VIEW PROJECTS <span aria-hidden="true">↗</span></a>';
- studio.appendChild(block);
- block.querySelector('a').addEventListener('click',e=>{
-   e.preventDefault();
-   works.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
- });
-});
-</script>
+
 </body>
 </html>

@@ -2218,7 +2218,35 @@ function enterStudio() {
 }
 
 
-$('.replay').addEventListener('click', playIntro);
+// Replay must restore the entire document, not only the opening GSAP timeline.
+// ScrollTrigger reparents the character, and the smooth-wheel loop retains its
+// own target. Reloading from the top prevents both states leaking into replay.
+const replayStorageKey = 'dasom-portfolio-replay-once';
+let replayRequestedOnLoad = false;
+try { replayRequestedOnLoad = sessionStorage.getItem(replayStorageKey) === '1'; } catch (_) {}
+if (replayRequestedOnLoad && 'scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+$('.replay').addEventListener('click', () => {
+  if (!hasEntered && window.scrollY < 2) {
+    playIntro();
+    return;
+  }
+  try { sessionStorage.setItem(replayStorageKey, '1'); } catch (_) {}
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.dispatchEvent(new Event('portfolio:reset-smooth-scroll'));
+  window.scrollTo(0, 0);
+  window.location.reload();
+});
+
+window.addEventListener('load', () => {
+  if (!replayRequestedOnLoad) return;
+  try { sessionStorage.removeItem(replayStorageKey); } catch (_) {}
+  window.scrollTo(0, 0);
+  requestAnimationFrame(() => {
+    window.scrollTo(0, 0);
+    playIntro();
+  });
+}, { once: true });
 
 const shutterHandle = $('.handle-body');
 let handlePointerId = null;
@@ -4385,6 +4413,13 @@ body.vertical-ready { scroll-behavior: auto !important; }
   let rafId = 0;
   let lastTime = 0;
   const ease = 0.105;
+  // Cancel an in-flight eased wheel animation before a replay reset.
+  window.addEventListener('portfolio:reset-smooth-scroll', () => {
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = 0;
+    targetY = 0;
+    lastTime = 0;
+  });
   const stopAtNativeScroll = (event) => {
     const el = event.target instanceof Element ? event.target : null;
     return !document.body.classList.contains('vertical-ready') ||

@@ -1920,12 +1920,23 @@ body.vertical-ready #ds-fixed-nav{transform:translateY(0);opacity:1;pointer-even
 #ds-fixed-nav.is-scrolled .ds-bar{background:rgba(255,255,255,.68);backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3);border-color:rgba(71,48,32,.11);box-shadow:0 12px 38px rgba(40,23,12,.095)}
 #ds-fixed-nav .ds-logo{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;min-width:46px;min-height:46px}
 #ds-fixed-nav .ds-logo img{display:block;object-fit:cover;width:46px;height:46px;border-radius:10px;border:1px solid rgba(24,24,24,.2);box-shadow:0 3px 8px rgba(0,0,0,.09)}
+
+/* 2026-11-10 | edge-aligned hero header / white-to-glass scroll state */
+#ds-fixed-nav{top:20px;left:clamp(16px,1.75vw,36px);right:clamp(16px,1.75vw,36px)}
+#ds-fixed-nav .ds-bar{min-height:76px;padding:10px 22px 10px 25px;border-radius:21px;background:#fff;border-color:rgba(70,50,36,.12);box-shadow:0 10px 28px rgba(39,23,12,.085)}
+#ds-fixed-nav.is-scrolled .ds-bar{background:rgba(251,249,247,.70);backdrop-filter:blur(24px) saturate(1.3);-webkit-backdrop-filter:blur(24px) saturate(1.3);box-shadow:0 10px 35px rgba(35,25,17,.10)}
+#ds-fixed-nav .ds-logo{min-width:112px;min-height:34px;width:112px;height:34px}
+#ds-fixed-nav .ds-wordmark{display:block;width:112px;height:30px;flex:none;overflow:visible}
+#ds-fixed-nav .ds-descriptor{margin-left:3px}
+body.vertical-ready .soi-header{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+@media(max-width:850px){#ds-fixed-nav{top:12px;left:16px;right:16px}#ds-fixed-nav .ds-bar{min-height:62px;border-radius:17px;padding:9px 14px 9px 17px;gap:12px}#ds-fixed-nav .ds-wordmark{width:108px;height:auto}#ds-fixed-nav .ds-logo{width:108px;min-width:108px}}
+@media(max-width:430px){#ds-fixed-nav .ds-descriptor{display:none}#ds-fixed-nav .ds-toggle{margin-left:auto}}
 </style>
 </head>
 <body>
 <header id="ds-fixed-nav" aria-label="포트폴리오 메뉴">
  <div class="ds-bar">
-  <a href="#intro" data-ds-dest="intro" class="ds-logo" aria-label="포트폴리오 맨 위로 이동"><img src="data:image/webp;base64,UklGRv4AAABXRUJQVlA4IPIAAAAwBwCdASpYAFgAPpFInUylpCKloOiwsBIJaWtHEHvlAAbfDaVqEo/+GlhgVfKLPvJ8jUR0i5nBN7fmJT+HYvUB8AAA/vaXoxA/loIUbtGYfInIpnRZmfkK1ldSyWEF0U9qSwBThRj5CVi1S6w6jgav8LPV3jc9uVD0Qfgq062Xdjip2qJ7DlB1IyZw/zvTHt0qEm8pTref9Kx1LhCVKH6//lgUpbPnWl8sMdjA5Do3I5m+IQdUFrft44NSIVKNkOvkYvxA9ODlGMqjZG0lfKmLCTjSZ0eRjGVC6cNrRjn+FQES33YRQjGcR19MwicIqgAAAA==" alt="격자 패턴 로고" width="46" height="46"></a>
+  <a href="#intro" data-ds-dest="intro" class="ds-logo" aria-label="포트폴리오 맨 위로 이동"><svg class="ds-wordmark" width="112" height="30" viewBox="0 0 112 30" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#27201b" fill-rule="evenodd" d="M80 4L80 25L83 25L83 12L84 11L85 12L85 13L86 14L86 15L87 16L87 17L88 18L88 19L90 22L92 22L93 21L93 20L94 19L94 18L95 17L96 14L98 12L99 12L100 13L100 25L101 25L101 4L99 4L98 5L98 6L97 7L96 10L94 12L94 14L92 17L91 17L89 15L89 14L88 13L88 12L87 11L87 10L86 9L86 8L85 7L84 4Z M28 4L27 5L27 7L26 8L26 10L25 11L25 13L24 14L24 16L22 19L22 21L21 22L21 24L20 25L23 25L24 22L26 20L34 20L36 23L36 25L39 25L39 24L38 23L38 21L37 20L37 18L36 17L36 15L34 12L34 10L33 9L33 7L32 6L32 4Z M29 9L30 9L32 12L32 14L33 15L33 17L32 18L27 18L26 17L26 16L27 15L27 13L28 12L28 10Z M3 4L3 25L13 25L14 24L16 24L19 21L19 20L20 19L20 10L19 9L19 8L16 5L15 5L14 4Z M7 6L12 6L13 7L14 7L17 10L17 13L18 14L18 15L17 16L17 19L14 22L13 22L12 23L7 23L6 22L6 7Z M66 3L65 4L63 4L62 5L61 5L58 8L58 10L57 11L57 18L58 19L58 21L61 24L62 24L63 25L71 25L72 24L73 24L76 21L76 20L77 19L77 16L78 15L78 14L77 13L77 10L76 9L76 8L72 4L69 4L68 3Z M65 6L70 6L74 10L74 11L75 12L75 17L74 18L74 19L70 23L65 23L64 22L63 22L61 20L61 19L60 18L60 11L61 10L61 9L63 7L64 7Z M47 3L46 4L44 4L41 7L41 12L43 14L45 14L46 15L48 15L49 16L50 16L52 18L52 21L50 23L46 23L44 21L44 20L43 19L41 19L40 20L41 21L41 22L44 25L52 25L55 22L55 17L52 14L50 14L49 13L46 12L44 10L44 8L46 6L49 6L52 9L54 9L55 8L54 7L54 6L52 4L49 4L48 3Z"/><circle cx="106" cy="23" r="3.1" fill="#ef642e"/></svg></a>
   <span class="ds-descriptor">UX/UI DESIGNER<br>PORTFOLIO · 2026</span>
   <button type="button" class="ds-toggle" aria-controls="ds-nav-items" aria-expanded="false" aria-label="메뉴 열기"><i></i><i></i></button>
   <nav id="ds-nav-items" class="ds-items" aria-label="페이지 섹션">

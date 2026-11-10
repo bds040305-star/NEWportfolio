@@ -20,7 +20,7 @@ function observeHero(){
  heroObserver?.disconnect();
  heroObserver=new IntersectionObserver(entries=>{
   const entry=entries[0];outside=!entry.isIntersecting&&entry.boundingClientRect.bottom<=header.getBoundingClientRect().height;
-  header.classList.toggle('is-scrolled',outside);syncFloat();
+  syncFloat(); // Header styling is owned by the ABOUT ME boundary observer.
  },{rootMargin:`-${header.getBoundingClientRect().height}px 0px 0px 0px`,threshold:0});
  heroObserver.observe(hero);
 }

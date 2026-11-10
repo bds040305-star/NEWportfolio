@@ -1,0 +1,88 @@
+@font-face{font-family:HeroAboutPretendard;src:url('../lh-figma/PretendardVariable.woff2') format('woff2');font-weight:100 900;font-display:swap}
+/* Reference: Main / 310:5723, 310:5553, 310:5531. Scene and model controllers are unchanged. */
+.studio.ha-restored::before,.studio.ha-restored::after{display:none!important}
+.studio.ha-restored{background:#101010!important}
+.studio.ha-restored .hero-glow,.studio.ha-restored .soi-copy,.studio.ha-restored .soi-projects,.studio.ha-restored .soi-stage-label{display:none!important}
+body.vertical-ready #intro.intro{height:calc(100vw * 1187 / 1920);min-height:0}
+.ha-hero-plane{position:absolute;left:50%;top:0;width:1920px;height:1187px;transform:translateX(-50%) scale(var(--ha-scale,1));transform-origin:50% 0;pointer-events:none;overflow:hidden;z-index:0}
+.ha-hero-plane img{display:block}
+.ha-about{position:relative;width:100%;height:calc(100vw * 1518 / 1920);overflow:hidden;isolation:isolate;background:#e9e4da}
+.ha-about-plane{position:absolute;left:50%;top:0;width:1920px;height:1518px;transform:translateX(-50%) scale(var(--ha-scale,1));transform-origin:50% 0;font-family:HeroAboutPretendard,sans-serif;line-height:normal;color:#000}
+.ha-about-plane p,.ha-about-plane h1{margin:0}
+.ha-about-plane img{display:block}
+.ha-about-group,.ha-about-details,.ha-about-portrait{display:contents}
+.ha-logo-bar{position:relative;width:100%;height:203px;padding:37px 0;background:#1b1b1b;color:#fff;overflow:hidden;isolation:isolate}
+.ha-logo-track{display:flex;width:max-content;will-change:transform;animation:ha-logo-loop var(--ha-loop-duration,80s) linear infinite;animation-play-state:paused}
+.ha-logo-group{display:flex;flex:none;align-items:center;gap:78.5px;padding-right:78.5px;padding-left:0}
+.ha-logo-pair{display:flex;flex:none;align-items:center;gap:69px;width:268px;height:129px;white-space:nowrap}
+.ha-logo-pair img{display:block;flex:none;width:129px;height:129px;object-fit:contain}
+.ha-logo-pair span{flex:none;font:600 21.317px/17.48px HeroAboutPretendard,sans-serif;letter-spacing:-1.5988px;color:#fff;white-space:nowrap}
+.ha-logo-bar .ha-logo-track{margin-left:30px}
+.ha-logo-bar.is-running .ha-logo-track{animation-play-state:running}
+.ha-logo-bar:hover .ha-logo-track,.ha-logo-bar:focus-within .ha-logo-track{animation-play-state:paused}
+@keyframes ha-logo-loop{from{transform:translateX(0)}to{transform:translateX(calc(-1 * var(--ha-loop-width,2079px)))}}
+/* The shared header owns navigation; only these reference geometry values change. */
+#ds-fixed-nav .ds-bar{height:clamp(64px,5.208333vw,100px)!important;padding:0 3.943vw 0 1.972vw!important;transition:background .4s ease,backdrop-filter .4s ease,-webkit-backdrop-filter .4s ease!important}
+#ds-fixed-nav .ds-logo{width:clamp(53px,4.3112vw,82.775px)!important}
+#ds-fixed-nav .ds-logo img.ds-robot-logo{aspect-ratio:1;object-fit:contain!important}
+#ds-fixed-nav .ds-items{position:absolute;left:48.75%;top:0;height:100%;margin-left:0!important;gap:5.1041667vw!important}
+#ds-fixed-nav .ds-link{font-family:HeroAboutPretendard,sans-serif!important;font-size:clamp(12px,1.18734375vw,22.797px)!important;font-weight:600!important;line-height:18.694px!important;letter-spacing:-.08905vw!important}
+@media(max-width:850px){#ds-fixed-nav .ds-bar{height:64px!important;padding:0 20px!important}#ds-fixed-nav .ds-items{position:absolute!important;left:0!important;right:0!important;top:100%!important;height:auto!important;gap:0!important}#ds-fixed-nav .ds-link{font-size:16px!important;letter-spacing:-.03em!important}}
+@media(max-width:760px){
+ body.vertical-ready #intro.intro{height:max(390px,72svh);min-height:0}
+ .ha-hero-plane{left:0;width:100%;height:100%;transform:none}
+ .ha-hero-plane>[data-node-id="310:5724"]{left:15%!important;top:25%!important;width:70%!important;height:auto!important;aspect-ratio:711/534}
+ .ha-hero-plane>[data-node-id="310:5725"]{left:-23%!important;top:-15%!important;width:83%!important;height:55%!important}
+ .ha-hero-plane>[data-node-id="310:5725"]>div{width:100%;height:100%}
+ .ha-hero-plane>[data-node-id="310:5725"]>div>div{width:100%!important;height:100%!important}
+ .ha-hero-plane>[data-node-id="310:5726"]{left:-20%!important;top:65%!important;width:85%!important;height:48%!important}
+ .ha-hero-plane>[data-node-id="310:5727"]{left:59%!important;top:62%!important;width:86%!important;height:48%!important}
+ .ha-hero-plane>[data-node-id="310:5727"]>div,.ha-hero-plane>[data-node-id="310:5728"]>div{width:100%;height:100%}
+ .ha-hero-plane>[data-node-id="310:5727"]>div>div,.ha-hero-plane>[data-node-id="310:5728"]>div>div{width:100%!important;height:100%!important}
+ .ha-hero-plane>[data-node-id="310:5728"]{left:62%!important;top:-10%!important;width:81%!important;height:48%!important}
+ .ha-hero-plane>[data-node-id="310:5725"] img,.ha-hero-plane>[data-node-id="310:5727"] img,.ha-hero-plane>[data-node-id="310:5728"] img{object-fit:contain!important}
+ .ha-about{height:auto}
+ .ha-about-plane{position:relative;left:0;width:100%;height:auto;transform:none;padding:90px 24px 40px}
+ .ha-about-plane>[aria-hidden]{position:absolute!important;inset:0}
+ .ha-about-plane>[data-node-id="310:5554"],.ha-about-plane>[data-node-id="310:5555"]{display:none}
+ .ha-about-plane>[data-node-id="310:5720"]{position:relative!important;left:auto!important;top:auto!important;white-space:normal!important;font-size:clamp(31px,8vw,52px)!important;line-height:1.15!important;letter-spacing:-.07em!important;background:linear-gradient(transparent 50%,#ff4800);display:table;margin-bottom:24px}
+ .ha-about-plane>[data-node-id="310:5558"]{position:relative!important;left:auto!important;top:auto!important;width:auto!important;font-size:14px!important;line-height:1.8!important;margin-bottom:24px}
+ .ha-about-plane>[data-node-id="310:5558"] p{line-height:1.8!important}
+ .ha-about-portrait{display:block;position:relative;height:min(140vw,600px);margin:0 -24px 32px;overflow:hidden}
+ .ha-about-portrait>[data-node-id="310:5721"]{left:-12%!important;top:0!important;width:128%!important;height:auto!important;aspect-ratio:956/1226}
+ .ha-about-portrait>[data-node-id="310:5722"]{left:-6%!important;top:16px!important;width:110%!important;height:auto!important;aspect-ratio:823/1159}
+ .ha-about-details{display:grid;grid-template-columns:1fr;gap:30px}
+ .ha-about-group{display:block}
+ .ha-about-group>p,.ha-about-group>div{position:relative!important;left:auto!important;top:auto!important;white-space:normal!important;width:auto!important;font-size:15px!important;line-height:1.7!important;letter-spacing:0!important}
+ .ha-about-group>p[style*="color:#ff4800"],.ha-about-group>div[style*="color:#ff4800"]{font-size:25px!important;line-height:1.3!important;margin-bottom:15px}
+ .ha-about-group>p[style*="font-weight:800"]:not(:first-child){margin-top:12px}
+ .ha-about-group>p[style*="font-weight:400"]{margin-bottom:8px}
+ .ha-awards>div:first-child p{display:inline;line-height:1.3!important}
+ .ha-skills{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}
+ .ha-skills>p:first-child{grid-column:1/-1;margin-bottom:0!important}
+ .ha-skills>div>div:first-child>p{font-size:14px!important;line-height:1.4!important}
+ .ha-skills>div>div:first-child{height:34px}
+}
+@media(prefers-reduced-motion:reduce){.ha-logo-track{animation:none!important;transform:none!important;will-change:auto}#ds-fixed-nav .ds-bar{transition:none!important}}
+
+
+
+.ha-about-plane>[data-node-id="310:5720"]{z-index:1}
+
+/* Reuse the live model in the reference hero slot. Only its page layout changes;
+   the existing renderer, poses, drag response and later section choreography remain untouched. */
+html.ha-first-scenes body.vertical-ready #dasom-monkey-3d.scroll-companion{
+ position:absolute!important;left:calc(100vw * 1315 / 1920)!important;top:calc(100vw * 499 / 1920)!important;
+ width:calc(100vw * 253 / 1920)!important;height:calc(100vw * 253 / 1920)!important;
+ transform:none!important;translate:none!important;
+}
+@media(max-width:760px){html.ha-first-scenes body.vertical-ready #dasom-monkey-3d.scroll-companion{left:calc(100% - 110px)!important;top:calc(max(390px,72svh) * .48)!important;width:100px!important;height:100px!important}}
+
+.ha-about-plane [style*="font-family:"]{font-family:HeroAboutPretendard,sans-serif!important}
+.ha-about-plane>[data-node-id="310:5720"]{font-family:Subway,HeroAboutPretendard,sans-serif!important}
+
+/* Preserve the original Subway headline outlines; the live h1 text remains accessible. */
+.ha-title-text{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.ha-title-art{display:block;width:877px;height:99px;max-width:none}
+@media(max-width:760px){.ha-title-art{width:min(877px,100%);height:auto;max-width:100%}}
+@media(max-width:760px){.ha-about-plane>[data-node-id="310:5720"]{display:block;width:100%!important;max-width:877px}}

@@ -22,12 +22,12 @@ body.vertical-ready #intro.intro{height:calc(100vw * 1187 / 1920);min-height:0}
 .ha-logo-bar:hover .ha-logo-track,.ha-logo-bar:focus-within .ha-logo-track{animation-play-state:paused}
 @keyframes ha-logo-loop{from{transform:translateX(0)}to{transform:translateX(calc(-1 * var(--ha-loop-width,2079px)))}}
 /* The shared header owns navigation; only these reference geometry values change. */
-#ds-fixed-nav .ds-bar{height:clamp(54px,3.125vw,60px)!important;padding:0 3.943vw 0 1.972vw!important;transition:background .4s ease,backdrop-filter .4s ease,-webkit-backdrop-filter .4s ease!important}
-#ds-fixed-nav .ds-logo{width:clamp(40px,2.4vw,49px)!important}
+#ds-fixed-nav .ds-bar{height:clamp(46px,2.5vw,48px)!important;padding:0 3.943vw 0 1.972vw!important;transition:background .4s ease,backdrop-filter .4s ease,-webkit-backdrop-filter .4s ease!important}
+#ds-fixed-nav .ds-logo{width:clamp(34px,2vw,40px)!important}
 #ds-fixed-nav .ds-logo img.ds-robot-logo{aspect-ratio:1;object-fit:contain!important}
 #ds-fixed-nav .ds-items{position:absolute;left:48.75%;right:3.943vw;top:0;height:100%;margin-left:0!important;justify-content:space-between!important;gap:0!important}
-#ds-fixed-nav .ds-link{font-family:HeroAboutPretendard,sans-serif!important;font-size:clamp(10px,.594vw,12px)!important;font-weight:600!important;line-height:1.15!important;letter-spacing:-.045vw!important;min-height:34px!important}
-@media(max-width:850px){#ds-fixed-nav .ds-bar{height:54px!important;padding:0 20px!important}#ds-fixed-nav .ds-items{position:absolute!important;left:0!important;right:0!important;top:100%!important;height:auto!important;gap:0!important;justify-content:flex-start!important}#ds-fixed-nav .ds-link{font-size:14px!important;letter-spacing:-.03em!important;min-height:48px!important}}
+#ds-fixed-nav .ds-link{font-family:HeroAboutPretendard,sans-serif!important;font-size:clamp(9px,.55vw,11px)!important;font-weight:600!important;line-height:1.15!important;letter-spacing:-.045vw!important;min-height:28px!important}
+@media(max-width:850px){#ds-fixed-nav .ds-bar{height:48px!important;padding:0 20px!important}#ds-fixed-nav .ds-items{position:absolute!important;left:0!important;right:0!important;top:100%!important;height:auto!important;gap:0!important;justify-content:flex-start!important}#ds-fixed-nav .ds-link{font-size:14px!important;letter-spacing:-.03em!important;min-height:48px!important}}
 @media(max-width:760px){
  body.vertical-ready #intro.intro{height:max(390px,72svh);min-height:0}
  .ha-hero-plane{left:0;width:100%;height:100%;transform:none}
@@ -86,3 +86,25 @@ html.ha-first-scenes body.vertical-ready #dasom-monkey-3d.scroll-companion{
 .ha-title-art{display:block;width:877px;height:99px;max-width:none;mix-blend-mode:multiply} /* The PNG's white paper now blends into the existing About grid without changing the lettering. */
 @media(max-width:760px){.ha-title-art{width:min(877px,100%);height:auto;max-width:100%}}
 @media(max-width:760px){.ha-about-plane>[data-node-id="310:5720"]{display:block;width:100%!important;max-width:877px}}
+
+
+/* Desktop visual rhythm: reduce oversized Figma artwork without scaling the full page,
+   altering the background image, changing zoom or touching the 3D monkey controller. */
+@media(min-width:761px){
+ .ha-hero-plane > [data-node-id="310:5724"]{
+   transform:scale(.88);
+   transform-origin:50% 50%;
+ }
+ .ha-hero-plane > [data-node-id="310:5725"],
+ .ha-hero-plane > [data-node-id="310:5726"],
+ .ha-hero-plane > [data-node-id="310:5727"],
+ .ha-hero-plane > [data-node-id="310:5728"]{
+   transform:scale(.93);
+   transform-origin:50% 50%;
+ }
+ .ha-about-plane > [data-node-id="310:5720"],
+ .ha-about-plane > [data-node-id="310:5554"]{
+   transform:scale(.90);
+   transform-origin:top left;
+ }
+}

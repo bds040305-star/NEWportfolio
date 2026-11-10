@@ -1896,9 +1896,9 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 }
 </style>
 <style id="ds-nav-style">
-#ds-fixed-nav{position:fixed;top:16px;left:50%;z-index:900;width:min(1140px,calc(100% - 40px));transform:translate(-50%,-130%);opacity:0;pointer-events:none;transition:transform .48s cubic-bezier(.2,.8,.2,1),opacity .32s;font-family:'DM Sans','Pretendard Variable',sans-serif}
-body.vertical-ready #ds-fixed-nav{transform:translate(-50%,0);opacity:1;pointer-events:auto}
-#ds-fixed-nav .ds-bar{display:flex;align-items:center;gap:18px;min-height:64px;padding:9px 17px 9px 22px;box-sizing:border-box;border:1px solid rgba(63,42,25,.14);border-radius:18px;background:rgba(252,249,245,.88);backdrop-filter:blur(20px) saturate(1.25);-webkit-backdrop-filter:blur(20px) saturate(1.25);box-shadow:0 12px 36px rgba(39,23,12,.07)}
+#ds-fixed-nav{position:fixed;top:16px;left:clamp(22px,5vw,86px);right:clamp(22px,5vw,86px);z-index:900;width:auto;transform:translateY(-130%);opacity:0;pointer-events:none;transition:transform .48s cubic-bezier(.2,.8,.2,1),opacity .32s;font-family:'DM Sans','Pretendard Variable',sans-serif}
+body.vertical-ready #ds-fixed-nav{transform:translateY(0);opacity:1;pointer-events:auto}
+#ds-fixed-nav .ds-bar{display:flex;align-items:center;gap:18px;min-height:64px;padding:9px 17px 9px 22px;box-sizing:border-box;border:1px solid rgba(63,42,25,.14);border-radius:18px;background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:0 12px 36px rgba(39,23,12,.07);transition:background-color .38s ease,box-shadow .38s ease,border-color .38s ease,backdrop-filter .38s ease,-webkit-backdrop-filter .38s ease}
 #ds-fixed-nav a{text-decoration:none;color:inherit}
 #ds-fixed-nav .ds-logo{white-space:nowrap;font:900 24px/1 'DM Sans',sans-serif;letter-spacing:-.075em;color:#2a211a}
 #ds-fixed-nav .ds-logo b{color:#ff642b}
@@ -1913,16 +1913,19 @@ body.vertical-ready #ds-fixed-nav{transform:translate(-50%,0);opacity:1;pointer-
 #ds-fixed-nav .ds-toggle[aria-expanded="true"] i:first-child{transform:translateY(3.5px) rotate(45deg)}
 #ds-fixed-nav .ds-toggle[aria-expanded="true"] i:last-child{transform:translateY(-3.5px) rotate(-45deg)}
 #ds-fixed-nav :is(a,button):focus-visible{outline:2px solid #ff642b;outline-offset:3px}
-@media(max-width:850px){#ds-fixed-nav{top:12px;width:calc(100% - 28px)}#ds-fixed-nav .ds-bar{min-height:60px;padding:8px 12px 8px 17px;border-radius:16px;gap:12px}#ds-fixed-nav .ds-logo{font-size:22px}#ds-fixed-nav .ds-descriptor{font-size:8px;padding-left:11px}#ds-fixed-nav .ds-toggle{display:flex}
+@media(max-width:850px){#ds-fixed-nav{top:12px;left:20px;right:20px;width:auto}#ds-fixed-nav .ds-bar{min-height:60px;padding:8px 12px 8px 17px;border-radius:16px;gap:12px}#ds-fixed-nav .ds-logo{font-size:22px}#ds-fixed-nav .ds-descriptor{font-size:8px;padding-left:11px}#ds-fixed-nav .ds-toggle{display:flex}
 #ds-fixed-nav .ds-items{display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;margin:0;padding:10px;flex-direction:column;align-items:stretch;gap:4px;background:rgba(252,249,245,.98);border:1px solid rgba(63,42,25,.14);border-radius:16px;box-shadow:0 15px 35px rgba(37,22,12,.12);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 #ds-fixed-nav .ds-items.is-open{display:flex}#ds-fixed-nav .ds-link,#ds-fixed-nav .ds-replay{justify-content:flex-start;min-height:46px;font-size:12px;padding:0 15px}#ds-fixed-nav .ds-replay{margin:4px 0 0;justify-content:center}}
 @media(prefers-reduced-motion:reduce){#ds-fixed-nav,#ds-fixed-nav *{transition:none!important}}
+#ds-fixed-nav.is-scrolled .ds-bar{background:rgba(255,255,255,.68);backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3);border-color:rgba(71,48,32,.11);box-shadow:0 12px 38px rgba(40,23,12,.095)}
+#ds-fixed-nav .ds-logo{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;min-width:46px;min-height:46px}
+#ds-fixed-nav .ds-logo img{display:block;object-fit:cover;width:46px;height:46px;border-radius:10px;border:1px solid rgba(24,24,24,.2);box-shadow:0 3px 8px rgba(0,0,0,.09)}
 </style>
 </head>
 <body>
 <header id="ds-fixed-nav" aria-label="포트폴리오 메뉴">
  <div class="ds-bar">
-  <a href="#intro" data-ds-dest="intro" class="ds-logo" aria-label="DASOM 홈으로">DASOM<b>.</b></a>
+  <a href="#intro" data-ds-dest="intro" class="ds-logo" aria-label="포트폴리오 맨 위로 이동"><img src="data:image/webp;base64,UklGRv4AAABXRUJQVlA4IPIAAAAwBwCdASpYAFgAPpFInUylpCKloOiwsBIJaWtHEHvlAAbfDaVqEo/+GlhgVfKLPvJ8jUR0i5nBN7fmJT+HYvUB8AAA/vaXoxA/loIUbtGYfInIpnRZmfkK1ldSyWEF0U9qSwBThRj5CVi1S6w6jgav8LPV3jc9uVD0Qfgq062Xdjip2qJ7DlB1IyZw/zvTHt0qEm8pTref9Kx1LhCVKH6//lgUpbPnWl8sMdjA5Do3I5m+IQdUFrft44NSIVKNkOvkYvxA9ODlGMqjZG0lfKmLCTjSZ0eRjGVC6cNrRjn+FQES33YRQjGcR19MwicIqgAAAA==" alt="격자 패턴 로고" width="46" height="46"></a>
   <span class="ds-descriptor">UX/UI DESIGNER<br>PORTFOLIO · 2026</span>
   <button type="button" class="ds-toggle" aria-controls="ds-nav-items" aria-expanded="false" aria-label="메뉴 열기"><i></i><i></i></button>
   <nav id="ds-nav-items" class="ds-items" aria-label="페이지 섹션">
@@ -5926,7 +5929,7 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
  }));
  header.querySelector('.ds-replay').addEventListener('click',()=>{close();document.querySelector('.studio-header .replay')?.click()});
  let raf=0;
- function activate(){raf=0;const mark=scrollY+Math.min(220,innerHeight*.28);let selected='';
+ function activate(){raf=0;header.classList.toggle('is-scrolled',window.scrollY>40);const mark=scrollY+Math.min(220,innerHeight*.28);let selected='';
   navLinks.forEach(a=>{const section=document.getElementById(a.dataset.dsDest);if(section&&mark>=scrollY+section.getBoundingClientRect().top)selected=a.dataset.dsDest});
   navLinks.forEach(a=>{const active=a.dataset.dsDest===selected;a.classList.toggle('is-active',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')});
  }

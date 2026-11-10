@@ -2,38 +2,51 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <script id="portfolio-replay-top-boot">
-  // A replay is an entirely fresh visit to the opening scene.
-  // Browsers and ScrollTrigger can attempt scroll restoration after 'load';
-  // keep the viewport at zero until the user actually enters the studio.
+  <script id="portfolio-intro-fresh-boot">
+  // EVERY top-level page load, including F5 / Ctrl+R, starts at the shutter.
+  // Disable native restoration before the browser parses its scrollable sections.
   (() => {
-    if (!new URLSearchParams(location.search).has('portfolioReplay')) return;
+    if (window.self !== window.top) return; // leave embedded case-study frames alone
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+    document.documentElement.style.setProperty('scroll-behavior','auto','important');
+    let released = false;
+    let correcting = false;
+    const release = () => {
+      if (released) return;
+      released = true;
+      window.removeEventListener('scroll',onScroll);
+      watcher?.disconnect();
+    };
     const forceTop = () => {
-      if (document.body && document.body.classList.contains('vertical-ready')) return;
-      if (window.scrollY !== 0) window.scrollTo({top:0,left:0,behavior:'instant'});
-      const el = document.scrollingElement;
-      if (el && el.scrollTop !== 0) el.scrollTop = 0;
+      if (released) return;
+      if (document.body?.classList.contains('vertical-ready')) { release(); return; }
+      if (correcting) return;
+      correcting = true;
+      try {
+        if (window.scrollY || window.scrollX) window.scrollTo({left:0,top:0,behavior:'instant'});
+        const el = document.scrollingElement;
+        if (el && el.scrollTop) el.scrollTop = 0;
+        if (document.body && document.body.scrollTop) document.body.scrollTop = 0;
+      } finally { correcting = false; }
     };
     const onScroll = () => forceTop();
-    window.addEventListener('scroll', onScroll, { passive:true });
-    document.addEventListener('DOMContentLoaded', forceTop, { once:true });
-    window.addEventListener('load', () => {
+    let watcher = null;
+    forceTop();
+    window.addEventListener('scroll',onScroll,{passive:true});
+    document.addEventListener('DOMContentLoaded',() => {
       forceTop();
-      requestAnimationFrame(() => { forceTop(); requestAnimationFrame(forceTop); });
-    }, { once:true });
-    window.addEventListener('pageshow', forceTop);
-    document.addEventListener('DOMContentLoaded', () => {
-      const watcher = new MutationObserver(() => {
-        if (document.body.classList.contains('vertical-ready')) {
-          window.removeEventListener('scroll', onScroll);
-          watcher.disconnect();
-        } else forceTop();
+      watcher = new MutationObserver(() => {
+        if (document.body.classList.contains('vertical-ready')) release();
+        else forceTop();
       });
       watcher.observe(document.body,{attributes:true,attributeFilter:['class']});
-    }, { once:true });
-    forceTop();
+      requestAnimationFrame(forceTop);
+    },{once:true});
+    window.addEventListener('load',() => {
+      forceTop();
+      requestAnimationFrame(() => {forceTop();requestAnimationFrame(forceTop);});
+    },{once:true});
+    window.addEventListener('pageshow',forceTop);
   })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -2160,8 +2173,11 @@ function startHatchMotion(){
 
 function resetIntro() {
   hasEntered = false;
+  // Scroll while the page is still scrollable; only then lock the intro.
+  window.dispatchEvent(new Event('portfolio:reset-smooth-scroll'));
+  if (document.scrollingElement) document.scrollingElement.scrollTop = 0;
+  window.scrollTo({left:0,top:0,behavior:'instant'});
   document.body.classList.remove('vertical-ready');
-  window.scrollTo(0,0);
   if (introTimeline) introTimeline.kill();
   if (hatchTimeline) { hatchTimeline.kill(); hatchTimeline = null; }
   gsap.killTweensOf('*');

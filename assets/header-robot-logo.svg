@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 101 77" width="101" height="77">
+  <title>포트폴리오 로봇 로고</title>
+  <g fill="none" stroke="#f7e9dc" stroke-width="5.2" stroke-linecap="round">
+    <path d="M20 25 C10 24 5 26 5 37 C5 48 11 51 20 48"/>
+    <path d="M81 25 C93 24 97 27 97 38 C97 48 92 51 82 49"/>
+  </g>
+  <path d="M25 3 H48 C68 3 85 18 85 38.5 S68 73 48 73 H25 Q18 73 18 66 V10 Q18 3 25 3 Z" fill="#fa5212"/>
+  <path d="M37 24 H57 C65 24 71 29 71 38 S65 52 57 52 H37 Z" fill="#11121c"/>
+  <rect x="45" y="33" width="4.4" height="9.6" rx="2.2" fill="#f7e5d2"/>
+  <rect x="57.5" y="34.5" width="4" height="7.8" rx="2" fill="#f7e5d2"/>
+</svg>

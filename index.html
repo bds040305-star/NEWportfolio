@@ -3861,9 +3861,39 @@ body.case-overlay-open,body.project-confirm-open{overflow:hidden!important}
       immediateRender:false
     },startTimes[index]);
   });
-  // Hold the complete floating tableau over the remainder of the section.
+  // Give people time to grab a sticker before the exit starts.
+  // The same scrubbed GSAP timeline reverses when they scroll back upward.
   const rest = {value:0};
-  master.to(rest,{value:1,duration:.48,ease:'none'},.60);
+  master.to(rest,{value:1,duration:.40,ease:'none'},.61);
+
+  // DOWNWARD EXIT: each tool fades and rises out in turn rather than the
+  // entire stage disappearing at ScrollTrigger.onLeave.
+  const exitStart = 1.02;
+  const exitGap = .072;
+  icons.forEach((el,index)=>{
+    const baseRot = parseFloat((el.style.getPropertyValue('--rot')||'0').replace('deg',''))||0;
+    const drift = index % 2 ? -1 : 1;
+    master.to(el,{
+      y:()=>innerHeight * (slotsY[index] - .10 - (index%3)*.014),
+      x:driftX[index] + drift*13,
+      rotation:baseRot + drift*3,
+      scale:.94,
+      opacity:0,
+      duration:.18,
+      ease:'power1.inOut',
+      force3D:true
+    },exitStart + index*exitGap);
+  });
+
+  // Hide only after the stagger actually finishes. A scrubbed animation
+  // can still be catching up when onLeave fires; hiding onLeave was causing
+  // the abrupt all-at-once disappearance.
+  const hideFinishedStage=()=>{
+    gsap.set(stage,{opacity:0});
+    stage.style.visibility='hidden';
+  };
+  master.eventCallback('onComplete',hideFinishedStage);
+  master.eventCallback('onReverseComplete',hideFinishedStage);
 
   const trigger = ScrollTrigger.create({
     animation:master,
@@ -3883,13 +3913,11 @@ body.case-overlay-open,body.project-confirm-open{overflow:hidden!important}
       freezeMonkey();
     },
     onLeave:()=>{
-      gsap.set(stage,{opacity:0});
-      stage.style.visibility='hidden';
+      // Let the final sequential fade finish, even with scrub smoothing.
       releaseMonkey();
     },
     onLeaveBack:()=>{
-      gsap.set(stage,{opacity:0});
-      stage.style.visibility='hidden';
+      // Likewise finish the reverse reveal/disappear before hiding.
       releaseMonkey();
     },
     onRefresh:self=>{

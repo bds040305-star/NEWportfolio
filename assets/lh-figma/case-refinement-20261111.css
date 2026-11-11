@@ -89,25 +89,44 @@
    The dome meets the existing lower gradient precisely at y=1077. */
 #view-lh [data-frame-id="124:16295"] img[src$="9b5f297200b2aa4932a868a6a043be4f092fb7be.svg"],
 #view-lh [data-frame-id="124:16295"] img[src$="e24ce22404c0ea98abfb59e82c62cc9dd700a7c9.svg"]{visibility:hidden!important}
-#view-lh [data-frame-id="124:16295"] .lh-section-backdrop::before,
-#view-lh [data-frame-id="124:16295"] .lh-design-frame > [data-node-id="124:16295"]::before{
- content:"";display:block;position:absolute;pointer-events:none;
- left:0;right:0;width:100%;background:#c5d8fb;
- border-radius:50% 50% 0 0 / 100% 100% 0 0;
+/* One continuous dome belongs to the full-width background, not the 1920px content frame. */
+#view-lh [data-frame-id="124:16295"]{background:#fff!important}
+#view-lh [data-frame-id="124:16295"] .lh-design-frame > [data-node-id="124:16295"]{
+ background-color:transparent!important;
 }
 #view-lh [data-frame-id="124:16295"] .lh-design-frame > [data-node-id="124:16295"]::before{
- top:350px;height:727px;
+ content:none!important;display:none!important;
 }
 #view-lh [data-frame-id="124:16295"] .lh-section-backdrop::before{
- top:calc(350px * var(--lh-layout-scale,1));height:calc(727px * var(--lh-layout-scale,1));
+ content:"";display:block;position:absolute;pointer-events:none;
+ left:0;right:0;width:100%;top:calc(350px * var(--lh-layout-scale,1));
+ height:calc(727px * var(--lh-layout-scale,1));background:#c5d8fb;
+ border-radius:50% 50% 0 0 / 100% 100% 0 0;
 }
 /* The persona marquee and its background reach both actual viewport edges. */
 #view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer{
  width:100%!important;left:0!important;right:0!important;max-width:none!important;
 }
+/* Duplicate only the existing scene image at original scale, mirroring at its
+   borders. Unlike an edge blur or image stretch, actual scenery fills each side. */
+#view-lh [data-frame-id="124:16332"]{background:#f9fbff!important}
+#view-lh [data-frame-id="124:16332"] .lh-design-frame > [data-node-id="124:16332"]{
+ background-color:transparent!important;
+}
+#view-lh [data-frame-id="124:16332"] [data-node-id="124:16334"],
+#view-lh [data-frame-id="124:16332"] .lh-edge-tone{display:none!important}
+#view-lh [data-frame-id="124:16332"] .lh-background-plane::before,
+#view-lh [data-frame-id="124:16332"] .lh-background-plane::after{
+ content:"";position:absolute;top:418px;width:1983px;height:793px;pointer-events:none;
+ background-image:url("adcd0f6ae8d4df60273c03e852741485e8006861.png");
+ background-size:cover;background-position:center;
+ transform:scaleX(-1);
+}
+#view-lh [data-frame-id="124:16332"] .lh-background-plane::before{left:-2015px}
+#view-lh [data-frame-id="124:16332"] .lh-background-plane::after{left:1951px}
 #view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-lane{
  box-sizing:border-box;width:100%!important;left:0!important;right:0!important;
- background:linear-gradient(90deg,rgba(239,245,255,.34),rgba(239,245,255,.24) 50%,rgba(239,245,255,.34));
+ background:transparent!important;
 }
 #view-lh [data-frame-id="124:16498"] [data-node-id="124:16504"]{
  height:730px!important;
@@ -124,9 +143,12 @@
  pointer-events:auto!important;touch-action:manipulation;
  transition:background-color .22s ease,box-shadow .22s ease,filter .22s ease,outline-color .22s ease,scale .22s ease;
 }
-#view-lh [data-frame-id="124:16498"] [data-lh-guide-action].lh-guide-selected,
-#view-lh [data-frame-id="124:16498"] [data-lh-guide-action][aria-pressed="true"]{
- outline:2px solid #0056b3!important;outline-offset:2px;filter:brightness(.97);
+/* Do not draw a blue outline on clicks. Real component state is painted within each control. */
+#view-lh [data-frame-id="124:16498"] [data-lh-guide-action]{
+ outline:0!important;
+}
+#view-lh [data-frame-id="124:16498"] [data-lh-guide-action]:focus-visible{
+ outline:2px solid #0056b3!important;outline-offset:2px;
 }
 #view-lh [data-frame-id="124:16498"] [data-lh-guide-action].lh-guide-tapped{
  scale:.96;filter:brightness(.88);
@@ -134,4 +156,81 @@
 #view-lh [data-frame-id="124:16498"] [data-lh-guide-action]:active{scale:.95}
 @media(prefers-reduced-motion:reduce){
 #view-lh [data-frame-id="124:16498"] [data-lh-guide-action]{transition:none!important}
+}
+
+
+/* Figma style-guide component preview — interactive states matching LH app UI. */
+#view-lh [data-frame-id="124:16498"] .lh-demo-choice,
+#view-lh [data-frame-id="124:16498"] .lh-demo-nav,
+#view-lh [data-frame-id="124:16498"] .lh-demo-checkbox{
+ cursor:pointer!important;
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-choice{
+ background:#e4e7ec!important;border-color:transparent!important;
+ transition:background-color .22s ease,color .22s ease,filter .22s ease!important;
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-choice p{
+ color:#727b86!important;transition:color .22s ease!important;
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-choice.is-active{
+ background:#0056b3!important;border-color:#0056b3!important;
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-choice.is-active p{color:#fff!important}
+#view-lh [data-frame-id="124:16498"] .lh-demo-choice:hover:not(.is-active){background:#d9e8fc!important}
+#view-lh [data-frame-id="124:16498"] .lh-demo-nav{
+ border:0!important;outline:0!important;
+ transition:background-color .22s ease!important;border-radius:4px;
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-nav p{
+ transition:color .22s ease!important;color:#525252!important;
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-nav img{
+ filter:grayscale(1) brightness(.7);transition:filter .22s ease!important;
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-nav.is-active p,
+#view-lh [data-frame-id="124:16498"] .lh-demo-nav:hover p{
+ color:#0056b3!important;font-weight:700!important;
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-nav.is-active img,
+#view-lh [data-frame-id="124:16498"] .lh-demo-nav:hover img{
+ filter:brightness(0) saturate(100%) invert(25%) sepia(89%) saturate(3000%) hue-rotate(199deg) brightness(87%) contrast(103%);
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-checkbox{
+ background:#fff!important;border:1px solid #79c000!important;border-radius:4px;
+ display:flex!important;align-items:center;justify-content:center;
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-checkbox.is-checked{
+ background:#79c000!important;
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-checkbox:not(.is-checked) img{visibility:hidden!important}
+#view-lh [data-frame-id="124:16498"] .lh-demo-checkbox.is-checked:empty::after{
+ content:"✓";font:bold 16px/1 sans-serif;color:white;
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-switch{
+ width:26.633px!important;height:12.737px!important;border-radius:999px!important;
+ background:#d6dce0!important;position:relative!important;overflow:visible!important;
+ border:0!important;
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-switch img{visibility:hidden!important}
+#view-lh [data-frame-id="124:16498"] .lh-demo-switch::after{
+ content:"";position:absolute;top:1.7px;left:2px;width:9.3px;height:9.3px;
+ border-radius:50%;background:#fff;box-shadow:0 1px 2px #1b2b3333;
+ transition:transform .22s ease!important;
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-switch[aria-checked="true"]{
+ background:#0056b3!important;
+}
+#view-lh [data-frame-id="124:16498"] .lh-demo-switch[aria-checked="true"]::after{
+ transform:translateX(13px);
+}
+#view-lh [data-frame-id="124:16498"] .lh-guide-demo-pressed{
+ filter:brightness(.91)!important;scale:.985;
+}
+#view-lh [data-frame-id="124:16498"] .lh-guide-swatch.is-picked{
+ filter:saturate(1.12) brightness(.96);
+}
+@media(prefers-reduced-motion:reduce){
+#view-lh [data-frame-id="124:16498"] .lh-demo-nav img,
+#view-lh [data-frame-id="124:16498"] .lh-demo-switch::after,
+#view-lh [data-frame-id="124:16498"] .lh-demo-choice{transition:none!important}
 }

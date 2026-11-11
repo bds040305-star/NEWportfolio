@@ -10,8 +10,8 @@ const problem=section('124:16295');
 if(problem){
  ['124:16303','124:16305','124:16307','124:16309','124:16311','124:16313'].forEach((id,i)=>{
   const el=node(problem,id);if(!el)return;
-  el.style.setProperty('--lh-card-speed',(6.1+i*.57)+'s');
-  el.style.setProperty('--lh-card-delay',(-i*1.13)+'s');
+  el.style.setProperty('--lh-card-speed',(5.6+i*.62)+'s');
+  el.style.setProperty('--lh-card-delay',(-i*1.41)+'s');
  });
  // Each illustration and its corresponding label enter together, at offset times.
  const groups=[
@@ -23,15 +23,19 @@ if(problem){
  const targets=groups.map(ids=>ids.map(id=>node(problem,id)).filter(Boolean));
  targets.flat().forEach(el=>el.classList.add('lh-case-reveal'));
  const enter=()=>{
-  targets.forEach((group,i)=>group.forEach(el=>{
-   el.style.transitionDelay=(i*.22)+'s';
-   el.classList.add('lh-case-visible');
-   el.style.setProperty('--lh-illustration-delay',(-i*1.55)+'s');
-  }));
-  // Begin the subtle secondary movement after the entrance has settled.
-  if(!reduce.matches)window.setTimeout(()=>targets.forEach(group=>group.forEach(el=>{
-   el.style.transitionDelay='0s';el.classList.add('lh-case-drift');
-  })),1950);
+  targets.forEach((group,i)=>{
+   window.setTimeout(()=>{
+    group.forEach((el,j)=>{
+     el.style.transitionDelay=(j*.10)+'s';
+     el.classList.add('lh-case-visible');
+     el.style.setProperty('--lh-illustration-delay',(-i*1.7-j*.45)+'s');
+    });
+    // Let the illustration land before beginning its independent slow floating.
+    if(!reduce.matches)window.setTimeout(()=>group.forEach(el=>{
+     el.style.transitionDelay='0s';el.classList.add('lh-case-drift');
+    }),1550);
+   },reduce.matches?0:i*520);
+  });
  };
  if(reduce.matches)enter();
  else{
@@ -71,51 +75,75 @@ if(guide){
   group.style.setProperty('--lh-guide-duration',plan.duration+'s');
   group.style.setProperty('--lh-guide-delay',plan.delay+'s');
  });
- const toast=document.createElement('div');toast.className='lh-guide-toast';toast.setAttribute('aria-live','polite');
- const design=node(guide,'124:16498');design?.appendChild(toast);
- let toastTimeout=0;
- const show=label=>{
-  toast.textContent=label;toast.classList.add('is-on');clearTimeout(toastTimeout);
-  toastTimeout=window.setTimeout(()=>toast.classList.remove('is-on'),2400);
- };
- const act=(el,label,kind='momentary')=>{
-  if(!el||el.dataset.lhGuideAction)return;
-  el.dataset.lhGuideAction=kind;el.setAttribute('role','button');el.tabIndex=0;
+
+ // The component showcase demonstrates real selected/pressed/toggled states.
+ // No temporary explanation text appears under the buttons.
+ const register=(el,label,mode='momentary',groupName='')=>{
+  if(!el || el.dataset.lhGuideAction)return;
+  el.dataset.lhGuideAction=mode;
+  if(groupName)el.dataset.lhGuideGroup=groupName;
+  if(el.tagName!=='BUTTON'){el.setAttribute('role',mode==='radio'?'radio':'button');el.tabIndex=0;}
   el.setAttribute('aria-label',label);
-  if(kind==='toggle'||kind==='single')el.setAttribute('aria-pressed','false');
+  if(mode==='radio')el.setAttribute('aria-checked','false');
+  else if(mode==='toggle')el.setAttribute('aria-pressed','false');
   const run=()=>{
-   if(kind==='toggle'){
-    const next=el.getAttribute('aria-pressed')!=='true';
-    el.setAttribute('aria-pressed',String(next));el.classList.toggle('lh-guide-selected',next);
-    show(label+(next?' 켜짐':' 꺼짐'));return;
-   }
-   if(kind==='single'){
-    guide.querySelectorAll('[data-lh-guide-action="single"]').forEach(other=>{
-     other.classList.remove('lh-guide-selected');other.setAttribute('aria-pressed','false');
+   if(mode==='radio'){
+    guide.querySelectorAll('[data-lh-guide-group="'+groupName+'"]').forEach(other=>{
+     other.classList.remove('lh-guide-selected');
+     other.setAttribute('aria-checked','false');
     });
-    el.classList.add('lh-guide-selected');el.setAttribute('aria-pressed','true');show(label+' 선택');return;
+    el.classList.add('lh-guide-selected');el.setAttribute('aria-checked','true');
+   }else if(mode==='toggle'){
+    const value=el.getAttribute('aria-pressed')!=='true';
+    el.setAttribute('aria-pressed',String(value));el.classList.toggle('lh-guide-selected',value);
+   }else{
+    el.classList.add('lh-guide-tapped');
+    window.setTimeout(()=>el.classList.remove('lh-guide-tapped'),550);
    }
-   show(label);
   };
-  el.addEventListener('click',e=>{if(e.target.closest('a[href]'))return;e.stopPropagation();run();});
-  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();run();}});
+  el.addEventListener('click',event=>{
+   if(event.target.closest('a[href]'))return;
+   event.stopPropagation();run();
+  });
+  if(el.tagName!=='BUTTON')el.addEventListener('keydown',event=>{
+   if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();run();}
+  });
  };
- [['1:2362','기본 버튼을 눌렀습니다'],['1:2364','보조 버튼을 눌렀습니다'],['1:2366','비활성 버튼 디자인 예시입니다']].forEach(([id,label])=>act(node(guide,id),label));
+ // Three button states: every one gives tangible press feedback without text.
+ [['1:2362','기본 버튼'],['1:2364','보조 버튼'],['1:2366','비활성 디자인 버튼 체험']].forEach(([id,label])=>register(node(guide,id),label));
+ // Horizontal rental type options are mutually exclusive.
  const choices=node(guide,'124:16587');
- if(choices){
-  [...choices.children].forEach((el,i)=>act(el,['전세임대','매입임대','분양'][i]||'임대 유형','single'));
- }
- ['1:2368','1:2370','1:2372'].forEach((id,i)=>act(node(guide,id),['안내','성공','주의'][i]+' 상태 표시'));
- act(node(guide,'124:16597'),'모름 자동 확인하기','toggle');
- act(node(guide,'124:16594'),'자동 확인 설정','toggle');
- act(node(guide,'124:16598'),'지역: 경기도');
- act(node(guide,'124:16572'),'맞춤 조건 설정');
- // Styleguide navigation controls are previews, not real page navigation.
- guide.querySelectorAll('[data-name*="→"]').forEach(el=>{
-  if(el.closest('.lh-live-mockup')||el.dataset.lhGuideAction)return;
-  if(el.getBoundingClientRect().width>100) return;
-  act(el,(el.dataset.name||'메뉴')+' 선택');
+ if(choices)[...choices.children].forEach((el,i)=>{
+  register(el,['전세임대','매입임대','분양'][i]||'임대 유형','radio','rental-type');
  });
+ // Status badges, location and settings are clickable, not static mock buttons.
+ ['1:2368','1:2370','1:2372'].forEach((id,i)=>
+  register(node(guide,id),['안내','성공','주의'][i]+' 상태','toggle'));
+ register(node(guide,'124:16597'),'모름 자동 확인하기','toggle');
+ register(node(guide,'124:16598'),'경기도 지역 선택','toggle');
+ register(node(guide,'124:16572'),'맞춤 조건 설정','toggle');
+ // The style guide's navigation icons use the same single-choice visual pattern.
+ const nav=guide.querySelectorAll('[data-name*="→"]');
+ nav.forEach(el=>{
+  if(el.closest('a[href]')||el.dataset.lhGuideAction)return;
+  if(el.getBoundingClientRect().width>110)return;
+  register(el,(el.dataset.name||'메뉴')+' 탭','radio','bottom-navigation');
+ });
+ // Radius samples are live: clicking changes the real primary button's corner radius.
+ const primary=node(guide,'1:2362');
+ [['124:16535',2],['124:16537',4],['124:16539',6],['124:16541',10],['124:16543',12]].forEach(([id,radius])=>{
+  const el=node(guide,id);
+  register(el,'반경 '+radius+'픽셀','radio','radius');
+  el?.addEventListener('click',()=>{if(primary)primary.style.borderRadius=radius+'px';});
+ });
+ // Colour chips are selectable states too; no explanatory overlay.
+ [['124:16556','#0056b3'],['124:16557','#edf4fc'],['124:16558','#79c000'],['124:16559','#edf6e8']].forEach(([id,color])=>{
+  register(node(guide,id),'컬러 샘플 '+color,'radio','guide-color');
+ });
+ // The sample checkbox is a genuine toggle.
+ guide.querySelectorAll('[data-name="Checkbox"]').forEach(el=>
+  register(el,'체크박스 선택','toggle'));
+
 }
 // Remove the permanent blue frame and keep hover lift independent per phone.
 const publishing=section('124:16915'),strip=publishing?.querySelector('#lhStrip');

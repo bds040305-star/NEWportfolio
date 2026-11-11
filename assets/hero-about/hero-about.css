@@ -108,3 +108,7 @@ html.ha-first-scenes body.vertical-ready #dasom-monkey-3d.scroll-companion{
    transform-origin:top left;
  }
 }
+
+/* Temporary portrait placeholder: keep the original orange background, border,
+   dimensions and responsive layout; only hide the portrait photo until reshoot. */
+.ha-about-portrait > [data-node-id="310:5722"]{visibility:hidden!important}

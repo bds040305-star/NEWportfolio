@@ -97,8 +97,8 @@ if(guide){
    }
    show(label);
   };
-  el.addEventListener('click',e=>{if(e.target.closest('a[href]'))return;run();});
-  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();run();}});
+  el.addEventListener('click',e=>{if(e.target.closest('a[href]'))return;e.stopPropagation();run();});
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();run();}});
  };
  [['1:2362','기본 버튼을 눌렀습니다'],['1:2364','보조 버튼을 눌렀습니다'],['1:2366','비활성 버튼 디자인 예시입니다']].forEach(([id,label])=>act(node(guide,id),label));
  const choices=node(guide,'124:16587');

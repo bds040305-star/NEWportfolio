@@ -5,7 +5,7 @@
 function start(){
   const section=document.querySelector('[data-frame-id="124:16332"]');
   const root=section?.querySelector('[data-node-id="124:16332"]');
-  if(!root||root.querySelector('#lh-persona-carousel-layer'))return;
+  if(!root||section.querySelector('#lh-persona-carousel-layer'))return;
   const ids=['124:16365','124:16373','124:16381','124:16337','124:16345','124:16354'];
   const originals=ids.map(id=>root.querySelector('[data-node-id="'+id+'"]'));
   if(originals.some(el=>!el))return;
@@ -50,7 +50,8 @@ function start(){
   // Top: 박민정, 김도윤, 최은정... / Bottom: 최은정, 이수진, 이준호...
   lane('top',327,true);
   lane('bottom',525,false);
-  root.append(layer);
+  // Append outside the centered/scaled Figma design frame so the lanes truly span the viewport.
+  section.append(layer);
   window.__lhPersonaCarousel={mode:'continuous-keyword-marquee',running:()=>getComputedStyle(layer.querySelector('.lh-persona-track')).animationPlayState};
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();

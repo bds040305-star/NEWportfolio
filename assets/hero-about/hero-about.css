@@ -112,3 +112,39 @@ html.ha-first-scenes body.vertical-ready #dasom-monkey-3d.scroll-companion{
 /* Temporary portrait placeholder: keep the original orange background, border,
    dimensions and responsive layout; only hide the portrait photo until reshoot. */
 .ha-about-portrait > [data-node-id="310:5722"]{visibility:hidden!important}
+
+/* ABOUT ME headline: remove the baked-in white rectangle from the raster title.
+   Show the existing accessible Korean h1 as real text over the original orange accent. */
+.ha-about-plane > [data-node-id="310:5720"]{
+  background:linear-gradient(180deg,rgba(255,72,0,0) 2%,rgba(255,72,0,.20) 35%,#ff4800 100%)!important;
+  width:877px;
+  min-height:99px;
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+}
+.ha-about-plane > [data-node-id="310:5720"] .ha-title-art{display:none!important}
+.ha-about-plane > [data-node-id="310:5720"] .ha-title-text{
+  display:block!important;
+  position:relative!important;
+  width:auto!important;
+  height:auto!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:visible!important;
+  clip-path:none!important;
+  white-space:nowrap!important;
+  font-family:HeroAboutPretendard,Pretendard,sans-serif!important;
+  font-size:83px!important;
+  font-weight:900!important;
+  line-height:1.08!important;
+  letter-spacing:-.085em!important;
+  color:#050505!important;
+}
+@media(max-width:760px){
+  .ha-about-plane > [data-node-id="310:5720"]{width:100%!important;min-height:0;padding:4px 0 7px}
+  .ha-about-plane > [data-node-id="310:5720"] .ha-title-text{
+    font-size:clamp(22px,7vw,42px)!important;
+    letter-spacing:-.09em!important;
+  }
+}

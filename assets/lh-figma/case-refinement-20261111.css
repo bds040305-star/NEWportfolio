@@ -8,17 +8,17 @@
  animation:lhCaseTagFloat var(--lh-card-speed,6.5s) ease-in-out var(--lh-card-delay,0s) infinite alternate;
  will-change:translate;
 }
-@keyframes lhCaseTagFloat{from{translate:0 4px}to{translate:0 -9px}}
+@keyframes lhCaseTagFloat{from{translate:-9px 16px}to{translate:11px -27px}}
 /* Problem illustrations appear in staggered order once on entry. */
-#view-lh [data-frame-id="124:16295"] .lh-case-reveal{opacity:0;translate:0 33px;transition:opacity .85s ease,translate 1.1s cubic-bezier(.16,1,.3,1)}
+#view-lh [data-frame-id="124:16295"] .lh-case-reveal{opacity:0;translate:0 64px;transition:opacity 1.05s ease,translate 1.25s cubic-bezier(.16,1,.3,1)}
 #view-lh [data-frame-id="124:16295"] .lh-case-reveal.lh-case-visible{opacity:1;translate:0 0}
 #view-lh [data-frame-id="124:16295"] .lh-case-reveal.lh-case-visible.lh-case-drift{
  animation:lhCaseIllustrationFloat 8.3s ease-in-out var(--lh-illustration-delay,0s) infinite alternate;
 }
-@keyframes lhCaseIllustrationFloat{from{translate:0 0}to{translate:0 -7px}}
+@keyframes lhCaseIllustrationFloat{from{translate:-4px 4px}to{translate:4px -14px}}
 /* Keep two continuous persona strips full bleed to actual viewport edge. */
-#view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;z-index:4;pointer-events:none}
-#view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-lane{left:0;width:100%;height:calc(150px * var(--lh-layout-scale,1));overflow:hidden;pointer-events:auto}
+#view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer{position:absolute;inset:0;left:0!important;right:0!important;width:100%!important;max-width:none!important;height:100%;overflow:hidden;z-index:4;pointer-events:none}
+#view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-lane{left:0!important;right:0!important;width:100%!important;max-width:none!important;height:calc(150px * var(--lh-layout-scale,1));overflow:hidden;pointer-events:auto}
 #view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-track{scale:var(--lh-layout-scale,1);transform-origin:top left}
 #view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-lane[data-lane="top"]{top:calc(327px * var(--lh-layout-scale,1))!important}
 #view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-lane[data-lane="bottom"]{top:calc(525px * var(--lh-layout-scale,1))!important}
@@ -82,4 +82,56 @@
 #view-lh [data-frame-id="124:16295"] .lh-case-reveal{opacity:1!important;translate:none!important;transition:none!important;animation:none!important}
 #view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-track{animation:none!important}
 #view-lh [data-frame-id="124:16915"] #lhStrip .lh-publish-phone{transition:none!important}
+}
+
+/* 2026-11-11 update: a single full-width semicircle, unbroken at both ends.
+   Two exported SVG half-ellipses are hidden in both the design and its background copy.
+   The dome meets the existing lower gradient precisely at y=1077. */
+#view-lh [data-frame-id="124:16295"] img[src$="9b5f297200b2aa4932a868a6a043be4f092fb7be.svg"],
+#view-lh [data-frame-id="124:16295"] img[src$="e24ce22404c0ea98abfb59e82c62cc9dd700a7c9.svg"]{visibility:hidden!important}
+#view-lh [data-frame-id="124:16295"] .lh-section-backdrop::before,
+#view-lh [data-frame-id="124:16295"] .lh-design-frame > [data-node-id="124:16295"]::before{
+ content:"";display:block;position:absolute;pointer-events:none;
+ left:0;right:0;width:100%;background:#c5d8fb;
+ border-radius:50% 50% 0 0 / 100% 100% 0 0;
+}
+#view-lh [data-frame-id="124:16295"] .lh-design-frame > [data-node-id="124:16295"]::before{
+ top:350px;height:727px;
+}
+#view-lh [data-frame-id="124:16295"] .lh-section-backdrop::before{
+ top:calc(350px * var(--lh-layout-scale,1));height:calc(727px * var(--lh-layout-scale,1));
+}
+/* The persona marquee and its background reach both actual viewport edges. */
+#view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer{
+ width:100%!important;left:0!important;right:0!important;max-width:none!important;
+}
+#view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-lane{
+ box-sizing:border-box;width:100%!important;left:0!important;right:0!important;
+ background:linear-gradient(90deg,rgba(239,245,255,.34),rgba(239,245,255,.24) 50%,rgba(239,245,255,.34));
+}
+#view-lh [data-frame-id="124:16498"] [data-node-id="124:16504"]{
+ height:730px!important;
+}
+#view-lh [data-frame-id="124:16498"] [data-node-id="124:16505"]{
+ height:auto!important;min-height:430px;overflow:visible!important;
+}
+#view-lh [data-frame-id="124:16498"] [data-node-id="124:16529"]{
+ margin-bottom:0!important;
+}
+/* All samples are live controls: no explanation bubble/toast. */
+#view-lh [data-frame-id="124:16498"] .lh-guide-toast{display:none!important}
+#view-lh [data-frame-id="124:16498"] [data-lh-guide-action]{
+ pointer-events:auto!important;touch-action:manipulation;
+ transition:background-color .22s ease,box-shadow .22s ease,filter .22s ease,outline-color .22s ease,scale .22s ease;
+}
+#view-lh [data-frame-id="124:16498"] [data-lh-guide-action].lh-guide-selected,
+#view-lh [data-frame-id="124:16498"] [data-lh-guide-action][aria-pressed="true"]{
+ outline:2px solid #0056b3!important;outline-offset:2px;filter:brightness(.97);
+}
+#view-lh [data-frame-id="124:16498"] [data-lh-guide-action].lh-guide-tapped{
+ scale:.96;filter:brightness(.88);
+}
+#view-lh [data-frame-id="124:16498"] [data-lh-guide-action]:active{scale:.95}
+@media(prefers-reduced-motion:reduce){
+#view-lh [data-frame-id="124:16498"] [data-lh-guide-action]{transition:none!important}
 }

@@ -76,73 +76,137 @@ if(guide){
   group.style.setProperty('--lh-guide-delay',plan.delay+'s');
  });
 
- // The component showcase demonstrates real selected/pressed/toggled states.
- // No temporary explanation text appears under the buttons.
- const register=(el,label,mode='momentary',groupName='')=>{
-  if(!el || el.dataset.lhGuideAction)return;
-  el.dataset.lhGuideAction=mode;
-  if(groupName)el.dataset.lhGuideGroup=groupName;
-  if(el.tagName!=='BUTTON'){el.setAttribute('role',mode==='radio'?'radio':'button');el.tabIndex=0;}
-  el.setAttribute('aria-label',label);
-  if(mode==='radio')el.setAttribute('aria-checked','false');
-  else if(mode==='toggle')el.setAttribute('aria-pressed','false');
-  const run=()=>{
-   if(mode==='radio'){
-    guide.querySelectorAll('[data-lh-guide-group="'+groupName+'"]').forEach(other=>{
-     other.classList.remove('lh-guide-selected');
-     other.setAttribute('aria-checked','false');
-    });
-    el.classList.add('lh-guide-selected');el.setAttribute('aria-checked','true');
-   }else if(mode==='toggle'){
-    const value=el.getAttribute('aria-pressed')!=='true';
-    el.setAttribute('aria-pressed',String(value));el.classList.toggle('lh-guide-selected',value);
-   }else{
-    el.classList.add('lh-guide-tapped');
-    window.setTimeout(()=>el.classList.remove('lh-guide-tapped'),550);
-   }
-  };
-  el.addEventListener('click',event=>{
-   if(event.target.closest('a[href]'))return;
-   event.stopPropagation();run();
-  });
-  if(el.tagName!=='BUTTON')el.addEventListener('keydown',event=>{
-   if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();run();}
-  });
+ // The style guide is a live miniature of the real LH controls, not an outline selector.
+ // Individual state changes affect the original icon/text/switch/checkbox pixels.
+ const register=(element,label,role,handler)=>{
+   if(!element||element.dataset.lhGuideAction)return null;
+   element.dataset.lhGuideAction=role||'button';
+   element.setAttribute('aria-label',label);
+   if(element.tagName!=='BUTTON')element.tabIndex=0;
+   if(role)element.setAttribute('role',role);
+   const invoke=event=>{event?.stopPropagation();handler?.(element);};
+   element.addEventListener('click',invoke);
+   if(element.tagName!=='BUTTON')element.addEventListener('keydown',event=>{
+     if(event.key==='Enter'||event.key===' '){event.preventDefault();invoke(event);}
+   });
+   return element;
  };
- // Three button states: every one gives tangible press feedback without text.
- [['1:2362','기본 버튼'],['1:2364','보조 버튼'],['1:2366','비활성 디자인 버튼 체험']].forEach(([id,label])=>register(node(guide,id),label));
- // Horizontal rental type options are mutually exclusive.
- const choices=node(guide,'124:16587');
- if(choices)[...choices.children].forEach((el,i)=>{
-  register(el,['전세임대','매입임대','분양'][i]||'임대 유형','radio','rental-type');
+ function pressed(element){
+   element.classList.remove('lh-guide-demo-pressed');
+   void element.offsetWidth;
+   element.classList.add('lh-guide-demo-pressed');
+   window.setTimeout(()=>element.classList.remove('lh-guide-demo-pressed'),260);
+ }
+ // Buttons respond with the actual press animation, without any toast.
+ [['1:2362','기본 버튼'],['1:2364','보조 버튼'],['1:2366','비활성 버튼 예시']].forEach(([id,label])=>{
+   register(node(guide,id),label,'button',pressed);
  });
- // Status badges, location and settings are clickable, not static mock buttons.
- ['1:2368','1:2370','1:2372'].forEach((id,i)=>
-  register(node(guide,id),['안내','성공','주의'][i]+' 상태','toggle'));
- register(node(guide,'124:16597'),'모름 자동 확인하기','toggle');
- register(node(guide,'124:16598'),'경기도 지역 선택','toggle');
- register(node(guide,'124:16572'),'맞춤 조건 설정','toggle');
- // The style guide's navigation icons use the same single-choice visual pattern.
- const nav=guide.querySelectorAll('[data-name*="→"]');
- nav.forEach(el=>{
-  if(el.closest('a[href]')||el.dataset.lhGuideAction)return;
-  if(el.getBoundingClientRect().width>110)return;
-  register(el,(el.dataset.name||'메뉴')+' 탭','radio','bottom-navigation');
+ // Segment control — a single selected type (matches the LH mobile app).
+ const choiceGroup=node(guide,'124:16587');
+ if(choiceGroup){
+   choiceGroup.setAttribute('role','radiogroup');
+   choiceGroup.setAttribute('aria-label','임대 유형');
+   const options=[...choiceGroup.children];
+   const choose=index=>options.forEach((option,i)=>{
+     const current=i===index;
+     option.classList.toggle('is-active',current);
+     option.setAttribute('aria-checked',String(current));
+   });
+   options.forEach((option,i)=>{
+     option.classList.add('lh-demo-choice');
+     option.setAttribute('aria-checked',String(i===1));
+     register(option,['전세임대','매입임대','분양'][i]||'주택 유형','radio',()=>choose(i));
+   });
+   choose(1);
+ }
+ // Navigation — change text AND icon colour only for the selected destination.
+ const navGroup=node(guide,'1:2338');
+ if(navGroup){
+   navGroup.setAttribute('role','tablist');
+   navGroup.setAttribute('aria-label','청약플러스 하단 메뉴 미리보기');
+   const tabs=[...navGroup.children];
+   function activate(index){
+     tabs.forEach((tab,i)=>{
+       const active=i===index;
+       tab.classList.toggle('is-active',active);
+       tab.setAttribute('aria-selected',String(active));
+       tab.tabIndex=active?0:-1;
+     });
+   }
+   tabs.forEach((tab,i)=>{
+     tab.classList.add('lh-demo-nav');
+     register(tab,['홈','맞춤공고','내 일정','부동산맵','MY'][i]+' 탭','tab',()=>activate(i));
+     tab.addEventListener('keydown',event=>{
+       if(event.key!=='ArrowLeft'&&event.key!=='ArrowRight')return;
+       event.preventDefault();
+       const next=(i+(event.key==='ArrowRight'?1:tabs.length-1))%tabs.length;
+       activate(next);tabs[next].focus({preventScroll:true});
+     });
+   });
+   activate(0);
+ }
+ // A filled box empties when clicked; an empty one fills with a white tick.
+ [['124:16567',false],['124:16568',true]].forEach(([id,initial])=>{
+   const checkbox=node(guide,id);
+   if(!checkbox)return;
+   checkbox.classList.add('lh-demo-checkbox');
+   checkbox.setAttribute('aria-checked',String(initial));
+   checkbox.classList.toggle('is-checked',initial);
+   register(checkbox,'청약 체크박스','checkbox',el=>{
+     const next=el.getAttribute('aria-checked')!=='true';
+     el.setAttribute('aria-checked',String(next));
+     el.classList.toggle('is-checked',next);
+   });
  });
- // Radius samples are live: clicking changes the real primary button's corner radius.
+ // Switch — use its original footprint with a moving thumb and blue active track.
+ const toggle=node(guide,'124:16597');
+ if(toggle){
+   toggle.classList.add('lh-demo-switch');
+   toggle.setAttribute('aria-checked','false');
+   register(toggle,'모름 자동 확인하기','switch',el=>{
+     el.setAttribute('aria-checked',String(el.getAttribute('aria-checked')!=='true'));
+   });
+   const track=node(guide,'124:16594');
+   if(track)track.addEventListener('click',event=>{
+     if(!event.target.closest('[data-node-id="124:16597"]'))toggle.click();
+   });
+ }
+ // A selected location actually changes the visible label.
+ const location=node(guide,'1:2334'),locationText=node(guide,'1:2335');
+ if(location&&locationText){
+   const values=['경기도 · 수원시','경기도 · 하남시','서울특별시 · 강동구'];
+   let current=0;
+   register(location,'지역 선택','button',el=>{
+     current=(current+1)%values.length;
+     locationText.textContent=values[current];
+     pressed(el);
+   });
+ }
+ // Badges / input / mini tiles use subtle tactile feedback, never a blue focus box on click.
+ ['1:2368','1:2370','1:2372','124:16598','124:16572'].forEach(id=>{
+   const el=node(guide,id);
+   if(el)register(el,el.dataset.name||'컴포넌트','button',pressed);
+ });
+ // Live border-radius tokens modify the visible primary button.
  const primary=node(guide,'1:2362');
  [['124:16535',2],['124:16537',4],['124:16539',6],['124:16541',10],['124:16543',12]].forEach(([id,radius])=>{
-  const el=node(guide,id);
-  register(el,'반경 '+radius+'픽셀','radio','radius');
-  el?.addEventListener('click',()=>{if(primary)primary.style.borderRadius=radius+'px';});
+   register(node(guide,id),'모서리 반경 '+radius+'px','button',el=>{
+     if(primary)primary.style.borderRadius=radius+'px';
+     pressed(el);
+   });
  });
- // Colour chips are selectable states too; no explanatory overlay.
+ // Swatches sample the system colours on the button (not an outside outline).
  [['124:16556','#0056b3'],['124:16557','#edf4fc'],['124:16558','#79c000'],['124:16559','#edf6e8']].forEach(([id,color])=>{
-  register(node(guide,id),'컬러 샘플 '+color,'radio','guide-color');
+   const el=node(guide,id);if(!el)return;
+   el.classList.add('lh-guide-swatch');
+   register(el,'색상 '+color+' 사용','button',item=>{
+     if(primary){
+       primary.style.backgroundColor=color;
+       const label=primary.querySelector('p');if(label)label.style.color=color==='#edf4fc'||color==='#edf6e8'?'#171717':'#fff';
+     }
+     pressed(item);
+   });
  });
- // The sample checkbox is a genuine toggle.
- guide.querySelectorAll('[data-name="Checkbox"]').forEach(el=>
-  register(el,'체크박스 선택','toggle'));
 
 }
 // Remove the permanent blue frame and keep hover lift independent per phone.

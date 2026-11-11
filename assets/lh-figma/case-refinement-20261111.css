@@ -20,6 +20,8 @@
 #view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;z-index:4;pointer-events:none}
 #view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-lane{left:0;width:100%;height:calc(150px * var(--lh-layout-scale,1));overflow:hidden;pointer-events:auto}
 #view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-track{scale:var(--lh-layout-scale,1);transform-origin:top left}
+#view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-lane[data-lane="top"]{top:calc(327px * var(--lh-layout-scale,1))!important}
+#view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-lane[data-lane="bottom"]{top:calc(525px * var(--lh-layout-scale,1))!important}
 #view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-track:hover{animation-play-state:paused}
 #view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-lane[data-lane="top"] .lh-persona-track{margin-left:0;animation-delay:-7s}
 #view-lh [data-frame-id="124:16332"] #lh-persona-carousel-layer .lh-persona-lane[data-lane="bottom"] .lh-persona-track{margin-left:0;animation-delay:-19s}

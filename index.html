@@ -5946,7 +5946,9 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
 <script defer src="assets/hero-about/hero-about.js?v=20261111-1"></script>
 
 <style id="about-only-portrait-removal-20261120">
-#about .ha-about-portrait { display: none !important; }
+/* Hide only the orange SVG silhouette; retain the image layer and monkey elsewhere. */
+#about .ha-about-portrait > [data-node-id="310:5721"] { display: none !important; }
+#about .ha-about-portrait > [data-node-id="310:5722"] { display: block !important; }
 </style>
 </body>
 </html>

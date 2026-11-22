@@ -295,6 +295,7 @@ body #works .project-marquee-viewport {
 
 /* Let the shutter uncover Contents instead of the old studio scene. */
 body.portfolio-opening #intro {
+  z-index: 1100 !important;
   height: 0 !important;
   min-height: 0 !important;
   overflow: visible !important;

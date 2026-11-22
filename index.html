@@ -1899,7 +1899,7 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 
 <link rel="stylesheet" href="assets/portfolio-chrome/chrome.css?v=20261111-size48-3">
 <link rel="stylesheet" href="assets/hero-about/hero-about.css?v=20261112-header-height84-2">
-  <link rel="stylesheet" href="assets/portfolio-layout/layout.css?v=1440">
+  <link rel="stylesheet" href="assets/portfolio-layout/layout.css?v=contents-entry">
 </head>
 <body>
 <header id="ds-fixed-nav" aria-label="포트폴리오 메뉴">
@@ -2044,7 +2044,7 @@ html body #dasom-monkey-3d.scroll-companion canvas {
   <img loading="lazy" decoding="async" class="shared-flow-monkey" id="sharedFlowMonkey" alt="다솜 로봇 원숭이 캐릭터">
 
   <section class="portfolio-contents" id="contents" aria-labelledby="contents-title">
-    <h2 class="portfolio-display" id="contents-title">CONTENTS</h2>
+    <h2 class="portfolio-display" id="contents-title" tabindex="-1">CONTENTS</h2>
     <img class="portfolio-contents-art" src="assets/portfolio-layout/contents.png" width="1137" height="568"
          alt="주황색 원숭이와 포트폴리오 목차. Intro, About Me, Projects, Playground, Contact.">
     <button class="portfolio-about-preview" type="button" data-open-about aria-haspopup="dialog">
@@ -2304,30 +2304,17 @@ function enterStudio() {
   hasEntered = true;
   if (hatchTimeline) { hatchTimeline.kill(); hatchTimeline = null; }
   gsap.to(['.shutter-slats','.shutter-bottom','.shutter-handle-ui'], {x:0,y:0,rotation:0,scaleX:1,scaleY:1,duration:.12,overwrite:true});
-  const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
-  tl.to('.intro-copy', { opacity: 0, duration: .28, ease: 'power2.out' })
+
+  gsap.timeline({ defaults: { ease: 'power3.inOut' } })
+    .to('.intro-copy', { opacity: 0, duration: .28, ease: 'power2.out' })
     .to('.shutter-handle-ui', { opacity: 0, y: -18, duration: .28, ease: 'power2.out' }, '<')
-    .to('.shutter-curtain', { yPercent: -105, duration: 1.65, ease: 'expo.inOut' })
-    .to('.shutter-box', { y: -24, opacity: .35, duration: .5 }, '<.9')
-    .to('.window-stage', { backgroundColor: 'transparent', duration: .2 }, '<.8')
-    .to('.window-stage', { opacity: 0, duration: .45 })
+    .call(() => document.body.classList.add('portfolio-opening'))
+    .set('.window-stage', { backgroundColor: 'transparent' })
+    .to('.shutter-curtain', { yPercent: -105, duration: reduceMotion ? .01 : 1.65, ease: 'expo.inOut' })
     .set('.window-stage', { display: 'none' })
-    .call(() => setCharacterFrame('front'))
-    .to('.character-zone', { opacity: 1, x: 0, y: 0, scale: 1, duration: 1.05, ease: 'back.out(1.18)' }, '-=.10')
-    .to('.character', { y: -18, rotation: -2.2, duration: .28, ease: 'power2.out' }, '<.18')
-    .to('.character', { y: 0, rotation: 1.2, duration: .44, ease: 'bounce.out' })
-    .to('.character', { rotation: 0, duration: .20 }, '-=.10')
-    .to('.hero-mini-label', { opacity: 1, y: 0, duration: .45, ease: 'power2.out' }, '-=.18')
-    .to('.soi-header', {opacity:1,duration:.5,ease:'power2.out'}, '<')
-    .to('.soi-progress', {opacity:.68,duration:.45,ease:'power2.out'}, '<')
     .call(() => {
-      document.body.classList.add('vertical-ready');
-      $('.studio')?.classList.add('soi-active');
-      if (!reduceMotion) {
-        gsap.to('.character', { y: -10, rotation: .6, duration: 2.2, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-        gsap.to('.ear-left', { rotation: -5, duration: 1.4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-        gsap.to('.ear-right', { rotation: 5, duration: 1.4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-      }
+      document.body.classList.replace('portfolio-opening', 'vertical-ready');
+      document.getElementById('contents-title').focus({preventScroll:true});
     });
 }
 
@@ -5920,6 +5907,10 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
  links.forEach(a=>a.addEventListener('click',e=>{
   const target=document.getElementById(a.dataset.dsDest);if(!target)return;
   e.preventDefault();close();
+  if(a.dataset.dsDest==='intro' && a.classList.contains('ds-link')){
+   document.querySelector('.studio-header .replay')?.click();
+   return;
+  }
   const top=a.dataset.dsDest==='intro'?0:Math.max(0,scrollY+target.getBoundingClientRect().top-header.getBoundingClientRect().height-18);
   window.dispatchEvent(new CustomEvent('portfolio:nav-target',{detail:{top}}));
   window.scrollTo({top,left:0,behavior:reduced.matches?'instant':'smooth'});

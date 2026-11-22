@@ -292,3 +292,25 @@ body #works .project-marquee-viewport {
     right: var(--portfolio-content-edge);
   }
 }
+
+/* Let the shutter uncover Contents instead of the old studio scene. */
+body.portfolio-opening #intro {
+  height: 0 !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+body.portfolio-opening #intro .window-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+}
+
+body.portfolio-opening #intro .studio,
+body.vertical-ready #intro,
+body.vertical-ready #dasom-monkey-3d,
+body.vertical-ready #dasom-monkey-drag-cue {
+  display: none !important;
+}
+
+#contents-title:focus { outline: none; }

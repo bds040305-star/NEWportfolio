@@ -156,3 +156,72 @@ body #works .project-marquee-viewport {
 @media (prefers-reduced-motion: no-preference) {
   html:has(#contents:target), html:has(#about:target), html:has(#works:target) { scroll-behavior: smooth; }
 }
+
+#contents {
+  position: relative;
+  overflow: hidden;
+  gap: clamp(20px, 3.1vw, 60px);
+  padding-bottom: clamp(48px, 5.8vw, 112px);
+}
+
+.portfolio-about-preview {
+  position: absolute;
+  left: 0;
+  top: 46%;
+  width: clamp(120px, 15vw, 288px);
+  aspect-ratio: 1.05;
+  transform: translateX(-62%);
+  display: grid;
+  align-content: center;
+  gap: .65em;
+  padding: 12px;
+  grid-template-columns: 62% minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid #e2d4c3;
+  background: #f6eee4;
+  box-shadow: 6px 8px 15px #30241818;
+  color: #25221f;
+  text-align: right;
+  font-size: clamp(8px, .7vw, 14px);
+  cursor: pointer;
+}
+
+.portfolio-about-preview > * { grid-column: 2; }
+.portfolio-about-preview span:first-child { color: #c94509; font-weight: 800; }
+
+.portfolio-about-link {
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  color: #53504d;
+  font: 650 clamp(13px, .95vw, 18px)/1.4 var(--portfolio-display);
+  cursor: pointer;
+}
+
+.portfolio-about-link:hover { color: #a8380c; text-decoration: underline; }
+
+.portfolio-about-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: 100%;
+  max-height: 92dvh;
+  padding: 0;
+  border: 0;
+  overflow: auto;
+  background: #e9e4da;
+  color: #171717;
+}
+
+.portfolio-about-dialog::backdrop { background: #15100dcc; }
+.portfolio-about-close { position: sticky; top: 0; z-index: 2; height: 0; margin: 0; text-align: right; }
+.portfolio-about-close button { margin: 12px; padding: 10px 16px; border: 0; border-radius: 30px; background: #151515; color: white; cursor: pointer; }
+.portfolio-skills-caption { margin: 6px 16px 0; font-size: clamp(13px, 1.1vw, 20px); color: #626262; }
+#keywords .portfolio-display { margin-bottom: 0; }
+#keywords .keyword-cloud { margin-top: clamp(22px, 2.6vw, 50px); }
+#monkeyBridge .portfolio-bridge-link { background: transparent; }
+body #works.v-order { background: #131313 !important; }
+
+@media (max-width: 700px) {
+  .portfolio-about-preview { display: none; }
+}

@@ -11,6 +11,16 @@ body.vertical-ready #intro.intro{height:calc(100vw * 1187 / 1920);min-height:0}
 .ha-about-plane p,.ha-about-plane h1{margin:0}
 .ha-about-plane img{display:block}
 .ha-about-group,.ha-about-details,.ha-about-portrait{display:contents}
+.ha-logo-bar{position:relative;width:100%;height:203px;padding:37px 0;background:#1b1b1b;color:#fff;overflow:hidden;isolation:isolate}
+.ha-logo-track{display:flex;width:max-content;will-change:transform;animation:ha-logo-loop var(--ha-loop-duration,80s) linear infinite;animation-play-state:paused}
+.ha-logo-group{display:flex;flex:none;align-items:center;gap:78.5px;padding-right:78.5px;padding-left:0}
+.ha-logo-pair{display:flex;flex:none;align-items:center;gap:69px;width:268px;height:129px;white-space:nowrap}
+.ha-logo-pair img{display:block;flex:none;width:129px;height:129px;object-fit:contain}
+.ha-logo-pair span{flex:none;font:600 21.317px/17.48px HeroAboutPretendard,sans-serif;letter-spacing:-1.5988px;color:#fff;white-space:nowrap}
+.ha-logo-bar .ha-logo-track{margin-left:30px}
+.ha-logo-bar.is-running .ha-logo-track{animation-play-state:running}
+.ha-logo-bar:hover .ha-logo-track,.ha-logo-bar:focus-within .ha-logo-track{animation-play-state:paused}
+@keyframes ha-logo-loop{from{transform:translateX(0)}to{transform:translateX(calc(-1 * var(--ha-loop-width,2079px)))}}
 /* The shared header owns navigation; only these reference geometry values change. */
 #ds-fixed-nav .ds-bar{height:84px!important;padding:0 clamp(24px,3vw,60px)!important;transition:background .4s ease,backdrop-filter .4s ease,-webkit-backdrop-filter .4s ease!important}
 #ds-fixed-nav .ds-logo{width:58px!important}
@@ -53,7 +63,7 @@ body.vertical-ready #intro.intro{height:calc(100vw * 1187 / 1920);min-height:0}
  .ha-skills>div>div:first-child>p{font-size:14px!important;line-height:1.4!important}
  .ha-skills>div>div:first-child{height:34px}
 }
-@media(prefers-reduced-motion:reduce){#ds-fixed-nav .ds-bar{transition:none!important}}
+@media(prefers-reduced-motion:reduce){.ha-logo-track{animation:none!important;transform:none!important;will-change:auto}#ds-fixed-nav .ds-bar{transition:none!important}}
 
 
 

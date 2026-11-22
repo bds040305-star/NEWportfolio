@@ -324,3 +324,8 @@ body.portfolio-opening #intro .shutter-frame {
 body.portfolio-opening #intro .wall-noise {
   opacity: 0;
 }
+
+body.portfolio-opening #intro .intro-copy {
+  translate: -50% calc(-50% + var(--shutter-logo-offset, 0px)) !important;
+  will-change: translate !important;
+}

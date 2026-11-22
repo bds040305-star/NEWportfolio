@@ -1899,7 +1899,7 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 
 <link rel="stylesheet" href="assets/portfolio-chrome/chrome.css?v=20261111-size48-3">
 <link rel="stylesheet" href="assets/hero-about/hero-about.css?v=20261112-header-height84-2">
-  <link rel="stylesheet" href="assets/portfolio-layout/layout.css?v=shutter-layering">
+  <link rel="stylesheet" href="assets/portfolio-layout/layout.css?v=shutter-logo">
 </head>
 <body>
 <header id="ds-fixed-nav" aria-label="포트폴리오 메뉴">
@@ -2307,11 +2307,18 @@ function enterStudio() {
 
   const duration = reduceMotion ? .01 : 1.55;
   const stage = document.querySelector('.window-stage');
+  const curtain = stage.querySelector('.shutter-curtain');
+  const logo = stage.querySelector('.intro-copy');
   document.body.classList.add('portfolio-opening');
 
   gsap.timeline({ defaults: { duration, ease: 'power2.inOut' } })
-    .to('.shutter-curtain', { yPercent: -105 }, 0)
-    .to('.intro-copy', { y: -stage.clientHeight * 1.05 }, 0)
+    .to(curtain, {
+      yPercent: -105,
+      onUpdate() {
+        const offset = curtain.offsetHeight * gsap.getProperty(curtain, 'yPercent') / 100;
+        logo.style.setProperty('--shutter-logo-offset', offset + 'px');
+      }
+    }, 0)
     .to(stage, { opacity: 0, duration: reduceMotion ? .01 : .24 }, duration * .88)
     .set('.window-stage', { display: 'none' })
     .call(() => {

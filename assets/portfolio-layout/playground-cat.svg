@@ -19,7 +19,6 @@
     @keyframes shadow { 0%, 36%, 68%, 100% { transform: scale(1); opacity: .13; } 49% { transform: scale(.83); opacity: .07; } }
     @media (prefers-reduced-motion: reduce) { .body, .tail, .eyes, .shadow { animation: none; } }
   </style>
-  <path fill="#c48178" d="M0 0h440v440H0z"/>
   <ellipse class="shadow" cx="215" cy="365" rx="93" ry="10" fill="#63261f"/>
   <g class="body">
     <g class="tail">

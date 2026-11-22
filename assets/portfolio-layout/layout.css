@@ -1,0 +1,158 @@
+:root {
+  --portfolio-display: "42dot Sans", "Pretendard Variable", sans-serif;
+  --portfolio-heading: clamp(34px, 3.75vw, 72px);
+  --portfolio-orange: #fe6219;
+}
+
+#contents,
+#playground {
+  background: #fff;
+  color: #363636;
+  text-align: center;
+}
+
+#contents {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: clamp(24px, 3.4vw, 65px);
+  padding: clamp(76px, 12vw, 230px) 24px clamp(64px, 5vw, 96px);
+}
+
+.portfolio-display {
+  margin: 0;
+  color: #363636;
+  font: 700 var(--portfolio-heading)/1.22 var(--portfolio-display);
+}
+
+.portfolio-contents-art {
+  display: block;
+  width: min(100%, 59.22vw, 1137px);
+  height: auto;
+}
+
+.portfolio-pill {
+  display: inline-flex;
+  gap: .65em;
+  align-items: center;
+  justify-content: center;
+  padding: .8em 1.6em;
+  border-radius: 999px;
+  background: var(--portfolio-orange);
+  color: #fff;
+  font: 700 clamp(14px, 1.05vw, 20px)/1.15 var(--portfolio-display);
+  text-decoration: none;
+}
+
+#contents, #about, #works, #playground, #contact {
+  scroll-margin-top: 96px;
+}
+
+#keywords.v-keywords {
+  min-height: 0;
+  padding: clamp(70px, 8vw, 154px) 0 clamp(72px, 12vw, 230px);
+  text-align: center;
+  background: white;
+}
+
+#keywords .portfolio-display {
+  margin-bottom: clamp(18px, 2.6vw, 50px);
+}
+
+#dasomLogoBar.ha-logo-bar {
+  height: 129px;
+  padding: 0;
+}
+
+#monkeyBridge.monkey-bridge {
+  height: auto;
+  min-height: 0;
+}
+
+#monkeyBridge #monkeyBridgeSticky {
+  position: relative;
+  min-height: clamp(430px, 68.44vw, 1314px);
+  height: auto;
+}
+
+.portfolio-bridge-art {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 48%;
+  transform: translate(-50%, -50%);
+  width: min(55vw, 35.58vw, 683px);
+  height: auto;
+}
+
+.portfolio-bridge-link {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 7.5%;
+  transform: translateX(-50%);
+  background: #000;
+  white-space: nowrap;
+}
+
+body #works.v-order {
+  min-height: 0 !important;
+  padding: clamp(76px, 12.97vw, 249px) 0 clamp(84px, 15vw, 288px) !important;
+  background: #000 !important;
+}
+
+body #works.v-order::before {
+  display: none;
+}
+
+body #works .project-marquee-head {
+  padding: 0 20px clamp(20px, 3.6vw, 69px) !important;
+  text-align: center !important;
+}
+
+body #works .project-title {
+  margin: 0 !important;
+  color: #fff !important;
+  font: 700 var(--portfolio-heading)/1.22 var(--portfolio-display) !important;
+  letter-spacing: normal !important;
+  text-shadow: none !important;
+}
+
+body #works .project-marquee-wrap,
+body #works .project-marquee-viewport {
+  padding-block: 0 !important;
+}
+
+#playground {
+  padding: clamp(76px, 9.53vw, 183px) 24px clamp(90px, 9vw, 174px);
+}
+
+.portfolio-playground-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 10.9vw, 210px);
+  justify-items: center;
+  max-width: 990px;
+  margin: clamp(52px, 7.55vw, 145px) auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.portfolio-playground-grid img {
+  display: block;
+  width: min(100%, 190px);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 11px;
+}
+
+@media (max-width: 700px) {
+  .portfolio-contents-art { width: min(100%, 520px); }
+  .portfolio-bridge-art { width: min(68vw, 340px); }
+  #dasomLogoBar.ha-logo-bar { height: auto; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:has(#contents:target), html:has(#about:target), html:has(#works:target) { scroll-behavior: smooth; }
+}

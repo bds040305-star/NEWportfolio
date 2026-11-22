@@ -1899,7 +1899,7 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 
 <link rel="stylesheet" href="assets/portfolio-chrome/chrome.css?v=20261111-size48-3">
 <link rel="stylesheet" href="assets/hero-about/hero-about.css?v=20261112-header-height84-2">
-  <link rel="stylesheet" href="assets/portfolio-layout/layout.css?v=shutter-logo">
+  <link rel="stylesheet" href="assets/portfolio-layout/layout.css?v=book-turn">
 </head>
 <body>
 <header id="ds-fixed-nav" aria-label="포트폴리오 메뉴">
@@ -2045,14 +2045,19 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 
   <section class="portfolio-contents" id="contents" aria-labelledby="contents-title">
     <h2 class="portfolio-display" id="contents-title" tabindex="-1">CONTENTS</h2>
-    <img class="portfolio-contents-art" src="assets/portfolio-layout/contents.png" width="1137" height="568"
-         alt="주황색 원숭이와 포트폴리오 목차. Intro, About Me, Projects, Playground, Contact.">
-    <button class="portfolio-about-preview" type="button" data-open-about aria-haspopup="dialog">
-      <span>ABOUT ME</span>
-      <strong>다른 경험, 하나의 시선</strong>
-      <span>PROFILE · CONTACT · TOOLS</span>
-    </button>
-    <button class="portfolio-about-link" type="button" data-open-about aria-haspopup="dialog">자세한 자기소개를 확인해 보세요 <span aria-hidden="true">→</span></button>
+    <div class="portfolio-book" data-state="contents"
+         data-contents-image="assets/portfolio-layout/book-contents.webp"
+         data-about-image="assets/portfolio-layout/book-about.webp">
+      <div class="portfolio-book-half" aria-hidden="true"></div>
+      <div class="portfolio-book-half" aria-hidden="true"></div>
+      <canvas aria-hidden="true"></canvas>
+      <button type="button" id="book-hotspot" aria-label="02 About Me 페이지 넘기기"></button>
+    </div>
+    <div class="portfolio-book-controls">
+      <button class="portfolio-about-link" id="book-forward" type="button">자세한 자기소개를 확인해 보세요 <span aria-hidden="true">→</span></button>
+      <button class="portfolio-about-link" id="book-back" type="button" hidden>← 목차로 돌아가기</button>
+    </div>
+    <span class="portfolio-book-status" id="book-status" role="status">목차 페이지</span>
   </section>
 
 
@@ -5952,5 +5957,6 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
 #about .ha-about-portrait > [data-node-id="310:5721"] { display: none !important; }
 #about .ha-about-portrait > [data-node-id="310:5722"] { display: block !important; }
 </style>
+  <script defer src="assets/portfolio-layout/book-turn.js"></script>
 </body>
 </html>

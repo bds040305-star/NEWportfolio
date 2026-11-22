@@ -164,30 +164,8 @@ body #works .project-marquee-viewport {
   padding-bottom: clamp(48px, 5.8vw, 112px);
 }
 
-.portfolio-about-preview {
-  position: absolute;
-  left: 0;
-  top: 46%;
-  width: clamp(120px, 15vw, 288px);
-  aspect-ratio: 1.05;
-  transform: translateX(-62%);
-  display: grid;
-  align-content: center;
-  gap: .65em;
-  padding: 12px;
-  grid-template-columns: 62% minmax(0, 1fr);
-  overflow: hidden;
-  border: 1px solid #e2d4c3;
-  background: #f6eee4;
-  box-shadow: 6px 8px 15px #30241818;
-  color: #25221f;
-  text-align: right;
-  font-size: clamp(8px, .7vw, 14px);
-  cursor: pointer;
-}
 
-.portfolio-about-preview > * { grid-column: 2; }
-.portfolio-about-preview span:first-child { color: #c94509; font-weight: 800; }
+
 
 .portfolio-about-link {
   padding: 8px;
@@ -222,9 +200,7 @@ body #works .project-marquee-viewport {
 #monkeyBridge .portfolio-bridge-link { background: transparent; }
 body #works.v-order { background: #131313 !important; }
 
-@media (max-width: 700px) {
-  .portfolio-about-preview { display: none; }
-}
+
 
 /* Full-width section backgrounds with a shared desktop content boundary. */
 :root {
@@ -247,14 +223,7 @@ body #works .project-marquee-viewport {
     padding-inline: max(var(--portfolio-content-edge), clamp(24px, 3vw, 60px)) !important;
   }
 
-  #contents .portfolio-about-preview {
-    left: var(--portfolio-content-edge);
-    transform: none;
-    width: 130px;
-    grid-template-columns: 1fr;
-  }
 
-  #contents .portfolio-about-preview > * { grid-column: 1; }
 
   #dasomLogoBar::after {
     position: absolute;
@@ -328,4 +297,29 @@ body.portfolio-opening #intro .wall-noise {
 body.portfolio-opening #intro .intro-copy {
   translate: -50% calc(-50% + var(--shutter-logo-offset, 0px)) !important;
   will-change: translate !important;
+}
+
+.portfolio-book {
+  position: relative;
+  width: min(100%, 59.22vw, 1137px);
+  aspect-ratio: 2 / 1;
+}
+
+.portfolio-book-half {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: url("book-contents.webp") left center / 200% 100% no-repeat;
+}
+
+.portfolio-book-half:nth-child(2) { left: 50%; background-position: right center; }
+.portfolio-book canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: none; pointer-events: none; }
+.portfolio-book canvas.active { display: block; }
+#book-hotspot { position: absolute; inset: 10% 5% auto auto; width: 22%; height: 25%; border: 0; background: transparent; cursor: pointer; }
+#book-hotspot:focus-visible { outline: 3px solid var(--portfolio-orange); }
+.portfolio-book-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (max-width: 700px) {
+  .portfolio-book { width: min(100%, 520px); }
 }

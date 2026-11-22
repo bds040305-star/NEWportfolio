@@ -1899,7 +1899,7 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 
 <link rel="stylesheet" href="assets/portfolio-chrome/chrome.css?v=20261111-size48-3">
 <link rel="stylesheet" href="assets/hero-about/hero-about.css?v=20261112-header-height84-2">
-  <link rel="stylesheet" href="assets/portfolio-layout/layout.css?v=contents-entry">
+  <link rel="stylesheet" href="assets/portfolio-layout/layout.css?v=shutter-reveal">
 </head>
 <body>
 <header id="ds-fixed-nav" aria-label="포트폴리오 메뉴">
@@ -2305,12 +2305,14 @@ function enterStudio() {
   if (hatchTimeline) { hatchTimeline.kill(); hatchTimeline = null; }
   gsap.to(['.shutter-slats','.shutter-bottom','.shutter-handle-ui'], {x:0,y:0,rotation:0,scaleX:1,scaleY:1,duration:.12,overwrite:true});
 
-  gsap.timeline({ defaults: { ease: 'power3.inOut' } })
-    .to('.intro-copy', { opacity: 0, duration: .28, ease: 'power2.out' })
-    .to('.shutter-handle-ui', { opacity: 0, y: -18, duration: .28, ease: 'power2.out' }, '<')
-    .call(() => document.body.classList.add('portfolio-opening'))
-    .set('.window-stage', { backgroundColor: 'transparent' })
-    .to('.shutter-curtain', { yPercent: -105, duration: reduceMotion ? .01 : 1.65, ease: 'expo.inOut' })
+  const duration = reduceMotion ? .01 : 1.55;
+  const stage = document.querySelector('.window-stage');
+  document.body.classList.add('portfolio-opening');
+
+  gsap.timeline({ defaults: { duration, ease: 'power2.inOut' } })
+    .to('.shutter-curtain', { yPercent: -105 }, 0)
+    .to('.intro-copy', { y: -stage.clientHeight * 1.05 }, 0)
+    .to(stage, { opacity: 0, duration: reduceMotion ? .01 : .24 }, duration * .88)
     .set('.window-stage', { display: 'none' })
     .call(() => {
       document.body.classList.replace('portfolio-opening', 'vertical-ready');

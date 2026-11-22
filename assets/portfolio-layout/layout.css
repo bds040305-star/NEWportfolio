@@ -314,3 +314,12 @@ body.vertical-ready #dasom-monkey-drag-cue {
 }
 
 #contents-title:focus { outline: none; }
+
+body.portfolio-opening #intro .window-stage,
+body.portfolio-opening #intro .shutter-frame {
+  background: transparent;
+}
+
+body.portfolio-opening #intro .wall-noise {
+  opacity: 0;
+}

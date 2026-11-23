@@ -267,3 +267,16 @@
   background: linear-gradient(transparent, #202528);
   pointer-events: none;
 }
+
+/* Blur is clipped to the rounded surfaces, rather than the card wrappers. */
+.wf-mypage-float :is([data-node-id="113:10391"], [data-node-id="113:10398"]) {
+  backdrop-filter: blur(12px);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .wf-mypage-float { animation: wf-mypage-drift 5.6s ease-in-out infinite; }
+  .wf-mypage-float[data-node-id="113:10396"] { animation-duration: 6.4s; animation-delay: -2.8s; }
+}
+@keyframes wf-mypage-drift {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -12px; }
+}

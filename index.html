@@ -1899,7 +1899,7 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 
 <link rel="stylesheet" href="assets/portfolio-chrome/chrome.css?v=contact-marquee">
 <link rel="stylesheet" href="assets/hero-about/hero-about.css?v=contact-marquee">
-  <link rel="stylesheet" href="assets/portfolio-layout/layout.css?v=contact-marquee">
+  <link rel="stylesheet" href="assets/portfolio-layout/layout.css?v=bridge-3d">
 </head>
 <body>
 <header id="ds-fixed-nav" aria-label="포트폴리오 메뉴">
@@ -1949,7 +1949,6 @@ html body #dasom-monkey-3d.scroll-companion canvas {
       </div>
       <div class="plant"><i></i><i></i><i></i><span></span></div>
 
-      <div id="dasom-monkey-3d" role="img" aria-label="마우스 움직임에 반응하고 클릭하면 인사하는 3D 원숭이 캐릭터"></div>
       <div class="hero-glow" aria-hidden="true"></div>
       <div class="hero-mini-label">SCROLL DOWN</div>
       <div class="character-zone" aria-label="다솜의 캐릭터">
@@ -2077,12 +2076,10 @@ html body #dasom-monkey-3d.scroll-companion canvas {
     </section>
   <section class="monkey-bridge" id="monkeyBridge" aria-label="주황색에서 흰색으로 이어지는 UX/UI 인터랙션">
     <div class="monkey-bridge-sticky" id="monkeyBridgeSticky">
-      <img class="portfolio-bridge-art" src="assets/portfolio-layout/bridge.png" width="683" height="683"
-           alt="주황색 로봇 원숭이 캐릭터" loading="lazy">
+      <div id="dasom-monkey-3d" role="img" aria-label="드래그해서 돌려 볼 수 있는 3D 원숭이"></div>
       <div class="bridge-word bridge-word-left">UX RESEARCH × UI DESIGN</div>
       <div class="bridge-word bridge-word-right">INTERACTION → EXPERIENCE</div>
-      <p class="bridge-caption bridge-caption-top">PROJECT SECTION 02</p>
-      <a class="portfolio-pill portfolio-bridge-link" href="#works">SCROLL DOWN <span aria-hidden="true">↓</span></a>
+      <a class="portfolio-pill portfolio-bridge-link" href="#works">SCROLL DOWN <span class="portfolio-scroll-arrow" aria-hidden="true">↓</span></a>
     </div>
   </section>
 
@@ -5521,19 +5518,12 @@ h2 {
 @media(max-width:760px){#dasom-monkey-3d{left:50%;top:56%;width:100vw;height:65vh}}
 </style>
 
-<style id="dasom-scroll-companion-style">
-#dasom-monkey-3d.scroll-companion{position:fixed!important;left:50%;top:49%;width:min(40vw,530px)!important;height:min(55vh,540px)!important;z-index:30!important;pointer-events:auto!important;translate:none!important;transform-origin:center center!important;will-change:transform,left,top,opacity;transition:none!important;overflow:visible!important;}
-#dasom-monkey-3d.scroll-companion canvas{pointer-events:auto!important;}
-@media(max-width:760px){#dasom-monkey-3d.scroll-companion{width:65vw!important;height:44vh!important;z-index:28!important}}
-@media(prefers-reduced-motion:reduce){#dasom-monkey-3d.scroll-companion{opacity:1!important;transition:none!important}}
-</style>
 <script src="assets/vendor/three-r128.min.js"></script>
 <script>
 
 (async function(){
- const stage=document.querySelector('.intro > .studio');
  const host=document.getElementById('dasom-monkey-3d');
- if(!stage||!host)return;
+ if(!host)return;
  if(!window.THREE){host.setAttribute('data-error','three.js missing');return;}
  const THREE=window.THREE;
 
@@ -5648,70 +5638,6 @@ function apply(p){
  const target=new THREE.Vector3(0,.85,0);
  camera.position.set(0,1.3,7.5);camera.lookAt(target);
  let pointerX=0,pointerY=0,rotation=0,desiredRot=0,hover=false;
- let activeScroll=0;
- const observe=new IntersectionObserver(entries=>{activeScroll=entries[0].isIntersecting?1:0;},{threshold:.01});observe.observe(stage);
- // Scroll choreography runs independently of the intro observer once portfolio is open.
- let travelP=0, smoothedP=0, lastPhase=-1, traveling=false;
- // Guide states are based on the actual project title's viewport position.
- let guideStrength=0, guideEntered=false, greeted=false, lastGuideCard=0;
- // The guide anchors to actual on-screen headings, not a single scroll percentage.
- const guideStops=[
-  {section:document.getElementById('works'),title:document.querySelector('#works .project-title'),message:'이 프로젝트들을 소개할게요!'},
-  {section:document.getElementById('keywords'),title:document.querySelector('#keywords .v-title'),message:'제가 사용하는 키워드를 보여드릴게요!'},
-  {section:document.getElementById('process'),title:document.querySelector('#process .v-title'),message:'문제를 해결하는 과정도 소개할게요!'}
- ].filter(o=>o.section&&o.title);
- const workSection=document.getElementById('works');
- const workTitle=workSection?.querySelector('.project-title');
- const prefersCalm=matchMedia('(prefers-reduced-motion: reduce)').matches;
- const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
- let guideX=innerWidth*.5,guideY=innerHeight*.38,guideScale=.65;
- let guideMood='travel',guideStop=null,guideBecameActive=0;
- const guideCaption=document.createElement('div');
- guideCaption.id='dasom-guide-caption';
- guideCaption.setAttribute('aria-live','off');
- guideCaption.innerHTML='<span class="guide-eyebrow">DASOM GUIDE ↗</span><span class="guide-line">여기서 제 프로젝트들을 만나보세요!</span><span class="guide-hint">카드를 선택하면 자세히 볼 수 있어요.</span>';
- document.body.appendChild(guideCaption);
- // Initial hello only once the studio is actually revealed.
- const greetOnce=()=>{
-   if(greeted||!document.body.classList.contains('vertical-ready'))return;
-   greeted=true;setTimeout(()=>{if(!document.hidden&&stage.getBoundingClientRect().bottom>0)play(emotes.Wave,.35)},350);
- };
- const greetObserver=new MutationObserver(greetOnce);
- greetObserver.observe(document.body,{attributes:true,attributeFilter:['class']}); greetOnce();
- // Content-first travel: stay quiet as project cards become the focal point.
- const route=[
-   [0, 0, .04, .72, 0, 0],
-   [.10,.19,-.04,.56,.12,-.06],
-   [.22,.30,-.10,.38,.20,-.04],
-   [.42,.32,-.13,.30,.18,0],
-   [.65,.32,-.14,.28,.12,0],
-   [.84,.32,-.16,.25,.08,0],
-   [1,.32,-.17,.23,0,0]
- ];
- const mix=(a,b,t)=>a+(b-a)*t;
- function choreograph(p){
-  let i=0;while(i<route.length-2&&route[i+1][0]<p)i++;
-  const a=route[i],b=route[i+1],u=Math.max(0,Math.min(1,(p-a[0])/(b[0]-a[0]))),e=u*u*(3-2*u);
-  const bounce=0;
-  return {x:mix(a[1],b[1],e),y:mix(a[2],b[2],e)-bounce*.12,scale:mix(a[3],b[3],e)*(1+bounce*.09),spin:mix(a[4],b[4],e),tilt:mix(a[5],b[5],e),jump:bounce};
- }
- function updateTravel(){
-  const active=document.body.classList.contains('vertical-ready');
-  if(active!==traveling){
-   traveling=active;
-   if(active){document.body.appendChild(host);host.classList.add('scroll-companion');}
-   else {stage.appendChild(host);host.classList.remove('scroll-companion'); lastPhase=-1; smoothedP=0;}
-   resize();
-  }
-  if(!active)return;
-  const main=document.getElementById('verticalMain');
-  const max=Math.max(1,(main?main.getBoundingClientRect().height:document.documentElement.scrollHeight)-innerHeight);
-  const start=main?main.getBoundingClientRect().top+window.scrollY:0;
-  travelP=Math.max(0,Math.min(1,(window.scrollY-start)/max));
- }
- window.addEventListener('scroll',updateTravel,{passive:true});
- const companionObserver=new MutationObserver(updateTravel);companionObserver.observe(document.body,{attributes:true,attributeFilter:['class']});
- updateTravel();
  function resize(){const w=host.clientWidth||600,h=host.clientHeight||600;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false)}
  const ro=new ResizeObserver(resize);ro.observe(host);resize();
  // Cap pixel workload for large displays while preserving the model and its texture.
@@ -5728,7 +5654,7 @@ function apply(p){
  let dragActive=false, dragId=null, dragX=0, dragY=0, dragDistance=0;
  let userYaw=0, userPitch=0, yawVelocity=0, pitchVelocity=0;
  let suppressWaveUntil=0;
- zone.style.touchAction='none';
+ zone.style.touchAction='pan-y';
  zone.style.cursor='grab';
  zone.setAttribute('aria-label','3D 원숭이: 마우스로 드래그해 앞모습, 옆모습, 뒷모습을 회전하여 감상');
  zone.addEventListener('pointerdown',e=>{
@@ -5759,124 +5685,23 @@ function apply(p){
  zone.addEventListener('pointermove',e=>{const r=zone.getBoundingClientRect();pointerX=((e.clientX-r.left)/r.width-.5)*2;pointerY=((e.clientY-r.top)/r.height-.5)*2;hover=true;});
  zone.addEventListener('pointerleave',()=>{hover=false;pointerX=0;pointerY=0;});
  zone.addEventListener('click',()=>{if(performance.now()<suppressWaveUntil)return;if(typeof play==='function')play(emotes.Wave,.2);});
- // Project hover acknowledges the selected work without stealing focus or blocking cards.
- let lastReaction=0;
- document.querySelectorAll('#works .v-project-card.project-tile').forEach(card=>{
-   card.addEventListener('pointerenter',()=>{
-     const t=performance.now();
-     lastGuideCard=t;
-     if(t-lastReaction>1300 && !matchMedia('(prefers-reduced-motion: reduce)').matches){
-       lastReaction=t; if(typeof play==='function')play(emotes.Yes,.18);
-     }
-     guideCaption.querySelector('.guide-line').textContent='이 프로젝트를 살펴볼까요?';
-   });
-   card.addEventListener('pointerleave',()=>{guideCaption.querySelector('.guide-line').textContent='여기서 제 프로젝트들을 만나보세요!';});
- });
- let lastClick=0;
  const clock=new THREE.Clock();
  renderer.setAnimationLoop(()=>{
-   if(document.hidden || host.dataset.visible==='0' || document.body.classList.contains('case-overlay-open') || (!activeScroll && !traveling))return;
+   if(document.hidden || host.dataset.visible==='0' || document.body.classList.contains('case-overlay-open') || !document.body.classList.contains('vertical-ready'))return;
    now=clock.getElapsedTime();
-   if(traveling){
-    smoothedP+= (travelP-smoothedP)*.1;
-    const m=choreograph(smoothedP);
-    const isMobile=innerWidth<=760;
-    const centerY=innerHeight*.38;
-    const sectionBoxes=guideStops.map((stop)=>{
-      const section=stop.section.getBoundingClientRect();
-      const title=stop.title.getBoundingClientRect();
-      const center=title.top+title.height*.5;
-      return {stop,section,title,center,distance:Math.abs(center-innerHeight*.36)};
-    });
-    const candidate=sectionBoxes.filter(o=>o.section.top<innerHeight*.94&&o.section.bottom>innerHeight*.08)
-      .sort((a,b)=>a.distance-b.distance)[0];
-    // The character shrinks alongside a title, travels toward center between sections,
-    // and sits on the far right when cards or dense text would be obscured.
-    const headingVisible=!!candidate&&candidate.title.bottom>innerHeight*.08&&candidate.title.top<innerHeight*.82;
-    const titleHold=headingVisible && candidate.distance<innerHeight*.33;
-    const workCards=workSection?.querySelector('.project-marquee-viewport')?.getBoundingClientRect();
-    const cardsVisible=!!workCards&&workCards.top<innerHeight*.83&&workCards.bottom>innerHeight*.10;
-    const denseContent=!!candidate&&(candidate.section.top<innerHeight*.20&&candidate.section.bottom>innerHeight*.35);
-    const transitionGap=!titleHold&&!cardsVisible&&!denseContent;
-    const targetMode=titleHold?'title':transitionGap?'travel':'edge';
-    let tx,ty,ts;
-    if(targetMode==='title'){
-      const title=candidate.title;
-      tx=clamp(title.right+(isMobile?24:80),isMobile?innerWidth*.66:innerWidth*.61,innerWidth-(isMobile?49:96));
-      ty=clamp(title.top+title.height*.44,isMobile?80:105,innerHeight*.72);
-      ts=isMobile?.26:.34;
-    }else if(targetMode==='edge'){
-      tx=innerWidth-(isMobile?58:120);
-      ty=clamp(candidate?candidate.section.top+155:innerHeight*.30,innerHeight*.19,innerHeight*.49);
-      ts=isMobile?.20:.25;
-    }else{
-      tx=innerWidth*.50;
-      ty=centerY;
-      ts=isMobile?.54:.64;
-    }
-    // Lerp using time-corrected easing for gentle transitions at any refresh rate.
-    const ease=prefersCalm?1:1-Math.exp(-.095*16.7);
-    guideX+=(tx-guideX)*ease;
-    guideY+=(ty-guideY)*ease;
-    guideScale+=(ts-guideScale)*ease;
-    const nextGuideStrength=targetMode==='travel'?0:1;
-    guideStrength+=(nextGuideStrength-guideStrength)*(prefersCalm?1:.09);
-    host.style.left=guideX.toFixed(1)+'px';
-    host.style.top=guideY.toFixed(1)+'px';
-    host.style.transform='translate(-50%,-50%) scale('+guideScale.toFixed(4)+')';
-    // No fading, blurring or flash: the guide remains solid and legible.
-    host.style.setProperty('opacity','1','important');
-    host.style.setProperty('filter','none','important');
-    host.style.setProperty('pointer-events',targetMode==='travel'&&!isMobile?'auto':'none','important');
-    if(targetMode!==guideMood){
-      guideMood=targetMode;
-      guideBecameActive=now;
-      if(targetMode==='title' && candidate?.stop!==guideStop){
-        guideStop=candidate.stop;
-        guideCaption.querySelector('.guide-line').textContent=candidate.stop.message;
-        if(!prefersCalm)play(emotes.Wave,.28);
-      }
-    }
-    // A subtle caption next to title stops; never over the project artwork.
-    guideCaption.style.left=clamp(guideX+(isMobile?-158:80),12,innerWidth-(isMobile?182:255))+'px';
-    guideCaption.style.top=clamp(guideY+(isMobile?65:34),15,innerHeight-105)+'px';
-    guideCaption.style.opacity=String(targetMode==='title'&&candidate?.title.top>innerHeight*.06?1:0);
-    if(targetMode!=='title')guideStop=null;
-    const phase=targetMode==='travel'?1:2;
-    if(phase!==lastPhase){lastPhase=phase;setState(phase===1?'Walking':'Idle');}
-    model.rotation.z=(targetMode==='travel'?Math.sin(now*.65)*.045:Math.sin(now*.8)*.018);
-    model.userData.scrollSpin=0;
-    model.userData.scrollJump=targetMode==='travel'?.11:0;
-   }else{model.rotation.z=0;model.userData.scrollSpin=0;model.userData.scrollJump=0;guideCaption.style.opacity='0';guideStrength=0;}
    if(layer.def.d&&!layer.ended&&now-layer.start>layer.def.d){layer.ended=true;play(states[stateName],.2);}
    apply(pose());
-   // Organic guide acting: head follows the work, shoulder raises and the hand points down.
-   // This modifies bones only (original model, mesh and texture are untouched).
-   if(guideStrength>.015){
-     const w=guideStrength;
-     const nudge=Math.sin(now*2.1)*.065;
-     const reach=-1.42+Math.sin(now*1.8)*.13;
-     armR.rotation.x=mix(armR.rotation.x,reach,w);
-     armR.rotation.z=mix(armR.rotation.z,-.55+Math.sin(now*1.45)*.06,w);
-     armL.rotation.x=mix(armL.rotation.x,-.30+Math.sin(now*1.1)*.08,w);
-     head.rotation.x=mix(head.rotation.x,.13+Math.sin(now*.85)*.075,w);
-     head.rotation.y=mix(head.rotation.y,-.18+nudge,w);
-     head.rotation.z=mix(head.rotation.z,.10*Math.sin(now*1.4),w);
-     body.rotation.x+=w*.075;
-   }
    if(!dragActive){
      userYaw+=yawVelocity;userPitch=Math.max(-.85,Math.min(.85,userPitch+pitchVelocity));
      yawVelocity*=.9;pitchVelocity*=.86;
      if(Math.abs(yawVelocity)<.00001)yawVelocity=0;
      if(Math.abs(pitchVelocity)<.00001)pitchVelocity=0;
    }
-   // The user's angle is additive to the scroll choreography, so front/back view
-   // remains accessible even during the cinematic scripted spins.
    desiredRot=dragActive?0:(hover?pointerX*.13:Math.sin(now*.28)*.012);
    rotation+=(desiredRot-rotation)*.045;
-   model.rotation.y=userYaw*(1-guideStrength)+rotation*(1-guideStrength*.72)-guideStrength*.18;
-   model.rotation.x+=( ((userPitch+(dragActive?0:(hover?-pointerY*.065:0)))*(1-guideStrength))-model.rotation.x)*.12;
-   model.position.y=Math.sin(now*(guideStrength>.4?1.05:.9))*(guideStrength>.4?.021:.055)+(model.userData.scrollJump||0)*.12;
+   model.rotation.y=userYaw+rotation;
+   model.rotation.x+=( (userPitch+(dragActive?0:(hover?-pointerY*.065:0)))-model.rotation.x)*.12;
+   model.position.y=Math.sin(now*.9)*.055;
    renderer.render(scene,camera);
  });
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)resize()});
@@ -5886,12 +5711,8 @@ function apply(p){
 <style id="dasom-monkey-drag-cue-style">
 #dasom-monkey-3d{cursor:grab;user-select:none;-webkit-user-select:none}
 #dasom-monkey-3d:active{cursor:grabbing}
-#dasom-monkey-3d canvas{touch-action:none}
-#dasom-monkey-drag-cue{position:fixed;right:18px;bottom:20px;z-index:31;padding:9px 13px;border:1px solid rgba(120,120,120,.22);border-radius:999px;color:#fff;background:rgba(19,19,19,.68);font:500 11px/1.5 system-ui,sans-serif;letter-spacing:.02em;pointer-events:none;backdrop-filter:blur(12px);display:none}
-body.vertical-ready #dasom-monkey-drag-cue{display:block}
-@media(max-width:760px){#dasom-monkey-drag-cue{right:10px;bottom:12px;font-size:10px}}
+#dasom-monkey-3d canvas{touch-action:pan-y}
 </style>
-<div id="dasom-monkey-drag-cue" aria-hidden="true">↻ 원숭이를 드래그해 360° 회전 · 뒷모습 보기</div>
 <style id="dasom-monkey-ux-refinement-2026">
 /* Accessible CTA; existing shutter, backdrop, 3D mesh and project artwork unchanged. */
 #dasom-intro-guidance{position:absolute;z-index:20;right:clamp(22px,5.5vw,90px);bottom:clamp(58px,12vh,130px);width:min(330px,35vw);color:#302721;opacity:0;transform:translateY(15px);transition:opacity .65s ease,transform .65s ease;pointer-events:none}

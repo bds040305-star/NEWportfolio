@@ -75,14 +75,13 @@
   height: auto;
 }
 
-.portfolio-bridge-art {
+#monkeyBridge #dasom-monkey-3d {
   position: absolute;
   z-index: 2;
   left: 50%;
   top: 48%;
-  transform: translate(-50%, -50%);
-  width: min(55vw, 35.58vw, 683px);
-  height: auto;
+  width: min(62vw, 880px);
+  height: min(54vw, 850px);
 }
 
 .portfolio-bridge-link {
@@ -149,7 +148,7 @@ body #works .project-marquee-viewport {
 
 @media (max-width: 700px) {
   .portfolio-contents-art { width: min(100%, 520px); }
-  .portfolio-bridge-art { width: min(68vw, 340px); }
+  #monkeyBridge #dasom-monkey-3d { width: 90vw; height: min(90vw, 420px); }
   #dasomLogoBar.ha-logo-bar { height: auto; }
 }
 
@@ -277,9 +276,7 @@ body.portfolio-opening #intro .window-stage {
 }
 
 body.portfolio-opening #intro .studio,
-body.vertical-ready #intro,
-body.vertical-ready #dasom-monkey-3d,
-body.vertical-ready #dasom-monkey-drag-cue {
+body.vertical-ready #intro {
   display: none !important;
 }
 
@@ -322,4 +319,19 @@ body.portfolio-opening #intro .intro-copy {
 .portfolio-book-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 @media (max-width: 700px) {
   .portfolio-book { width: min(100%, 520px); }
+}
+
+.portfolio-scroll-arrow {
+  display: inline-block;
+  animation: portfolio-arrow-down 1.65s ease-out infinite;
+}
+
+@keyframes portfolio-arrow-down {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+  75% { transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-scroll-arrow { animation: none; }
 }

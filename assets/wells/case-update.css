@@ -1,0 +1,61 @@
+/* Case study frame 772:19825. The legacy mobile mockups retain their own UI styles. */
+#wells-section-0 { overflow: hidden; }
+.wf-new-logo, .wf-new-mascot, .wf-hero-copy { position: absolute; }
+.wf-new-logo { width: 532px; height: 150px; transform: translate(-50%, -50%); }
+.wf-new-hero-art { width: 100%; height: 100%; object-fit: contain; object-position: bottom; }
+.wf-new-mascot { width: 638px; height: 578px; }
+.wf-hero-copy { top: 327px; left: 960px; width: 690px; color: white; font-family: "Noto Sans KR", sans-serif; }
+.wf-hero-copy h1 { margin: 0; font-size: 72px; font-weight: 700; line-height: 92px; }
+.wf-hero-copy h1 span, .wf-overview h2 span { color: #b9d77a; }
+.wf-hero-meta { display: grid; grid-template-columns: 375px 1fr; column-gap: 40px; row-gap: 40px; margin: 43px 0 0; }
+.wf-hero-meta dt { font-size: 22px; font-weight: 500; line-height: 32px; }
+.wf-hero-meta dd { margin: 10px 0 0; font-size: 19px; line-height: 29px; }
+
+.wf-overview, .wf-reflection { box-sizing: border-box; padding-inline: 240px; font: 400 26px/40px "Noto Sans KR", sans-serif; color: #0e261a; }
+.wf-overview { background: #fff; padding-top: 88px; }
+.wf-reflection { position: relative; background: #f0f6ef; padding-top: 131px; }
+.wf-overview p, .wf-reflection p, .wf-evidence p { margin: 0; }
+.wf-kicker { color: #294a36; font-size: 22px; font-weight: 500; line-height: 32px; }
+.wf-overview h2, .wf-reflection h2 { margin: 12px 0 30px; font-size: 58px; font-weight: 700; line-height: 76px; }
+.wf-overview-reason { margin-top: 20px; padding: 22px 28px; min-height: 168px; box-sizing: border-box; border-radius: 16px; background: #e0f0e3; }
+.wf-overview-reason h3, .wf-reflection aside h3 { margin: 0 0 12px; font-size: 22px; font-weight: 500; line-height: 32px; }
+.wf-overview-reason p { max-width: 1221px; }
+.wf-reflection h2 { margin-top: 18px; margin-bottom: 18px; }
+.wf-reflection aside { position: absolute; inset: 805px 240px auto; min-height: 156px; box-sizing: border-box; padding: 15px 28px; border-radius: 16px; background: #edf5ed; font-size: 21px; }
+
+.wf-evidence { position: absolute; left: 245px; top: 895px; width: 1430px; min-height: 161px; z-index: 2; box-sizing: border-box; padding: 24px; border-radius: 12px; background: #e3f0e5; color: #0f3324; font: 400 21px/31px "Noto Sans KR", sans-serif; }
+.wf-evidence header, .wf-evidence-grid { display: grid; gap: 36px; }
+.wf-evidence header { grid-template-columns: 224px 1fr; align-items: baseline; margin-bottom: 17px; }
+.wf-evidence h3 { margin: 0; font-size: 22px; font-weight: 700; }
+.wf-evidence-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.wf-evidence a { color: #0a4d30; text-decoration: underline; text-underline-offset: 3px; }
+.wf-goal-copy { position: absolute; top: 138px; width: 100%; margin: 0; text-align: center; color: white; font: 500 32px/45px "Noto Sans KR", sans-serif; }
+
+/* The existing illustration groups are scaled to their updated Figma bounds. */
+#wells-section-1 :is([data-node-id="113:8929"], [data-node-id="113:8932"], [data-node-id="113:8933"], [data-node-id="113:8934"], [data-node-id="113:8935"], [data-node-id="113:8939"], [data-node-id="113:8946"], [data-node-id="113:8953"], [data-node-id="113:8959"], [data-node-id="113:8966"], [data-node-id="113:8970"]) {
+ transform: scale(.7842) !important;
+ transform-origin: top left;
+}
+#wells-section-1 [data-node-id="113:8939"] { left:380px;top:644px; }
+#wells-section-1 [data-node-id="113:8946"] { left:293px;top:401px; }
+#wells-section-1 [data-node-id="113:8953"] { left:1280px;top:374px; }
+#wells-section-1 [data-node-id="113:8959"] { left:1243px;top:638px; }
+#wells-section-1 [data-node-id="113:8966"] { left:758px;top:369px; }
+#wells-section-1 [data-node-id="113:8970"] { left:802px;top:415px; }
+#wells-section-1 [data-node-id="113:8929"] { left:764px;top:375px; }
+#wells-section-1 [data-node-id="113:8932"] { left:1246px;top:651px; }
+#wells-section-1 [data-node-id="113:8933"] { left:300px;top:411px; }
+#wells-section-1 [data-node-id="113:8934"] { left:389px;top:655px; }
+#wells-section-1 [data-node-id="113:8935"] { left:1290px;top:385px; }
+#wells-section-3 [data-node-id="113:9052"] { left:240px; transform:scale(.876); transform-origin:top left; }
+#wells-section-3 [data-node-id="113:9052"] p { word-break:keep-all; }
+#wells-section-3 [data-node-id="113:9084"] { border-radius:30px; }
+#wells-section-3 [data-node-id="113:9085"] { width:100%;height:100%; }
+
+.wf-reflection-notes { margin:0;padding:0;list-style:none; }
+.wf-reflection-notes li { position:absolute;box-sizing:border-box;width:416px;height:240px;padding:20px;box-shadow:0 6px 12px #0002;font-size:18px;line-height:30px;color:#172822; }
+.wf-reflection-notes li:nth-child(1) { left:365px;top:380px;background:#a7d9f9; }
+.wf-reflection-notes li:nth-child(2) { left:740px;top:547px;background:#afebbb;z-index:1; }
+.wf-reflection-notes li:nth-child(3) { left:1054px;top:327px;background:#aff2ef; }
+.wf-reflection-notes h3 { margin:0;font-size:18px;font-weight:500; }
+.wf-reflection-notes span { position:absolute;bottom:15px;font-size:12px;color:#4a6660; }

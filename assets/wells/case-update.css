@@ -148,3 +148,34 @@
   top: auto;
   bottom: 0;
 }
+
+/* Add space around complete scenes without shifting their internal artwork. */
+#wf-page > .wf-section {
+  box-sizing: content-box;
+  padding-block: var(--wf-space-start, 0) var(--wf-space-end, 0);
+  background-color: var(--wf-scene-color, transparent);
+}
+#wells-overview { --wf-space-start: 32px; --wf-space-end: 76px; --wf-scene-color: #fff; }
+#wells-section-1 { --wf-space-start: 48px; --wf-scene-color: #9dc7aa; }
+#wells-section-2 { --wf-space-start: 48px; --wf-space-end: 72px; --wf-scene-color: #1e2226; }
+#wells-section-4 { --wf-space-end: 76px; --wf-scene-color: #23272c; }
+#wells-section-5 { --wf-space-start: 44px; --wf-space-end: 70px; --wf-scene-color: #202528; }
+#wells-section-9 { --wf-space-start: 40px; --wf-space-end: 76px; --wf-scene-color: #fff; }
+#wells-section-13 { --wf-space-start: 48px; --wf-space-end: 76px; --wf-scene-color: #fff; }
+#wells-section-7 { --wf-space-start: 42px; --wf-space-end: 70px; --wf-scene-color: #fff; }
+#wells-reflection { --wf-space-start: 32px; --wf-space-end: 64px; --wf-scene-color: #f0f6ef; }
+#wells-section-16 { --wf-space-start: 52px; --wf-space-end: 40px; --wf-scene-color: #fff; }
+#wells-section-1 [data-node-id="113:8936"] { top: 257px !important; }
+#wells-section-14 [data-node-id="113:10340"] {
+  width: 1540px;
+  height: auto;
+  font-size: 50px;
+  line-height: 72px;
+}
+.wf-copy-accent { color: #2f8f4e; }
+#wells-section-16 .wf-takeaway-copy {
+  top: 472px;
+  width: 1150px;
+  font-size: 27px;
+  line-height: 42px;
+}

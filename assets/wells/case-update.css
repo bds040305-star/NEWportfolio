@@ -158,8 +158,8 @@
 #wells-overview { --wf-space-start: 32px; --wf-space-end: 76px; --wf-scene-color: #fff; }
 #wells-section-1 { --wf-space-start: 48px; --wf-scene-color: #9dc7aa; }
 #wells-section-2 { --wf-space-start: 48px; --wf-space-end: 72px; --wf-scene-color: #1e2226; }
-#wells-section-4 { --wf-space-end: 76px; --wf-scene-color: #23272c; }
-#wells-section-5 { --wf-space-start: 44px; --wf-space-end: 70px; --wf-scene-color: #202528; }
+#wells-section-4 { --wf-scene-color: #202528; }
+#wells-section-5 { --wf-space-end: 70px; --wf-scene-color: #202528; }
 #wells-section-9 { --wf-space-start: 40px; --wf-space-end: 76px; --wf-scene-color: #fff; }
 #wells-section-13 { --wf-space-start: 48px; --wf-space-end: 76px; --wf-scene-color: #fff; }
 #wells-section-7 { --wf-space-start: 42px; --wf-space-end: 70px; --wf-scene-color: #fff; }
@@ -255,3 +255,14 @@
 #wells-section-13 [data-node-id="113:10206"] { left: 985.5px; }
 #wells-section-13 [data-node-id="113:10208"] { left: 1420.34px; }
 #wells-section-13 [data-node-id="113:10165"] { line-height: 1.2; }
+
+/* Blend the empty tail of Strategy into the Journey background. */
+#wells-section-4 > div { overflow: clip; }
+#wells-section-4 > div::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 130px;
+  background: linear-gradient(transparent, #202528);
+  pointer-events: none;
+}

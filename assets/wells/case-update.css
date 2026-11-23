@@ -179,3 +179,79 @@
   font-size: 27px;
   line-height: 42px;
 }
+
+/* Center the goal title and copy against the same green panel. */
+.wf-goal-title[data-node-id] {
+  position: absolute;
+  inset: 48px 0 auto;
+  width: auto;
+  height: auto;
+  margin: 0;
+  color: #fff;
+  font: 700 58px/76px "Noto Sans KR", sans-serif;
+  text-align: center;
+}
+
+/* Use the center of the three cards as the strategy scene's origin. */
+#wells-section-4 .wf-content-plane {
+  transform: translateX(960px) scale(.94) translateX(-960.5px);
+}
+#wells-section-4 :is(
+  [data-node-id="113:9141"], [data-node-id="113:9184"], [data-node-id="113:9185"]
+) {
+  left: 240.5px;
+  width: 1440px;
+  translate: none;
+  text-align: center;
+}
+#wells-section-4 [data-node-id="113:9141"] { top: 85px; }
+#wells-section-4 [data-node-id="113:9184"] { top: 149px; }
+#wells-section-4 :is(
+  [data-node-id="113:9143"], [data-node-id="113:9149"], [data-node-id="113:9157"],
+  [data-node-id="113:9168"], [data-node-id="113:9173"], [data-node-id="113:9179"]
+) {
+  align-items: center;
+  justify-content: center;
+  padding-inline: 28px;
+  text-align: center;
+}
+#wells-section-4 :is([data-node-id="113:9143"], [data-node-id="113:9149"], [data-node-id="113:9157"]) {
+  padding-block: 24px;
+}
+#wells-section-4 :is([data-node-id="113:9150"], [data-node-id="113:9152"], [data-node-id="113:9158"]) {
+  width: 100%;
+  gap: 14px;
+}
+#wells-section-4 :is(
+  [data-node-id="113:9147"], [data-node-id="113:9148"], [data-node-id="113:9155"],
+  [data-node-id="113:9156"], [data-node-id="113:9162"], [data-node-id="113:9163"],
+  [data-node-id="113:9171"], [data-node-id="113:9176"], [data-node-id="113:9177"]
+) {
+  width: 100%;
+  height: auto;
+  line-height: 1.4;
+  text-align: center;
+  white-space: normal;
+  word-break: keep-all;
+}
+
+/* The three account mockups are symmetric about the middle phone. */
+#wells-section-13 .wf-content-plane {
+  transform: translateX(960px) scale(.973) translateX(-985.5px);
+}
+#wells-section-13 :is(
+  [data-node-id="113:10105"], [data-node-id="113:10165"], [data-node-id="113:10164"]
+) {
+  left: 265.5px;
+  width: 1440px;
+  height: auto;
+  text-align: center;
+}
+#wells-section-13 [data-node-id="113:10164"] { line-height: 1.5; }
+#wells-section-13 :is([data-node-id="113:10204"], [data-node-id="113:10206"], [data-node-id="113:10208"]) {
+  translate: -50% 0;
+}
+#wells-section-13 [data-node-id="113:10204"] { left: 550.66px; }
+#wells-section-13 [data-node-id="113:10206"] { left: 985.5px; }
+#wells-section-13 [data-node-id="113:10208"] { left: 1420.34px; }
+#wells-section-13 [data-node-id="113:10165"] { line-height: 1.2; }

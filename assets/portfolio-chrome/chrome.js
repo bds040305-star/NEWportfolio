@@ -44,7 +44,7 @@ function openLink(event){
  const missing=pending.hasAttribute('data-unavailable'),label=pending.dataset.pcAction;
  dialog.querySelector('#pc-confirm-label').textContent=label.toUpperCase();
  dialog.querySelector('#pc-confirm-title').textContent=missing?'연결 준비 중입니다':'해당 페이지로 이동하시겠습니까?';
- dialog.querySelector('#pc-confirm-note').textContent=missing?`${label==='Resume'?'이력서 PDF':'Figma 포트폴리오'}의 실제 주소가 아직 연결되지 않았습니다.`:label==='Email'?'bds040305@gmail.com으로 이메일 앱을 엽니다.':label==='Resume'?'이력서 PDF를 새 탭에서 엽니다.':`${label} 페이지를 새 탭에서 엽니다.`;
+ dialog.querySelector('#pc-confirm-note').textContent=missing?`${label==='Resume'?'이력서 PDF':'Figma 포트폴리오'}의 실제 주소가 아직 연결되지 않았습니다.`:label==='Email'?'bds040305@gmail.com으로 이메일 앱을 엽니다.':label==='Resume'?'이력서를 새 탭에서 엽니다.':`${label} 페이지를 새 탭에서 엽니다.`;
  yes.disabled=missing;document.body.classList.add('pc-modal-open');dialog.showModal();no.focus({preventScroll:true});syncFloat();
 }
 function closeLink(){if(dialog.open)dialog.close();}

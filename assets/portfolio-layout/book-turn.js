@@ -14,6 +14,8 @@
   imgA.src = book.dataset.aboutImage;
   let current = 'contents';
   let turning = false;
+  const turnDuration = 1100;
+  const landingDuration = 180;
 
   function resize() {
     const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -26,7 +28,15 @@
     half.style.backgroundImage = 'url("' + image.src + '")';
   }
 
-function drawTurn(p,dir){const W=cv.clientWidth,H=cv.clientHeight;ctx.clearRect(0,0,W,H);if(!W||!H)return;const fw=W/2,theta=(dir==='forward'?-Math.PI*p:-Math.PI*(1-p));const cvt=Math.cos(theta),wave=Math.sin(Math.PI*p),curv=wave*.12*fw;const n=48;
+function drawTurn(p,dir){const W=cv.clientWidth,H=cv.clientHeight;ctx.clearRect(0,0,W,H);if(!W||!H)return;const fw=W/2;
+  // The lifted page is drawn only on the leaf, leaving blank paper beneath it.
+  const liftedSide = dir === 'forward' ? fw : 0;
+  const underPage = ctx.createLinearGradient(liftedSide, 0, liftedSide + fw, 0);
+  underPage.addColorStop(0, dir === 'forward' ? '#e5dfd5' : '#faf7f1');
+  underPage.addColorStop(1, dir === 'forward' ? '#faf7f1' : '#e5dfd5');
+  ctx.fillStyle = underPage;
+  ctx.fillRect(liftedSide, 0, fw, H);
+  const theta=(dir==='forward'?-Math.PI*p:-Math.PI*(1-p));const cvt=Math.cos(theta),wave=Math.sin(Math.PI*p),curv=wave*.12*fw;const n=48;
 // Soft contact shadow cast on receiving page by the moving paper.
 ctx.save();const intensity=Math.max(0,.65*wave);let grad=ctx.createLinearGradient(fw-90,0,fw+120,0);grad.addColorStop(0,'rgba(28,18,12,0)');grad.addColorStop(.5,'rgba(28,18,12,'+(0.29*intensity)+')');grad.addColorStop(1,'rgba(28,18,12,0)');ctx.fillStyle=grad;ctx.fillRect(fw-100,0,250,H);ctx.restore();
 const showingFront=(dir==='forward'?p<.5:p>=.5);const im=dir==='forward'?imgC:imgA;const halfOfImage=im.width/2;function X(u){return fw+fw*u*cvt+curv*Math.sin(Math.PI*u)*(Math.abs(cvt)*.20+ .70)}function Y(u){return -wave*H*.012*Math.sin(Math.PI*u)}function paintStrip(u0,u1){const x0=X(u0),x1=X(u1),y0=Y(u0),y1=Y(u1);if(Math.abs(x1-x0)<.008)return;const s0=showingFront?u0:(1-u1),s1=showingFront?u1:(1-u0);const sx=(dir==='forward'?halfOfImage:0)+s0*halfOfImage;const sw=(s1-s0)*halfOfImage;ctx.save();ctx.translate(x0,y0);ctx.transform((x1-x0)/(sw||1), (y1-y0)/(sw||1),0,1,0,0);if(x1<x0){ctx.translate(sw,0);ctx.scale(-1,1)}const overlap=1.5/Math.max(0.02,Math.abs((x1-x0)/(sw||1)));ctx.drawImage(im,sx,0,sw,im.height,0,0,sw+overlap,H);ctx.restore();}
@@ -57,17 +67,27 @@ const shade=ctx.createLinearGradient(lo,0,hi,0);shade.addColorStop(0,'rgba(57,44
       if (to === 'about') document.getElementById('profile-dialog').showModal();
       return;
     }
-    function finish() {
+    function finish(animateLanding = false) {
       current = to;
       const image = to === 'about' ? imgA : imgC;
       showPage(left, image);
       showPage(right, image);
       book.dataset.state = to;
-      cv.classList.remove('active');
       hotspot.hidden = forward.hidden = to === 'about';
       back.hidden = to === 'contents';
       status.textContent = to === 'about' ? 'About Me 페이지' : '목차 페이지';
-      turning = false;
+      function settle() {
+        cv.classList.remove('active');
+        turning = false;
+      }
+      if (animateLanding) {
+        const fade = cv.animate([{ opacity: 1 }, { opacity: 0 }], {
+          duration: landingDuration, easing: 'ease-out'
+        });
+        fade.onfinish = fade.oncancel = settle;
+      } else {
+        settle();
+      }
       if (restoreFocus) (to === 'about' ? back : forward).focus({preventScroll:true});
     }
     if (!ctx || matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -81,12 +101,13 @@ const shade=ctx.createLinearGradient(lo,0,hi,0);shade.addColorStop(0,'rgba(57,44
     let start;
     function frame(time) {
       start ??= time;
-      const progress = Math.min(1, (time - start) / 1850);
+      const progress = Math.min(1, (time - start) / turnDuration);
       if (progress < 1) {
         drawTurn(.5 - .5 * Math.cos(Math.PI * progress), dir);
         requestAnimationFrame(frame);
       } else {
-        finish();
+        drawTurn(1, dir);
+        finish(true);
       }
     }
     requestAnimationFrame(frame);

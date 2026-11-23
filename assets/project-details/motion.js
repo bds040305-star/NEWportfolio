@@ -85,7 +85,7 @@ function enable(){
    const flow=root.querySelector('[data-frame-id="124:16388"]');if(flow&&ST){const lines=[...flow.querySelectorAll('img[src$=".svg"]')].filter(el=>{const r=el.getBoundingClientRect();return !excluded(el)&&r.height<700&&r.width<1400&&getComputedStyle(el).clipPath==='none';}).sort((a,b)=>{const ar=a.getBoundingClientRect(),br=b.getBoundingClientRect();return Math.abs(ar.top-br.top)>18?ar.top-br.top:ar.left-br.left;}).slice(0,32);
     const t=gs.fromTo(lines,{clipPath:'inset(0 100% 0 0)'},{clipPath:'inset(0 0% 0 0)',duration:.8,stagger:.075,ease:'power2.out',clearProps:'clipPath',scrollTrigger:{trigger:flow,start:'top 75%',once:true}});api.triggers.push(t.scrollTrigger);api.counts.reveal+=lines.length;}
   }
-  const parallaxIds=project==='haevichi'?['113:9045','113:10411']:project==='wells'?['113:11553','113:11627']:[];
+  const parallaxIds=project==='haevichi'?['113:9045','113:10411']:project==='wells'?['113:11553']:[];
   if(ST)for(const id of parallaxIds){const el=node(id)?.querySelector('img');if(!el||!prepare(el))continue;const t=gs.fromTo(el,{'--pm-scroll-y':'-5px'},{'--pm-scroll-y':'5px',ease:'none',scrollTrigger:{trigger:el.parentElement,start:'top bottom',end:'bottom top',scrub:project==='haevichi'?1.4:.9}});api.triggers.push(t.scrollTrigger);api.counts.parallax++;}
   const hoverTargets=[...new Set(cards.concat(project==='haevichi'?['113:10411'].map(node):[]).filter(Boolean))];
   for(const el of hoverTargets){if(excluded(el)||!prepare(el))continue;const image=project==='haevichi'?null:el.querySelector('img'),label=[...el.querySelectorAll('p')].find(e=>!e.closest('[role=button],button'));if(image)prepare(image);if(label)prepare(label);el.classList.add('pm-hover-surface');

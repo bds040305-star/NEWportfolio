@@ -99,20 +99,27 @@
 .wf-barrier-card p { margin: 0; font-size: 21px; line-height: 32px; }
 .wf-barrier-card div:last-child p { color: #515151; font-size: 20px; }
 
-/* Keep the harvest heading and style-guide artwork inside their own sections. */
+/* Keep the strategy heading legible and fit the Harvest Log artwork to its scene. */
 #wells-section-4 [data-node-id="113:9184"] { color: #fff; }
-#wells-section-10 [data-node-id="113:11618"] { left: 236px; }
+#wells-section-10 > div { overflow: clip; }
+#wells-section-10 .wf-content-plane { transform: none; }
+#wells-section-10 [data-node-id="113:11627"] { inset: auto -63px -32px; width: auto; }
+#wells-section-10 [data-node-id="113:11553"] { left: 249px; }
+#wells-section-10 [data-node-id="113:11554"] { left: 1040px; top: 694px; width: 638px; height: 373px; border-radius: 34px; }
+#wells-section-10 [data-node-id="113:11618"] { left: var(--wf-content-gutter); font: 500 22px/32px "Noto Sans KR", sans-serif; }
+#wells-section-10 [data-node-id="113:11623"] { left: 623px; top: 980px; width: 495px; height: 279px; }
+#wells-section-10 [data-node-id="113:11625"] { width: 279px; height: 335px; }
 #wells-section-10 [data-node-id="113:11626"] {
-  left: 236px;
-  top: 138px;
+  left: var(--wf-content-gutter);
+  top: 153px;
   width: 680px;
   height: auto;
   font-size: 58px;
   line-height: 76px;
 }
 #wells-section-10 [data-node-id="113:11551"] {
-  left: 236px;
-  top: 319px;
+  left: var(--wf-content-gutter);
+  top: 350px;
   height: auto;
   line-height: 40px;
 }

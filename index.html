@@ -1899,7 +1899,7 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 
 <link rel="stylesheet" href="assets/portfolio-chrome/chrome.css?v=compact-footer-icon">
 <link rel="stylesheet" href="assets/hero-about/hero-about.css?v=compact-footer">
-  <link rel="stylesheet" href="assets/portfolio-layout/layout.css?v=compact-footer">
+  <link rel="stylesheet" href="assets/portfolio-layout/layout.css?v=book-navigation">
 </head>
 <body>
 <header id="ds-fixed-nav" aria-label="포트폴리오 메뉴">
@@ -2050,7 +2050,13 @@ html body #dasom-monkey-3d.scroll-companion canvas {
       <div class="portfolio-book-half" aria-hidden="true"></div>
       <div class="portfolio-book-half" aria-hidden="true"></div>
       <canvas aria-hidden="true"></canvas>
-      <button type="button" id="book-hotspot" aria-label="02 About Me 페이지 넘기기"></button>
+      <nav class="portfolio-book-nav" aria-label="포트폴리오 책 목차">
+        <a href="#intro" data-ds-dest="intro" aria-label="01 Intro"></a>
+        <button type="button" id="book-hotspot" aria-label="02 About Me 페이지 넘기기"></button>
+        <a href="#works" data-ds-dest="works" aria-label="03 Projects"></a>
+        <a href="#playground" data-ds-dest="playground" aria-label="04 Playground"></a>
+        <a href="#contact" data-ds-dest="contact" aria-label="05 Contact"></a>
+      </nav>
     </div>
     <div class="portfolio-book-controls">
       <button class="portfolio-about-link" id="book-forward" type="button">자세한 자기소개를 확인해 보세요 <span aria-hidden="true">→</span></button>
@@ -5732,7 +5738,7 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
 (()=>{
  const header=document.getElementById('ds-fixed-nav');if(!header)return;
  const nav=header.querySelector('.ds-items'),toggle=header.querySelector('.ds-toggle');
- const links=[...header.querySelectorAll('[data-ds-dest]')];
+ const links=[...document.querySelectorAll('#ds-fixed-nav [data-ds-dest], .portfolio-book-nav [data-ds-dest]')];
  const navLinks=links.filter(a=>a.classList.contains('ds-link'));
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  function close(focus=false){nav.classList.remove('is-open');toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','메뉴 열기');if(focus)toggle.focus()}
@@ -5743,7 +5749,7 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
  links.forEach(a=>a.addEventListener('click',e=>{
   const target=document.getElementById(a.dataset.dsDest);if(!target)return;
   e.preventDefault();close();
-  if(a.dataset.dsDest==='intro' && a.classList.contains('ds-link')){
+  if(a.dataset.dsDest==='intro' && (a.classList.contains('ds-link') || a.closest('.portfolio-book-nav'))){
    document.querySelector('.studio-header .replay')?.click();
    return;
   }

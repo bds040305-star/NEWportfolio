@@ -59,11 +59,6 @@
   margin-bottom: clamp(18px, 2.6vw, 50px);
 }
 
-#dasomLogoBar.ha-logo-bar {
-  height: 129px;
-  padding: 0;
-}
-
 #monkeyBridge.monkey-bridge {
   height: auto;
   min-height: 0;
@@ -149,7 +144,6 @@ body #works .project-marquee-viewport {
 @media (max-width: 700px) {
   .portfolio-contents-art { width: min(100%, 520px); }
   #monkeyBridge #dasom-monkey-3d { width: 90vw; height: min(90vw, 420px); }
-  #dasomLogoBar.ha-logo-bar { height: auto; }
 }
 
 @media (prefers-reduced-motion: no-preference) {

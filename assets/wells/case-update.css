@@ -268,15 +268,39 @@
   pointer-events: none;
 }
 
-/* Blur is clipped to the rounded surfaces, rather than the card wrappers. */
-.wf-mypage-float :is([data-node-id="113:10391"], [data-node-id="113:10398"]) {
-  backdrop-filter: blur(12px);
+/* A single translucent surface carries both the text and the motion. */
+#wells-section-14 .wf-mypage-float {
+  position: absolute;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: 28px 32px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, .61);
+  color: #121612;
+  font-family: Pretendard, sans-serif;
 }
+#wells-section-14 .wf-mypage-float[data-node-id="113:10389"] {
+  left: 154px;
+  top: 583px;
+  width: 339px;
+  min-height: 166px;
+}
+#wells-section-14 .wf-mypage-float[data-node-id="113:10396"] {
+  left: 1272px;
+  top: 507px;
+  width: 309px;
+  min-height: 190px;
+}
+.wf-mypage-float h3 { margin: 0; font-size: 32px; font-weight: 700; line-height: 1.2; }
+.wf-mypage-float p { margin: 0; font-size: 24px; font-weight: 500; line-height: 1.35; }
 @media (prefers-reduced-motion: no-preference) {
-  .wf-mypage-float { animation: wf-mypage-drift 5.6s ease-in-out infinite; }
-  .wf-mypage-float[data-node-id="113:10396"] { animation-duration: 6.4s; animation-delay: -2.8s; }
+  #wells-section-14 .wf-mypage-float { animation: wf-mypage-drift 4.8s ease-in-out infinite; }
+  #wells-section-14 .wf-mypage-float[data-node-id="113:10396"] { animation-duration: 5.6s; animation-delay: -2.8s; }
 }
 @keyframes wf-mypage-drift {
-  0%, 100% { translate: 0 0; }
-  50% { translate: 0 -12px; }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-26px); }
 }

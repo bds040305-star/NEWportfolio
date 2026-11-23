@@ -121,3 +121,30 @@
   [data-node-id="113:11788"], [data-node-id="113:11789"], [data-node-id="113:11790"],
   [data-node-id="113:11791"], [data-node-id="113:11792"]
 ) { margin-top: -142px; }
+
+/* Center the 1440px content area within the 1920px artboard. The scene
+   backgrounds sit outside the transformed foreground layer. */
+#wf-page { --wf-content-width: 1440px; --wf-content-gutter: 240px; }
+.wf-content-plane {
+  position: absolute;
+  inset: 0;
+  transform: translateX(var(--wf-content-offset)) scale(var(--wf-content-scale));
+  transform-origin: left center;
+  pointer-events: none;
+}
+.wf-content-plane > * { pointer-events: auto; }
+#wells-section-0 .wf-new-mascot { left: var(--wf-content-gutter) !important; }
+#wells-section-3 [data-node-id="113:9084"] {
+  left: var(--wf-content-gutter) !important;
+  width: var(--wf-content-width) !important;
+}
+#wells-section-3 [data-node-id="113:9090"] { left: 1276px !important; }
+#wells-section-5 [data-node-id="113:9284"] { left: var(--wf-content-gutter); }
+#wells-section-12 [data-node-id="113:13976"] {
+  left: var(--wf-content-gutter);
+  width: 230px;
+  height: auto;
+  aspect-ratio: 445 / 407;
+  top: auto;
+  bottom: 0;
+}

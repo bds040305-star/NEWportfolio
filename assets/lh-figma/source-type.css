@@ -148,3 +148,21 @@
 }
 
 #view-lh .lh-editorial-cover { top: 80px; }
+
+#view-lh .lh-persona-row--top { --lh-persona-travel: 120px; }
+#view-lh .lh-persona-row--bottom { --lh-persona-travel: -120px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  #view-lh .lh-persona-row {
+    animation: lh-persona-sway 5s ease-in-out infinite alternate;
+  }
+
+  #view-lh .lh-persona-row:is(:hover, :focus-within) {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes lh-persona-sway {
+  from { translate: 0 0; }
+  to { translate: var(--lh-persona-travel) 0; }
+}

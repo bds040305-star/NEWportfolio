@@ -1900,6 +1900,121 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 <link rel="stylesheet" href="assets/portfolio-chrome/chrome.css?v=compact-footer-icon">
 <link rel="stylesheet" href="assets/hero-about/hero-about.css?v=compact-footer">
   <link rel="stylesheet" href="assets/portfolio-layout/layout.css?v=book-navigation">
+<style id="book-about-live-style">
+.book-about-live {
+  display: none;
+  --book-orange: #df520b;
+  font-family: 'DM Sans', 'Pretendard', 'Malgun Gothic', sans-serif;
+  color: #17130f;
+  text-align: left;
+  word-break: keep-all;
+}
+.portfolio-book[data-state="about"] {
+  width: min(100%, 1168px);
+  container-type: inline-size;
+  aspect-ratio: auto;
+}
+.portfolio-book[data-state="about"] > .portfolio-book-half { visibility: hidden; }
+.portfolio-book[data-state="about"] > canvas { z-index: 1; }
+.portfolio-book[data-state="about"] > .book-about-live {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.book-about-page {
+  position: relative;
+  min-width: 0;
+  aspect-ratio: 1;
+}
+.book-about-left {
+  background: linear-gradient(90deg, #d6c5c0 0%, #f7efea 2%, #eee1dc 6%, #faf8f4 8%, #faf8f4 94%, #d2c9bf 99%, #9d9187 100%);
+  border-radius: 2.5% 3% 3% 2.5%;
+}
+.book-about-right {
+  background: linear-gradient(90deg, #aaa095, #eee8e1 2%, #faf8f4 5%, #faf8f4 92%, #eee1dc 94%, #f7efea 98%, #d6c5c0);
+  border-radius: 3% 2.5% 2.5% 3%;
+}
+.book-about-live h3, .book-about-live h4, .book-about-live p,
+.book-about-live ul, .book-about-live dl, .book-about-live dd { margin: 0; }
+.book-about-live ul { padding: 0; list-style: none; }
+.book-about-live h3 { font-size: 1.85cqw; font-weight: 900; line-height: 1.15; }
+.book-about-live p, .book-about-live li, .book-about-live dl {
+  font-size: 1.14cqw;
+  font-weight: 600;
+  letter-spacing: -.035em;
+  line-height: 1.6;
+}
+.book-about-intro, .book-about-name, .book-about-contact,
+.book-about-portrait, .book-about-history, .book-about-tools { position: absolute; }
+.book-about-intro { top: 25%; left: 15%; }
+.book-about-intro h3 { font-size: 3.8cqw; margin-bottom: .15em; }
+.book-about-portrait { top: 13.7%; left: 55.65%; width: 31.7%; }
+.book-about-portrait::before {
+  content: ""; position: absolute; z-index: 0; background: #ef580b;
+  width: 82%; height: 82%; right: -16%; top: -11%;
+}
+.book-about-portrait > div { position: relative; aspect-ratio: 185 / 253; overflow: hidden; border-radius: 0 0 4% 4%; }
+.book-about-portrait img { position: absolute; display: block; max-width: none; width: 631.35%; height: auto; left: -175.68%; top: -31.62%; }
+.book-about-name { top: 63%; left: 15%; width: 42%; }
+.book-about-name h3, .book-about-contact h3 { font-size: 2.35cqw; }
+.book-about-name .book-about-role { color: var(--book-orange); font-size: 2.1cqw; font-weight: 900; }
+.book-about-name p:last-child { border-top: 1px solid #9f9383; margin-top: .75em; padding-top: .6em; }
+.book-about-contact { top: 61%; left: 59%; width: 41%; border-left: 1px solid var(--book-orange); padding: 2% 0 2% 4%; }
+.book-about-contact h3 { margin-bottom: .35em; }
+.book-about-contact h3 span { color: var(--book-orange); font-size: .65em; }
+.book-about-contact dl > div { border-top: 1px solid #9f9383; display: flex; gap: .4em; padding: .35em 0; }
+.book-about-contact dl > div:last-child { border-bottom: 1px solid #9f9383; }
+.book-about-contact dt { min-width: 3.3em; font-weight: 900; }
+.book-about-contact a { overflow-wrap: anywhere; }
+.book-about-history { top: 10%; left: 8.5%; width: 50%; display: grid; gap: 2.1cqw; }
+.book-about-history h3 { margin-bottom: .55em; }
+.book-about-history h3::before { content: "✻"; color: var(--book-orange); margin-right: .65em; }
+.book-about-history li { position: relative; padding-left: 1.65em; }
+.book-about-history li::before { content: ""; position: absolute; left: .16em; top: .58em; width: .52em; height: .52em; background: var(--book-orange); border-radius: 50%; }
+.book-about-history li + li { margin-top: .65em; }
+.book-about-tools { top: 9%; bottom: 7%; left: 60%; width: 27%; border-left: 1px solid var(--book-orange); padding-left: 2.5%; }
+.book-about-tools h3 { margin: .2em 0 .35em; }
+.book-about-tools > div { background: #eee8e1; margin-bottom: .65cqw; }
+.book-about-tools h4 {
+  width: max-content;
+  padding: .25em 2.4em .25em .75em;
+  background: #c44809;
+  color: white;
+  clip-path: polygon(0 0, 100% 0, 76% 100%, 0 100%);
+  font-size: 1.04cqw;
+}
+.book-about-tools ul { padding: .32em .7em .5em; }
+.book-about-tools li { padding: .13em 0; }
+.book-about-tools li::before { content: "·"; font-weight: 900; color: var(--book-orange); margin-right: .48em; }
+@container (max-width: 950px) {
+  .portfolio-book[data-state="about"] > .book-about-live { grid-template-columns: 1fr; }
+  .book-about-page {
+    aspect-ratio: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, .9fr);
+    gap: 1.5rem 1rem;
+    padding: clamp(16px, 6cqw, 40px);
+    background: linear-gradient(90deg, #ded2cb, #faf8f4 5%, #faf8f4 95%, #ded2cb);
+  }
+  .book-about-page > * { position: static; width: auto; }
+  .book-about-intro { align-self: center; }
+  .book-about-intro br { display: none; }
+  .book-about-contact a { display: inline-block; }
+  .book-about-portrait { position: relative; inset: auto; width: 85%; align-self: center; justify-self: center; }
+  .book-about-live h3 { font-size: clamp(19px, 4cqw, 28px); }
+  .book-about-intro h3 { font-size: clamp(24px, 6cqw, 38px); }
+  .book-about-live p, .book-about-live li, .book-about-live dl { font-size: clamp(14px, 2.6cqw, 17px); }
+  .book-about-name .book-about-role { font-size: clamp(14px, 3cqw, 22px); }
+  .book-about-contact dl > div { flex-wrap: wrap; gap: 0 .5em; }
+  .book-about-right { grid-template-columns: minmax(0, 1fr); }
+  .book-about-history { gap: 1.5rem; }
+  .book-about-tools { padding-left: 1rem; }
+  .book-about-tools h4 { font-size: 13px; }
+  .book-about-tools > div { margin-bottom: .55rem; }
+}
+@container (max-width: 420px) {
+  .book-about-name, .book-about-contact { grid-column: 1 / -1; }
+}
+</style>
 </head>
 <body>
 <header id="ds-fixed-nav" aria-label="포트폴리오 메뉴">
@@ -2050,6 +2165,64 @@ html body #dasom-monkey-3d.scroll-companion canvas {
       <div class="portfolio-book-half" aria-hidden="true"></div>
       <div class="portfolio-book-half" aria-hidden="true"></div>
       <canvas aria-hidden="true"></canvas>
+      <article class="book-about-live" lang="ko" aria-label="About Me">
+        <div class="book-about-page book-about-left">
+          <div class="book-about-intro">
+            <h3>About Me</h3>
+            <p>사용자의 시선에서 문제를 바라보고,<br> 작은 불편함도 놓치지 않으며<br> 더 쉽고 편리한 경험을 고민합니다.</p>
+          </div>
+          <div class="book-about-portrait">
+            <div><img src="assets/portfolio-layout/book-about.webp" width="1168" height="584" alt="변다솜 프로필 사진" decoding="async"></div>
+          </div>
+          <div class="book-about-name">
+            <h3>BYEON DASOM</h3>
+            <p class="book-about-role">UX/UI DESIGNER</p>
+            <p>다양한 현장에서 쌓아온 경험은 새로운 환경에 유연하게 적응하고, 다양한 관점에서 생각하는 저만의 강점이 되었습니다.</p>
+          </div>
+          <div class="book-about-contact">
+            <h3>CONTACT <span aria-hidden="true">✻</span></h3>
+            <dl>
+              <div><dt>PHONE</dt><dd><a href="tel:010-4741-8244">010-4741-8244</a></dd></div>
+              <div><dt>E-MAIL</dt><dd><a href="mailto:bds040305@gmail.com">bds040305@gmail.com</a></dd></div>
+              <div><dt>SNS</dt><dd>@daaaaasom</dd></div>
+            </dl>
+          </div>
+        </div>
+        <div class="book-about-page book-about-right">
+          <div class="book-about-history">
+            <section>
+              <h3>EDUCATION</h3>
+              <ul>
+                <li>김해여자고등학교 졸업 (2020.03)</li>
+                <li>이젠아카데미 DX교육센터 (2026.06.30~12.15)</li>
+              </ul>
+            </section>
+            <section>
+              <h3>CERTIFICATES</h3>
+              <ul>
+                <li>퍼스널컬러교육지도사 (2024.05)</li>
+                <li>뷰티퍼스널컨설턴트 (2024.04)</li>
+                <li>퍼스널컬러전문가 (2024.04)</li>
+                <li>에어브러쉬 2급 (2024.01)</li>
+                <li>미용사(메이크업) (2023.12)</li>
+              </ul>
+            </section>
+            <section>
+              <h3>AWARDS · ACTIVITIES</h3>
+              <ul>
+                <li>국제바디아트콘테스트 월드 그랑프리 특수분장 (2024.07)</li>
+                <li>터치벨류 (2024.09~10)</li>
+              </ul>
+            </section>
+          </div>
+          <section class="book-about-tools">
+            <h3>Tools</h3>
+            <div><h4>DESIGN</h4><ul><li>Figma (상)</li><li>Photoshop (중)</li><li>Illustrator (중)</li></ul></div>
+            <div><h4>FRONT-END</h4><ul><li>VS Code (중)</li><li>HTML (상)</li><li>CSS (상)</li><li>JavaScript (중)</li><li>GSAP (상)</li><li>three.js (중)</li></ul></div>
+            <div><h4>AI</h4><ul><li>ChatGPT (상)</li><li>GitHub (중)</li><li>Claude (상)</li><li>Midjourney (중)</li></ul></div>
+          </section>
+        </div>
+      </article>
       <nav class="portfolio-book-nav" aria-label="포트폴리오 책 목차">
         <a href="#intro" data-ds-dest="intro" aria-label="01 Intro"></a>
         <button type="button" id="book-hotspot" aria-label="02 About Me 페이지 넘기기"></button>

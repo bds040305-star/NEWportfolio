@@ -1910,11 +1910,7 @@ html body #dasom-monkey-3d.scroll-companion canvas {
   word-break: keep-all;
 }
 .portfolio-book:is([data-state="about"], [data-state="experience"]) { container-type: inline-size; }
-.portfolio-book[data-state="experience"] {
-  width: min(100%, 1168px);
-  aspect-ratio: auto;
-}
-.portfolio-book[data-state="about"] > .book-about-live {
+.portfolio-book:is([data-state="about"], [data-state="experience"]) > .book-about-live {
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
 }
@@ -2032,15 +2028,6 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 }
 .book-about-contact { width: 38%; }
 .book-about-contact a:not(:hover):not(:focus-visible) { text-decoration: none; }
-@container (max-width: 950px) {
-  .portfolio-book[data-state="experience"] > .book-experience { grid-template-columns: 1fr; }
-  .book-experience::before, .book-experience::after { display: none; }
-  .book-experience > .book-about-page {
-    aspect-ratio: auto;
-    padding: clamp(16px, 6cqw, 40px);
-    background: linear-gradient(90deg, #ded2cb, #faf8f4 5%, #faf8f4 95%, #ded2cb);
-  }
-}
 @media (min-width: 1000px) {
   .portfolio-contents > .portfolio-book,
   .portfolio-contents > .portfolio-book:is([data-state="about"], [data-state="experience"]) {
@@ -2079,14 +2066,6 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 .book-experience-copy p { font-size: 1.25cqw; line-height: 1.65; }
 .book-experience-copy a { color: #b4430a; text-decoration: underline; text-underline-offset: .15em; }
 #book-experience-next { margin-inline-start: 1rem; }
-@container (max-width: 950px) {
-  .book-experience > .book-about-page { display: block; }
-  .book-experience-copy, .book-about-right .book-experience-copy { padding: .5rem; }
-  .book-experience-copy h3 { font-size: clamp(24px, 6cqw, 36px); }
-  .book-experience-copy h4 { font-size: 16px; }
-  .book-experience-copy p { font-size: clamp(14px, 2.6cqw, 17px); }
-  .book-experience-copy section { margin-top: 1rem; padding-top: 1rem; }
-}
 </style>
 <style id="book-experience-album-style">
 .book-experience-copy { padding-top: 9%; }
@@ -2095,30 +2074,30 @@ html body #dasom-monkey-3d.scroll-companion canvas {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   align-items: center;
-  gap: clamp(22px, 3.25cqw, 38px);
-  padding-top: clamp(12px, 1.5cqw, 18px);
-  margin-top: clamp(12px, 1.5cqw, 18px);
+  gap: 3.25cqw;
+  padding-top: 1.5cqw;
+  margin-top: 1.5cqw;
 }
-.experience-album-photos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+.experience-album-photos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .44cqw; }
 .experience-album-photos img {
   display: block;
   width: 100%;
-  aspect-ratio: 1;
+  height: 6cqw;
   object-fit: cover;
   object-position: center 40%;
-  border: 2px solid #fff;
-  border-radius: 4px;
+  border: .18cqw solid #fff;
+  border-radius: .35cqw;
   box-shadow: 0 1px 4px #3825162b;
 }
 .experience-album-single { grid-template-columns: 1fr; }
-.experience-album-single img { aspect-ratio: 1.55; object-position: center; }
+.experience-album-single img { height: 12cqw; object-position: center; }
 .experience-album-caption { position: relative; }
 .experience-album-caption::before {
   content: "";
   position: absolute;
-  width: clamp(22px, 3.05cqw, 36px);
-  height: 22px;
-  right: calc(100% + 3px);
+  width: 3.05cqw;
+  height: 1.95cqw;
+  right: calc(100% + .26cqw);
   top: 0;
   background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 45 23'%3E%3Cpath d='M2 19C14 19 20 17 23 10C26 4 17 1 15 7C12 14 23 17 30 12L42 5M34 4L42 5L39 12' fill='none' stroke='%23c44b12' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
@@ -2126,12 +2105,6 @@ html body #dasom-monkey-3d.scroll-companion canvas {
   color: #a33c0a;
   font-weight: 900;
   margin-bottom: .35em;
-}
-@container (max-width: 600px) {
-  .book-experience-copy .experience-album-entry { grid-template-columns: 1fr; gap: 12px; }
-  .experience-album-caption { padding-inline-start: 29px; }
-  .experience-album-caption::before { left: 0; right: auto; }
-  .experience-album-single img { max-height: 220px; }
 }
 </style>
 </head>

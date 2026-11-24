@@ -4948,21 +4948,32 @@ body.vertical-ready { scroll-behavior: auto !important; }
       return bounds.right - edgeGap - halfWidth - bounds.center;
     }
 
-    fit();
     gsap.set(lines, { xPercent: -50, x: 0 });
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 80%',
-        end: () => 'bottom ' + sticky.offsetHeight + 'px',
-        scrub: true,
-        invalidateOnRefresh: true,
-        onRefreshInit: fit
-      },
-      defaults: { ease: 'none' }
-    })
-      .to(top, { x: () => edgeOffset(top, 'left') }, 0)
-      .to(bottom, { x: () => edgeOffset(bottom, 'right') }, 0);
+    const setTopX = gsap.quickSetter(top, 'x', 'px');
+    const setBottomX = gsap.quickSetter(bottom, 'x', 'px');
+    let topLeft, topRight, bottomLeft, bottomRight;
+    function measureTravel() {
+      fit();
+      topLeft = edgeOffset(top, 'left');
+      topRight = edgeOffset(top, 'right');
+      bottomLeft = edgeOffset(bottom, 'left');
+      bottomRight = edgeOffset(bottom, 'right');
+    }
+
+    function moveLines({ progress }) {
+      setTopX(gsap.utils.interpolate(topRight, topLeft, progress));
+      setBottomX(gsap.utils.interpolate(bottomLeft, bottomRight, progress));
+    }
+
+    measureTravel();
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top 80%',
+      end: () => 'bottom ' + sticky.offsetHeight + 'px',
+      onRefreshInit: measureTravel,
+      onRefresh: moveLines,
+      onUpdate: moveLines
+    });
 
     document.fonts?.ready.then(() => ScrollTrigger.refresh());
   }

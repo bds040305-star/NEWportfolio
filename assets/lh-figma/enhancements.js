@@ -18,62 +18,15 @@
     '16': ['document-signed.html', '서명이 도착한 서류 준비'],
     '19': ['schedule.html', '내 일정']
   };
-  // Only background layers are continued outside the frame. Their coordinates,
-  // sizes and assets are copied unchanged; foreground circles are never cloned.
-  const backgroundNodes = new Set([
-    '124:17449','124:17450','124:16296','124:16298','124:16499','124:17683',
-    '124:17685','124:17686','124:17688','124:16419','124:16420',
-    '124:16500','124:16501','124:17730','124:17731','124:17732',
-    '124:17735','124:17736','124:16713','124:16745'
-  ]);
   const sections = [...root.querySelectorAll('.figma-section')];
-  const edgeArtwork = [];
   for (const section of sections) {
-    const designRoot = section.querySelector(`[data-node-id="${section.dataset.frameId}"]`);
     const originalHeight = parseFloat(section.style.height);
-    const paint = getComputedStyle(designRoot);
-    const backdrop = document.createElement('div');
-    backdrop.className = 'lh-section-backdrop';
-    backdrop.setAttribute('aria-hidden', 'true');
-    for (const property of ['backgroundColor','backgroundImage','backgroundPosition','backgroundSize','backgroundRepeat']) {
-      backdrop.style[property] = paint[property];
-    }
-    const plane = document.createElement('div');
-    plane.className = 'lh-background-plane';
-    for (const child of designRoot.children) {
-      if (!backgroundNodes.has(child.dataset.nodeId)) continue;
-      const copy = child.cloneNode(true);
-      for (const node of [copy, ...copy.querySelectorAll('*')]) {
-        node.removeAttribute('id');
-        node.removeAttribute('data-node-id');
-        node.removeAttribute('data-name');
-        node.removeAttribute('tabindex');
-        if (node.tagName === 'IMG') node.alt = '';
-      }
-      plane.append(copy);
-    }
-    backdrop.append(plane);
     const frame = document.createElement('div');
     frame.className = 'lh-design-frame';
     frame.append(...section.childNodes);
     section.style.setProperty('--lh-design-height', `${originalHeight}px`);
     section.dataset.designHeight = String(originalHeight);
-    section.append(backdrop, frame);
-    for (const id of ['124:16499','124:17683']) {
-      const artwork = designRoot.querySelector(`[data-node-id="${id}"] img`);
-      if (artwork) edgeArtwork.push({artwork,frame,backdrop,plane});
-    }
-    const lowerBackground = designRoot.querySelector('[data-node-id="124:16302"]');
-    if (lowerBackground) {
-      const band = document.createElement('div');
-      const fill = getComputedStyle(lowerBackground);
-      band.className = 'lh-background-band';
-      band.style.setProperty('--lh-art-top', fill.top);
-      band.style.setProperty('--lh-art-height', fill.height);
-      band.style.backgroundColor = fill.backgroundColor;
-      band.style.backgroundImage = fill.backgroundImage;
-      backdrop.append(band);
-    }
+    section.append(frame);
   }
   const fitPage = () => {
     const scale = Math.min(1, document.documentElement.clientWidth / 1920);
@@ -81,33 +34,6 @@
     for (const section of sections) section.style.height = `${Number(section.dataset.designHeight) * scale}px`;
   };
   fitPage();
-  // Continue only the boundary colours of the source background illustration.
-  // The 1px strips are sampled from the original image, never from a screenshot;
-  // no text, character, building or phone in the 1920px plane is resized or copied.
-  for (const {artwork,frame,backdrop,plane} of edgeArtwork) {
-    artwork.decode().then(() => {
-      const fr = frame.getBoundingClientRect(), r = artwork.getBoundingClientRect();
-      const scale = fr.width / 1920;
-      const x = (r.left-fr.left)/scale, y = (r.top-fr.top)/scale;
-      const width = r.width/scale, height = r.height/scale;
-      const cover = Math.max(width/artwork.naturalWidth,height/artwork.naturalHeight);
-      const cropX = (width-artwork.naturalWidth*cover)/2;
-      const cropY = (height-artwork.naturalHeight*cover)/2;
-      for (const [side,boundary] of [['left',0],['right',1919.99]]) {
-        const sourceX = (boundary-x-cropX)/cover;
-        if (sourceX<0 || sourceX>=artwork.naturalWidth) continue;
-        const strip = document.createElement('canvas');
-        strip.width=1; strip.height=Math.ceil(height);
-        strip.getContext('2d').drawImage(artwork,Math.floor(sourceX),0,1,artwork.naturalHeight,0,cropY,1,artwork.naturalHeight*cover);
-        const tone = document.createElement('div');
-        tone.className=`lh-edge-tone lh-edge-tone--${side}`;
-        tone.style.setProperty('--lh-art-top',`${y}px`);
-        tone.style.setProperty('--lh-art-height',`${height}px`);
-        tone.style.backgroundImage=`url("${strip.toDataURL('image/png')}")`;
-        backdrop.insertBefore(tone,plane);
-      }
-    }).catch(() => { /* The original section colour remains the background fallback. */ });
-  }
   let resizeTask = 0;
   window.addEventListener('resize', () => {
     cancelAnimationFrame(resizeTask);

@@ -2107,6 +2107,52 @@ html body #dasom-monkey-3d.scroll-companion canvas {
   .book-experience-copy section { margin-top: 1rem; padding-top: 1rem; }
 }
 </style>
+<style id="book-experience-album-style">
+.book-experience-copy { padding-top: 9%; }
+.book-experience-copy h3 { margin-bottom: .4em; }
+.book-experience-copy .experience-album-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(22px, 3.25cqw, 38px);
+  padding-top: clamp(12px, 1.5cqw, 18px);
+  margin-top: clamp(12px, 1.5cqw, 18px);
+}
+.experience-album-photos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+.experience-album-photos img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: center 40%;
+  border: 2px solid #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px #3825162b;
+}
+.experience-album-single { grid-template-columns: 1fr; }
+.experience-album-single img { aspect-ratio: 1.55; object-position: center; }
+.experience-album-caption { position: relative; }
+.experience-album-caption::before {
+  content: "";
+  position: absolute;
+  width: clamp(22px, 3.05cqw, 36px);
+  height: 22px;
+  right: calc(100% + 3px);
+  top: 0;
+  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 45 23'%3E%3Cpath d='M2 19C14 19 20 17 23 10C26 4 17 1 15 7C12 14 23 17 30 12L42 5M34 4L42 5L39 12' fill='none' stroke='%23c44b12' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.book-experience-copy .experience-album-year {
+  color: #a33c0a;
+  font-weight: 900;
+  margin-bottom: .35em;
+}
+@container (max-width: 600px) {
+  .book-experience-copy .experience-album-entry { grid-template-columns: 1fr; gap: 12px; }
+  .experience-album-caption { padding-inline-start: 29px; }
+  .experience-album-caption::before { left: 0; right: auto; }
+  .experience-album-single img { max-height: 220px; }
+}
+</style>
 </head>
 <body>
 <header id="ds-fixed-nav" aria-label="포트폴리오 메뉴">
@@ -2320,28 +2366,59 @@ html body #dasom-monkey-3d.scroll-companion canvas {
         <div class="book-about-page book-about-left">
           <div class="book-experience-copy">
             <h3>EXPERIENCE</h3>
-            <p class="book-experience-subtitle">특수분장과 요식업에서 쌓은 경험</p>
-            <section>
-              <h4>20–22세 · 특수분장에 도전하다</h4>
-              <p>스무 살에 대학에 진학했지만, 한 학기를 마친 뒤 특수분장을 배우기 위해 <a href="https://www.mbcbeauty.co.kr/">MBC아카데미 뷰티학원 강남점</a>에 다녔습니다. 메이크업과 특수분장 관련 자격증을 취득하고 특수분장 대회에서 1위를 했으며, 2025년 6월에 수료했습니다. 학원에 다니는 동안에도 요식업에서 아르바이트와 직원으로 일했습니다.</p>
+            <section class="experience-album-entry">
+              <div class="experience-album-photos">
+                  <img src="assets/portfolio-layout/experience/competition-1.webp" alt="대회 현장에서 특수분장 작업" loading="lazy" decoding="async">
+                  <img src="assets/portfolio-layout/experience/competition-2.webp" alt="분장 디테일을 다듬는 모습" loading="lazy" decoding="async">
+                  <img src="assets/portfolio-layout/experience/sculpture.webp" alt="특수분장 조형 실습" loading="lazy" decoding="async">
+                  <img src="assets/portfolio-layout/experience/character.webp" alt="완성한 특수분장 작품" loading="lazy" decoding="async">
+                  <img src="assets/portfolio-layout/experience/award.webp" alt="대회 트로피와 상장" loading="lazy" decoding="async">
+              </div>
+              <div class="experience-album-caption">
+                <p class="experience-album-year">2024–2025</p>
+                <h4>특수분장과 대회 도전</h4>
+                <p><a href="https://www.mbcbeauty.co.kr/">MBC아카데미 뷰티학원 강남점</a>에서 배우고 2025년 6월에 수료했어요. 2024년에는 특수분장 대회에서 1위를 했어요.</p>
+              </div>
             </section>
-            <section>
-              <h4>22세 · 촬영 현장과 주방에서 일하다</h4>
-              <p>처음으로 메이크업 숍에서 일했고, 해외 아동 모델이 참여한 패션 잡지 촬영에서 헤어와 메이크업을 맡았습니다. 여러 요식업 현장에서도 일하며 손님과 이야기하고, 그 반응을 가까이에서 보며 요리하는 일이 즐겁다는 걸 알게 됐습니다.</p>
+            <section class="experience-album-entry">
+              <div class="experience-album-photos experience-album-single">
+                  <img src="assets/portfolio-layout/experience/kitchen.webp" alt="주방에서 고기를 손질하는 모습" loading="lazy" decoding="async">
+              </div>
+              <div class="experience-album-caption">
+                <p class="experience-album-year">2023–2026.06</p>
+                <h4>주방에서 만난 사람들</h4>
+                <p>요식업 현장에서 약 3년간 일하며 손님과 소통하고, 바로 곁에서 반응을 살피는 즐거움을 배웠어요.</p>
+              </div>
             </section>
           </div>
         </div>
         <div class="book-about-page book-about-right">
           <div class="book-experience-copy">
             <h3>WHY UX/UI</h3>
-            <p class="book-experience-subtitle">직접 겪은 불편함에서 디자인을 시작하다</p>
-            <section>
-              <h4>23세 · 집을 알아보다 청약플러스를 만나다</h4>
-              <p>진로를 고민한 끝에 요리를 선택했습니다. 스무 살에 시작한 요식업 일은 스물세 살 6월 말까지 이어졌고, 약 3년의 현장 경험을 쌓았습니다. 집을 구하면서 청약을 알아보던 중 청약플러스 앱을 사용했고, 필요한 정보를 찾고 이용하는 과정에서 불편함을 느꼈습니다. 그때 관심을 갖게 된 UX/UI를 통해 제가 겪은 문제를 직접 해결해 보고 싶었습니다.</p>
+            <section class="experience-album-entry">
+              <div class="experience-album-photos">
+                  <img src="assets/portfolio-layout/experience/salon.webp" alt="메이크업 숍 근무 현장" loading="lazy" decoding="async">
+                  <img src="assets/portfolio-layout/experience/studio.webp" alt="촬영 준비 현장" loading="lazy" decoding="async">
+                  <img src="assets/portfolio-layout/experience/styling.webp" alt="촬영 전 헤어 스타일링" loading="lazy" decoding="async">
+                  <img src="assets/portfolio-layout/experience/pajamas.webp" alt="아동 패션 화보 촬영" loading="lazy" decoding="async">
+                  <img src="assets/portfolio-layout/experience/holiday.webp" alt="연말 콘셉트 패션 촬영" loading="lazy" decoding="async">
+                  <img src="assets/portfolio-layout/experience/outdoors.webp" alt="야외 패션 촬영 현장" loading="lazy" decoding="async">
+              </div>
+              <div class="experience-album-caption">
+                <p class="experience-album-year">2025</p>
+                <h4>패션 화보의 헤어·메이크업</h4>
+                <p>메이크업 숍에서 일하고, 해외 아동 모델이 참여한 패션 촬영에서 헤어와 메이크업을 맡았어요.</p>
+              </div>
             </section>
-            <section>
-              <h4>UX/UI를 배우고 프로젝트에 적용하다</h4>
-              <p>6개월 과정에서 UX/UI를 배우며 청약플러스를 프로젝트로 다뤘습니다. 사용자가 어디서 막히는지 살펴보고, 더 쉽게 이용할 수 있도록 화면과 흐름을 다듬는 일에 재미와 보람을 느꼈습니다.</p>
+            <section class="experience-album-entry">
+              <div class="experience-album-photos experience-album-single">
+                  <img src="assets/portfolio-layout/project-lh.png" alt="청약플러스 UX/UI 프로젝트" loading="lazy" decoding="async">
+              </div>
+              <div class="experience-album-caption">
+                <p class="experience-album-year">2026</p>
+                <h4>청약플러스에서 시작한 UX/UI</h4>
+                <p>집을 알아보다 느낀 앱의 불편함을 계기로 UX/UI를 배웠어요. 청약플러스 프로젝트에서 필요한 정보를 더 쉽게 찾는 흐름을 설계했어요.</p>
+              </div>
             </section>
           </div>
         </div>

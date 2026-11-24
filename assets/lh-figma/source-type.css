@@ -1,0 +1,55 @@
+#view-lh .lh-font-42dot-sans-bold{font-family:"42dot Sans",sans-serif;font-weight:700}
+#view-lh .lh-font-noto-sans-kr-bold{font-family:"Noto Sans KR",sans-serif;font-weight:700}
+#view-lh .lh-font-noto-sans-kr-medium{font-family:"Noto Sans KR",sans-serif;font-weight:500}
+#view-lh .lh-font-pretendard-extrabold{font-family:"Pretendard",sans-serif;font-weight:800}
+#view-lh .lh-font-noto-sans-kr-regular{font-family:"Noto Sans KR",sans-serif;font-weight:400}
+#view-lh .lh-font-pretendard-medium{font-family:"Pretendard",sans-serif;font-weight:500}
+#view-lh .lh-font-pretendard-black{font-family:"Pretendard",sans-serif;font-weight:400}
+#view-lh .lh-font-cj-onlyone-new-title-bold{font-family:"CJ ONLYONE NEW title",sans-serif;font-weight:700}
+#view-lh .lh-font-pretendard-semibold{font-family:"Pretendard",sans-serif;font-weight:600}
+#view-lh .lh-font-pretendard-regular{font-family:"Pretendard",sans-serif;font-weight:400}
+#view-lh .lh-font-42dot-sans-regular{font-family:"42dot Sans",sans-serif;font-weight:400}
+#view-lh .lh-font-pretendard-bold{font-family:"Pretendard",sans-serif;font-weight:700}
+#view-lh .lh-font-noto-sans-kr-black{font-family:"Noto Sans KR",sans-serif;font-weight:400}
+@font-face {
+  font-family: "42dot Sans";
+  src: url("source/42dotSans.woff") format("woff");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+#view-lh .lh-figma-gap {
+  height: calc(var(--gap) * var(--lh-layout-scale, 1));
+  background: white;
+}
+
+#view-lh .lh-figma-note {
+  box-sizing: border-box;
+  padding: 20px;
+  color: #123041;
+  box-shadow: 0 4px 9px #20374626;
+  font: 20px/1.55 "Noto Sans KR", sans-serif;
+}
+
+#view-lh .lh-figma-note h3 { font: inherit; }
+#view-lh .lh-figma-note small {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: #4c6777;
+  font-size: 12px;
+}
+
+#view-lh [data-node-id="727:13919"] {
+  background: linear-gradient(to bottom, #c5d8fb, white);
+}
+
+#view-lh [data-node-id="124:17448"] { filter: blur(26.95px); }
+
+#view-lh #lhStrip [data-node-id^="124:169"],
+#view-lh #lhStrip .lh-strip-cap { white-space: nowrap; }
+
+#view-lh [data-frame-id="124:16915"] #lhStrip [data-name="01 · 홈"] {
+  border-color: transparent;
+  outline: none;
+}

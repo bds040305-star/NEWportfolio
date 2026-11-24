@@ -4913,45 +4913,39 @@ body.vertical-ready { scroll-behavior: auto !important; }
   function initSection02WordMotion() {
     if (!window.gsap || !window.ScrollTrigger) return;
     gsap.registerPlugin(ScrollTrigger);
-    const section = document.querySelector('#monkeyBridge');
-    const leftWord = section && section.querySelector('.bridge-word-left');
-    const rightWord = section && section.querySelector('.bridge-word-right');
-    if (!section || !leftWord || !rightWord || section.dataset.section02MotionReady === 'true') return;
-    section.dataset.section02MotionReady = 'true';
+    const section=document.getElementById('monkeyBridge');
+    const top=section?.querySelector('.bridge-word-left');
+    const bottom=section?.querySelector('.bridge-word-right');
+    if(!section||!top||!bottom||section.dataset.section02MotionReady==='true')return;
+    section.dataset.section02MotionReady='true';
 
-    // Scroll progress directly controls the words, so reverse scrolling reverses the movement.
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 90%',
-        end: 'bottom 30%',
-        scrub: 1,
-        invalidateOnRefresh: true
-      }
+    // One centered line per headline, with plenty of visible travel.
+    gsap.set([top,bottom],{xPercent:-50,x:0});
+    const travel=(el)=>{
+      const viewport=section.clientWidth||window.innerWidth;
+      return Math.max(0,(viewport-el.getBoundingClientRect().width)/2-Math.max(16,viewport*.025));
+    };
+
+    // Scroll down: top travels left -> right; bottom travels right -> left.
+    // Scroll up: scrub automatically reverses each line on the same path.
+    const timeline=gsap.timeline({
+      scrollTrigger:{
+        trigger:section,
+        start:'top 80%',
+        end:'bottom 30%',
+        scrub:0.65,
+        invalidateOnRefresh:true
+      },
+      defaults:{ease:'none'}
     });
-    // Retain the original scroll-linked side-to-side animation.
-    // Clamp travel at the viewport edges so neither headline gets cut off.
-    gsap.set([leftWord,rightWord], {xPercent:-50});
-    function keepInside(el){
-      return value=>{
-        const requested=parseFloat(value)||0;
-        const room=Math.max(0,(window.innerWidth-el.offsetWidth)/2-Math.max(12,window.innerWidth*.015));
-        return Math.max(-room,Math.min(room,requested))+'px';
-      };
-    }
     timeline
-      .fromTo(leftWord, { x: '-18vw' }, { x: '22vw', ease: 'none',
-        modifiers:{x:keepInside(leftWord)} }, 0)
-      .fromTo(rightWord, { x: '18vw' }, { x: '-24vw', ease: 'none',
-        modifiers:{x:keepInside(rightWord)} }, 0);
+      .fromTo(top,{x:()=>-travel(top)},{x:()=>travel(top),immediateRender:false},0)
+      .fromTo(bottom,{x:()=>travel(bottom)},{x:()=>-travel(bottom),immediateRender:false},0);
 
-    window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
+    window.addEventListener('load',()=>ScrollTrigger.refresh(),{once:true});
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSection02WordMotion, { once: true });
-  } else {
-    initSection02WordMotion();
-  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initSection02WordMotion,{once:true});
+  else initSection02WordMotion();
 })();
 </script>
 
@@ -5824,7 +5818,7 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
       const r=document.createRange();r.selectNodeContents(el);
       const measured=r.getBoundingClientRect().width;
       /* Reserve room for scroll movement while keeping both ends visible. */
-      const maxWidth=window.innerWidth*.77;
+      const maxWidth=(document.getElementById('monkeyBridge')?.clientWidth||window.innerWidth)*.66;
       el.style.fontSize=Math.min(120,Math.max(12,120*maxWidth/Math.max(measured,1))).toFixed(2)+'px';
     });
     if(window.ScrollTrigger)window.ScrollTrigger.refresh();

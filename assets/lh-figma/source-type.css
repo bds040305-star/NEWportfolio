@@ -89,4 +89,5 @@
 #view-lh .lh-guide-title {
   color: #003a7a;
   font: 600 12px/16px Pretendard, sans-serif;
+  white-space: nowrap;
 }

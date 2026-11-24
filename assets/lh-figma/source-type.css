@@ -53,3 +53,6 @@
   border-color: transparent;
   outline: none;
 }
+
+/* Keep the Figma glow soft across the whole Persona artboard. */
+#view-lh [data-node-id="124:16334"] { filter: blur(158.05px); }

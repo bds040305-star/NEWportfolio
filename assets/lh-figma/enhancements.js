@@ -21,7 +21,7 @@
   // Only background layers are continued outside the frame. Their coordinates,
   // sizes and assets are copied unchanged; foreground circles are never cloned.
   const backgroundNodes = new Set([
-    '124:17449','124:17450','124:16296','124:16298','124:16333','124:16499','124:17683',
+    '124:17449','124:17450','124:16296','124:16298','124:16499','124:17683',
     '124:17685','124:17686','124:17688','124:16419','124:16420',
     '124:16500','124:16501','124:17730','124:17731','124:17732',
     '124:17735','124:17736','124:16713','124:16745'
@@ -59,7 +59,7 @@
     section.style.setProperty('--lh-design-height', `${originalHeight}px`);
     section.dataset.designHeight = String(originalHeight);
     section.append(backdrop, frame);
-    for (const id of ['124:16333','124:16499','124:17683']) {
+    for (const id of ['124:16499','124:17683']) {
       const artwork = designRoot.querySelector(`[data-node-id="${id}"] img`);
       if (artwork) edgeArtwork.push({artwork,frame,backdrop,plane});
     }

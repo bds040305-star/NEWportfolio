@@ -4930,8 +4930,8 @@ body.vertical-ready { scroll-behavior: auto !important; }
       }
     });
     timeline
-      .fromTo(leftWord, { x: '-18vw' }, { x: '22vw', ease: 'none' }, 0)
-      .fromTo(rightWord, { x: '18vw' }, { x: '-24vw', ease: 'none' }, 0);
+      .fromTo(leftWord, { x: '-0.7vw' }, { x: '0.7vw', ease: 'none' }, 0)
+      .fromTo(rightWord, { x: '0.7vw' }, { x: '-0.7vw', ease: 'none' }, 0);
 
     window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
   }
@@ -5786,5 +5786,45 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
 #about .ha-about-portrait > [data-node-id="310:5722"] { display: block !important; }
 </style>
   <script defer src="assets/portfolio-layout/book-turn.js?v=paper-landing"></script>
+
+<style id="hero-wide-type-fit-20261124">
+/* Only the two orange bridge lines. Keep 3D monkey, layering and other sections unchanged. */
+#monkeyBridge .bridge-word.bridge-word-left,
+#monkeyBridge .bridge-word.bridge-word-right {
+  box-sizing: border-box;
+  left: 3.5vw !important;
+  right: auto !important;
+  width: 93vw;
+  text-align: center;
+  white-space: nowrap;
+  font-size: clamp(30px, 7.1vw, 150px);
+  letter-spacing: -.065em;
+}
+#monkeyBridge .bridge-word.bridge-word-left { top: 30%; }
+#monkeyBridge .bridge-word.bridge-word-right { top: 62%; }
+@media (max-width: 700px) {
+  #monkeyBridge .bridge-word.bridge-word-left,
+  #monkeyBridge .bridge-word.bridge-word-right { left: 3.5vw !important; right: auto !important; width: 93vw; }
+}
+</style>
+<script id="hero-wide-type-fit-script-20261124">
+(()=>{
+  const fit=()=>{
+    const words=document.querySelectorAll('#monkeyBridge .bridge-word');
+    words.forEach(el=>{
+      const available=Math.max(1,window.innerWidth*.93-30);
+      el.style.fontSize='150px';
+      const r=document.createRange();r.selectNodeContents(el);
+      const natural=r.getBoundingClientRect().width;
+      const size=Math.min(150,150*available/Math.max(1,natural));
+      el.style.fontSize=Math.max(17,size).toFixed(2)+'px';
+    });
+  };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fit,{once:true});
+  else fit();
+  document.fonts?.ready?.then(fit);
+  window.addEventListener('resize',fit,{passive:true});
+})();
+</script>
 </body>
 </html>

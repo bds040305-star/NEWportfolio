@@ -4909,60 +4909,68 @@ body.vertical-ready { scroll-behavior: auto !important; }
   }
 </style>
 <script id="section02-scrolltrigger-word-motion">
-(function(){
-  function init(){
-    if(!window.gsap||!window.ScrollTrigger)return;
+(function () {
+  function init() {
+    if (!window.gsap || !window.ScrollTrigger) return;
     gsap.registerPlugin(ScrollTrigger);
-    const section=document.getElementById('monkeyBridge');
-    const sticky=document.getElementById('monkeyBridgeSticky');
-    const top=section?.querySelector('.bridge-word-left');
-    const bottom=section?.querySelector('.bridge-word-right');
-    if(!section||!top||!bottom||section.dataset.section02MotionReady==='true')return;
-    section.dataset.section02MotionReady='true';
 
-    const lines=[top,bottom];
-    const vw=()=>sticky.clientWidth||window.innerWidth;
-    const fit=()=>{
-      // Original single-line lettering is retained. Size only as much as needed
-      // to leave genuine left-right space for the scroll-linked travel.
-      lines.forEach(el=>{
-        el.style.fontSize='100px';
-        const range=document.createRange();
-        range.selectNodeContents(el);
-        const natural=range.getBoundingClientRect().width;
-        const size=Math.min(100,100*(vw()*.76)/Math.max(natural,1));
-        el.style.fontSize=Math.max(16,size).toFixed(2)+'px';
-      });
-    };
-    fit();
-    // With both headlines anchored at the viewport center, the exact edges
-    // are +/- half the spare viewport width. No cropped letters at either end.
-    const travel=el=>Math.max(0,(vw()-el.offsetWidth)/2-4);
-    gsap.set(lines,{xPercent:-50});
-    const tl=gsap.timeline({
-      scrollTrigger:{
-        trigger:section,
-        start:'top 80%',
-        end:'bottom 30%',
-        scrub:0.65,
-        invalidateOnRefresh:true
-      },
-      defaults:{ease:'none'}
-    });
-    tl.fromTo(top,{x:()=>-travel(top)},{x:()=>travel(top),immediateRender:false},0)
-      .fromTo(bottom,{x:()=>travel(bottom)},{x:()=>-travel(bottom),immediateRender:false},0);
-    let resizeQueued=false;
-    function refit(){
-      if(resizeQueued)return;
-      resizeQueued=true;
-      requestAnimationFrame(()=>{resizeQueued=false;fit();ScrollTrigger.refresh()});
+    const section = document.getElementById('monkeyBridge');
+    const sticky = document.getElementById('monkeyBridgeSticky');
+    const top = sticky?.querySelector('.bridge-word-left');
+    const bottom = sticky?.querySelector('.bridge-word-right');
+    if (!section || !top || !bottom || section.dataset.section02MotionReady === 'true') return;
+    section.dataset.section02MotionReady = 'true';
+
+    const lines = [top, bottom];
+    const edgeGap = 6;
+    function visibleBounds() {
+      const { left, right } = sticky.getBoundingClientRect();
+      return {
+        left: Math.max(0, left),
+        right: Math.min(document.documentElement.clientWidth, right),
+        center: (left + right) / 2
+      };
     }
-    window.addEventListener('resize',refit,{passive:true});
-    window.addEventListener('load',refit,{once:true});
-    document.fonts?.ready?.then(refit);
+
+    function fit() {
+      const { left, right } = visibleBounds();
+      lines.forEach(line => {
+        line.style.fontSize = '100px';
+        const width = line.getBoundingClientRect().width;
+        line.style.fontSize = Math.min(100, 100 * (right - left) * .76 / width) + 'px';
+      });
+    }
+
+    function edgeOffset(line, side) {
+      const bounds = visibleBounds();
+      const halfWidth = line.getBoundingClientRect().width / 2;
+      if (side === 'left') return bounds.left + edgeGap + halfWidth - bounds.center;
+      return bounds.right - edgeGap - halfWidth - bounds.center;
+    }
+
+    fit();
+    gsap.set(lines, { xPercent: -50, x: 0 });
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
+        end: () => 'bottom ' + sticky.offsetHeight + 'px',
+        scrub: true,
+        invalidateOnRefresh: true,
+        onRefreshInit: fit
+      },
+      defaults: { ease: 'none' }
+    })
+      .to(top, { x: () => edgeOffset(top, 'left') }, 0)
+      .to(bottom, { x: () => edgeOffset(bottom, 'right') }, 0);
+
+    document.fonts?.ready.then(() => ScrollTrigger.refresh());
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
-  else init();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
 })();
 </script>
 
@@ -5886,7 +5894,7 @@ html,body { max-width:none!important; }
 </style>
 
 <style id="bridge-true-viewport-edges-20261124">
-/* Reset earlier -8% / right:-10% anchors. The animation uses centered coordinates. */
+/* Center each headline before ScrollTrigger moves it to the visible edge. */
 #monkeyBridge #monkeyBridgeSticky .bridge-word-left,
 #monkeyBridge #monkeyBridgeSticky .bridge-word-right{
   position:absolute;
@@ -5899,6 +5907,7 @@ html,body { max-width:none!important; }
   white-space:nowrap!important;
   text-align:center!important;
 }
+#monkeyBridge:not([data-section02-motion-ready]) .bridge-word{transform:translateX(-50%)}
 #monkeyBridge #monkeyBridgeSticky .bridge-word-left{top:30%}
 #monkeyBridge #monkeyBridgeSticky .bridge-word-right{top:62%}
 </style>

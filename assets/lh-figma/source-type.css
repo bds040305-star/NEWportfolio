@@ -56,3 +56,32 @@
 
 /* Keep the Figma glow soft across the whole Persona artboard. */
 #view-lh [data-node-id="124:16334"] { filter: blur(158.05px); }
+
+#view-lh .lh-color-swatch {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-inline: 14px;
+}
+
+#view-lh .lh-back-to-top:focus-visible {
+  outline: 2px solid #0056b3;
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #view-lh .lh-back-to-top img {
+    animation: lh-top-float 3.6s ease-in-out infinite;
+  }
+
+  #view-lh .lh-back-to-top:is(:hover, :focus-visible) img {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes lh-top-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -12px; }
+}

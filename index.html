@@ -1909,10 +1909,14 @@ html body #dasom-monkey-3d.scroll-companion canvas {
   text-align: left;
   word-break: keep-all;
 }
-.portfolio-book:is([data-state="about"], [data-state="experience"]) {
+.portfolio-book:is([data-state="about"], [data-state="experience"]) { container-type: inline-size; }
+.portfolio-book[data-state="experience"] {
   width: min(100%, 1168px);
-  container-type: inline-size;
   aspect-ratio: auto;
+}
+.portfolio-book[data-state="about"] > .book-about-live {
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
 }
 .portfolio-book:is([data-state="about"], [data-state="experience"]) > .portfolio-book-half { visibility: hidden; }
 .portfolio-book:is([data-state="about"], [data-state="experience"]) > canvas { z-index: 1; }
@@ -1982,8 +1986,8 @@ html body #dasom-monkey-3d.scroll-companion canvas {
   clip-path: polygon(0 0, 100% 0, 76% 100%, 0 100%);
   font-size: 1.04cqw;
 }
-.book-about-tools ul { padding: .32em .7em .5em; }
-.book-about-tools li { padding: .13em 0; }
+.book-about-tools ul { font-size: 1.14cqw; padding: .32em .7em .5em; }
+.book-about-tools li { padding: .13em 0; white-space: nowrap; }
 .book-about-tools > div { background: #eee8e3; }
 .book-about-tools li {
   display: flex;
@@ -1999,66 +2003,43 @@ html body #dasom-monkey-3d.scroll-companion canvas {
   background: url("assets/portfolio-layout/book-about.webp") no-repeat
     -47.9em calc(-.05em * var(--book-tool-icon-y)) / 58.4em 29.2em;
 }
+.portfolio-book:is([data-state="about"], [data-state="experience"]) > .book-about-live {
+  position: relative;
+  isolation: isolate;
+}
+.book-about-live::before,
+.book-about-live::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.book-about-live::before {
+  z-index: -2;
+  inset: 2% 1.5% 2.2%;
+  background: linear-gradient(90deg, #f5f4f3 6%, #f7f6f5 44%, #eeeae7 49%, #f6f5f4 54%, #f5f4f3 94%);
+}
+.book-about-live::after {
+  z-index: -1;
+  background: url("assets/portfolio-layout/book-about.webp") center / 100% 100% no-repeat;
+  mask-image:
+    linear-gradient(to right, #000 3.8%, transparent 6%, transparent 46.4%, #000 48%, #000 52%, transparent 54%, transparent 93.5%, #000 96%),
+    linear-gradient(to bottom, #000 4%, transparent 7.8%, transparent 93%, #000 97%);
+}
+.book-about-live > .book-about-page {
+  background: transparent;
+  border-radius: 0;
+}
+.book-about-contact { width: 38%; }
+.book-about-contact a:not(:hover):not(:focus-visible) { text-decoration: none; }
 @container (max-width: 950px) {
-  .portfolio-book:is([data-state="about"], [data-state="experience"]) > .book-about-live { grid-template-columns: 1fr; }
-  .book-about-page {
+  .portfolio-book[data-state="experience"] > .book-experience { grid-template-columns: 1fr; }
+  .book-experience::before, .book-experience::after { display: none; }
+  .book-experience > .book-about-page {
     aspect-ratio: auto;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, .9fr);
-    gap: 1.5rem 1rem;
     padding: clamp(16px, 6cqw, 40px);
     background: linear-gradient(90deg, #ded2cb, #faf8f4 5%, #faf8f4 95%, #ded2cb);
   }
-  .book-about-page > * { position: static; width: auto; }
-  .book-about-intro { align-self: center; }
-  .book-about-intro br { display: none; }
-  .book-about-contact a { display: inline-block; }
-  .book-about-portrait { position: relative; inset: auto; width: 85%; align-self: center; justify-self: center; }
-  .book-about-live h3 { font-size: clamp(19px, 4cqw, 28px); }
-  .book-about-intro h3 { font-size: clamp(24px, 6cqw, 38px); }
-  .book-about-live p, .book-about-live li, .book-about-live dl { font-size: clamp(14px, 2.6cqw, 17px); }
-  .book-about-name .book-about-role { font-size: clamp(14px, 3cqw, 22px); }
-  .book-about-contact dl > div { flex-wrap: wrap; gap: 0 .5em; }
-  .book-about-right { grid-template-columns: minmax(0, 1fr); }
-  .book-about-history { gap: 1.5rem; }
-  .book-about-tools { padding-left: 1rem; }
-  .book-about-tools h4 { font-size: 13px; }
-  .book-about-tools > div { margin-bottom: .55rem; }
-}
-@container (max-width: 420px) {
-  .book-about-name, .book-about-contact { grid-column: 1 / -1; }
-}
-
-@container (min-width: 951px) {
-  .portfolio-book:is([data-state="about"], [data-state="experience"]) > .book-about-live {
-    position: relative;
-    isolation: isolate;
-  }
-  .book-about-live::before,
-  .book-about-live::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-  .book-about-live::before {
-    z-index: -2;
-    inset: 2% 1.5% 2.2%;
-    background: linear-gradient(90deg, #f5f4f3 6%, #f7f6f5 44%, #eeeae7 49%, #f6f5f4 54%, #f5f4f3 94%);
-  }
-  .book-about-live::after {
-    z-index: -1;
-    background: url("assets/portfolio-layout/book-about.webp") center / 100% 100% no-repeat;
-    mask-image:
-      linear-gradient(to right, #000 3.8%, transparent 6%, transparent 46.4%, #000 48%, #000 52%, transparent 54%, transparent 93.5%, #000 96%),
-      linear-gradient(to bottom, #000 4%, transparent 7.8%, transparent 93%, #000 97%);
-  }
-  .book-about-live > .book-about-page {
-    background: transparent;
-    border-radius: 0;
-  }
-  .book-about-contact { width: 38%; }
-  .book-about-contact a:not(:hover):not(:focus-visible) { text-decoration: none; }
 }
 @media (min-width: 1000px) {
   .portfolio-contents > .portfolio-book,

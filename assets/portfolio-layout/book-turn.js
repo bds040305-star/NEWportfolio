@@ -28,7 +28,28 @@
     half.style.backgroundImage = 'url("' + image.src + '")';
   }
 
+  function clipBookShape(width, height) {
+    const center = width / 2;
+    const foldWidth = width * .12;
+    const foldDepth = Math.min(width * .012, height * .045);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(center - foldWidth, 0);
+    ctx.bezierCurveTo(center - foldWidth * .35, 0, center - foldWidth * .12, foldDepth, center, foldDepth);
+    ctx.bezierCurveTo(center + foldWidth * .12, foldDepth, center + foldWidth * .35, 0, center + foldWidth, 0);
+    ctx.lineTo(width, 0);
+    ctx.lineTo(width, height);
+    ctx.lineTo(center + foldWidth, height);
+    ctx.bezierCurveTo(center + foldWidth * .35, height, center + foldWidth * .12, height - foldDepth, center, height - foldDepth);
+    ctx.bezierCurveTo(center - foldWidth * .12, height - foldDepth, center - foldWidth * .35, height, center - foldWidth, height);
+    ctx.lineTo(0, height);
+    ctx.closePath();
+    ctx.clip();
+  }
+
 function drawTurn(p,dir){const W=cv.clientWidth,H=cv.clientHeight;ctx.clearRect(0,0,W,H);if(!W||!H)return;const fw=W/2;
+  ctx.save();
+  clipBookShape(W, H);
   // The lifted page is drawn only on the leaf, leaving blank paper beneath it.
   const liftedSide = dir === 'forward' ? fw : 0;
   const underPage = ctx.createLinearGradient(liftedSide, 0, liftedSide + fw, 0);
@@ -54,7 +75,9 @@ if (!showPrintedFace) {
   ctx.fillStyle = paper;
   ctx.fillRect(lo - 1, -3, hi - lo + 3, H + 9);
 }
-const shade=ctx.createLinearGradient(lo,0,hi,0);shade.addColorStop(0,'rgba(57,44,30,'+(.20*wave)+')');shade.addColorStop(.3,'rgba(255,253,243,'+(.12*wave)+')');shade.addColorStop(.7,'rgba(255,255,250,'+(.06*wave)+')');shade.addColorStop(1,'rgba(57,38,20,'+(.29*wave)+')');ctx.fillStyle=shade;ctx.fillRect(lo-1,-3,hi-lo+3,H+9);ctx.restore();ctx.beginPath();ctx.moveTo(X(1),Y(1));ctx.lineTo(X(1),H+Y(1));ctx.strokeStyle='rgba(87,70,50,'+(.18+.3*wave)+')';ctx.lineWidth=Math.max(1,2.4*wave);ctx.stroke();}
+const shade=ctx.createLinearGradient(lo,0,hi,0);shade.addColorStop(0,'rgba(57,44,30,'+(.20*wave)+')');shade.addColorStop(.3,'rgba(255,253,243,'+(.12*wave)+')');shade.addColorStop(.7,'rgba(255,255,250,'+(.06*wave)+')');shade.addColorStop(1,'rgba(57,38,20,'+(.29*wave)+')');ctx.fillStyle=shade;ctx.fillRect(lo-1,-3,hi-lo+3,H+9);ctx.restore();ctx.beginPath();ctx.moveTo(X(1),Y(1));ctx.lineTo(X(1),H+Y(1));ctx.strokeStyle='rgba(87,70,50,'+(.18+.3*wave)+')';ctx.lineWidth=Math.max(1,2.4*wave);ctx.stroke();
+  ctx.restore();
+}
 
   async function turn(to) {
     if (turning || to === current) return;
@@ -96,8 +119,8 @@ const shade=ctx.createLinearGradient(lo,0,hi,0);shade.addColorStop(0,'rgba(57,44
     }
     resize();
     const dir = to === 'about' ? 'forward' : 'backward';
-    drawTurn(0, dir);
     cv.classList.add('active');
+    drawTurn(0, dir);
     let start;
     function frame(time) {
       start ??= time;

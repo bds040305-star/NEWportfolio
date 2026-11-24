@@ -1909,14 +1909,14 @@ html body #dasom-monkey-3d.scroll-companion canvas {
   text-align: left;
   word-break: keep-all;
 }
-.portfolio-book[data-state="about"] {
+.portfolio-book:is([data-state="about"], [data-state="experience"]) {
   width: min(100%, 1168px);
   container-type: inline-size;
   aspect-ratio: auto;
 }
-.portfolio-book[data-state="about"] > .portfolio-book-half { visibility: hidden; }
-.portfolio-book[data-state="about"] > canvas { z-index: 1; }
-.portfolio-book[data-state="about"] > .book-about-live {
+.portfolio-book:is([data-state="about"], [data-state="experience"]) > .portfolio-book-half { visibility: hidden; }
+.portfolio-book:is([data-state="about"], [data-state="experience"]) > canvas { z-index: 1; }
+.portfolio-book:is([data-state="about"], [data-state="experience"]) > .book-about-live {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
@@ -2000,7 +2000,7 @@ html body #dasom-monkey-3d.scroll-companion canvas {
     -47.9em calc(-.05em * var(--book-tool-icon-y)) / 58.4em 29.2em;
 }
 @container (max-width: 950px) {
-  .portfolio-book[data-state="about"] > .book-about-live { grid-template-columns: 1fr; }
+  .portfolio-book:is([data-state="about"], [data-state="experience"]) > .book-about-live { grid-template-columns: 1fr; }
   .book-about-page {
     aspect-ratio: auto;
     display: grid;
@@ -2030,7 +2030,7 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 }
 
 @container (min-width: 951px) {
-  .portfolio-book[data-state="about"] > .book-about-live {
+  .portfolio-book:is([data-state="about"], [data-state="experience"]) > .book-about-live {
     position: relative;
     isolation: isolate;
   }
@@ -2062,7 +2062,7 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 }
 @media (min-width: 1000px) {
   .portfolio-contents > .portfolio-book,
-  .portfolio-contents > .portfolio-book[data-state="about"] {
+  .portfolio-contents > .portfolio-book:is([data-state="about"], [data-state="experience"]) {
     width: min(100%, 1137px);
   }
 }
@@ -2083,6 +2083,27 @@ html body #dasom-monkey-3d.scroll-companion canvas {
     curve to 24% 0 with 2.9% 2.4% / 8.4% 0,
     line to 100% 0, line to 100% 100%, line to 24% 100%,
     curve to 0 97.6% with 8.4% 100% / 2.9% 97.6%, close);
+}
+</style>
+<style id="book-experience-style">
+.portfolio-book:not([data-state="experience"]) > .book-experience,
+.portfolio-book[data-state="experience"] > .book-about-live:not(.book-experience) { display: none; }
+.portfolio-book[data-state="experience"] > .portfolio-book-nav { visibility: hidden; }
+.book-experience-copy { padding: 13% 10% 8% 13%; }
+.book-about-right .book-experience-copy { padding-inline: 10% 13%; }
+.book-experience-copy h3 { font-size: 3.25cqw; }
+.book-experience-copy .book-experience-subtitle { margin-top: .5em; color: #b4430a; font-weight: 800; }
+.book-experience-copy section { border-top: 1px solid #c5b8ac; margin-top: 1.1cqw; padding-top: 1.1cqw; }
+.book-experience-copy h4 { font-size: 1.35cqw; margin-bottom: .45em; }
+.book-experience-copy p { font-size: 1.25cqw; line-height: 1.65; }
+#book-experience-next { margin-inline-start: 1rem; }
+@container (max-width: 950px) {
+  .book-experience > .book-about-page { display: block; }
+  .book-experience-copy, .book-about-right .book-experience-copy { padding: .5rem; }
+  .book-experience-copy h3 { font-size: clamp(24px, 6cqw, 36px); }
+  .book-experience-copy h4 { font-size: 16px; }
+  .book-experience-copy p { font-size: clamp(14px, 2.6cqw, 17px); }
+  .book-experience-copy section { margin-top: 1rem; padding-top: 1rem; }
 }
 </style>
 </head>
@@ -2293,6 +2314,36 @@ html body #dasom-monkey-3d.scroll-companion canvas {
           </section>
         </div>
       </article>
+      <article class="book-about-live book-experience" lang="ko" aria-label="Experience">
+        <div class="book-about-page book-about-left">
+          <div class="book-experience-copy">
+            <h3>EXPERIENCE</h3>
+            <p class="book-experience-subtitle">특수분장과 요식업에서 쌓은 경험</p>
+            <section>
+              <h4>20–21세 · 특수분장에 도전하다</h4>
+              <p>스무 살에 대학에 진학했지만, 한 학기를 마친 뒤 정말 하고 싶었던 특수분장을 배우기 위해 MBC아카데미에 다녔습니다. 1년 동안 메이크업과 특수분장 관련 자격증을 취득했고, 특수분장 대회에서 1위를 했습니다. 학원에 다니는 동안에도 요식업에서 아르바이트와 직원으로 일했습니다.</p>
+            </section>
+            <section>
+              <h4>22세 · 촬영 현장과 주방에서 일하다</h4>
+              <p>처음으로 메이크업 숍에서 일했고, 해외 아동 모델이 참여한 패션 잡지 촬영에서 헤어와 메이크업을 맡았습니다. 여러 요식업 현장에서도 일하며 손님과 이야기하고, 그 반응을 가까이에서 보며 요리하는 일이 즐겁다는 걸 알게 됐습니다.</p>
+            </section>
+          </div>
+        </div>
+        <div class="book-about-page book-about-right">
+          <div class="book-experience-copy">
+            <h3>WHY UX/UI</h3>
+            <p class="book-experience-subtitle">직접 겪은 불편함에서 디자인을 시작하다</p>
+            <section>
+              <h4>23세 · 집을 알아보다 청약플러스를 만나다</h4>
+              <p>진로를 고민한 끝에 요리를 선택했습니다. 스무 살에 시작한 요식업 일은 스물세 살 6월 말까지 이어졌고, 약 3년의 현장 경험을 쌓았습니다. 집을 구하면서 청약을 알아보던 중 청약플러스 앱을 사용했고, 필요한 정보를 찾고 이용하는 과정에서 불편함을 느꼈습니다. 그때 관심을 갖게 된 UX/UI를 통해 제가 겪은 문제를 직접 해결해 보고 싶었습니다.</p>
+            </section>
+            <section>
+              <h4>UX/UI를 배우고 프로젝트에 적용하다</h4>
+              <p>6개월 과정에서 UX/UI를 배우며 청약플러스를 프로젝트로 다뤘습니다. 사용자가 어디서 막히는지 살펴보고, 더 쉽게 이용할 수 있도록 화면과 흐름을 다듬는 일에 재미와 보람을 느꼈습니다.</p>
+            </section>
+          </div>
+        </div>
+      </article>
       <nav class="portfolio-book-nav" aria-label="포트폴리오 책 목차">
         <a href="#intro" data-ds-dest="intro" aria-label="01 Intro"></a>
         <button type="button" id="book-hotspot" aria-label="02 About Me 페이지 넘기기"></button>
@@ -2304,6 +2355,7 @@ html body #dasom-monkey-3d.scroll-companion canvas {
     <div class="portfolio-book-controls">
       <button class="portfolio-about-link" id="book-forward" type="button">자세한 자기소개를 확인해 보세요 <span aria-hidden="true">→</span></button>
       <button class="portfolio-about-link" id="book-back" type="button" hidden>← 목차로 돌아가기</button>
+      <button class="portfolio-about-link" id="book-experience-next" type="button" hidden>경험 이야기 보기 →</button>
     </div>
     <span class="portfolio-book-status" id="book-status" role="status">목차 페이지</span>
   </section>
@@ -6070,7 +6122,7 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
 #about .ha-about-portrait > [data-node-id="310:5721"] { display: none !important; }
 #about .ha-about-portrait > [data-node-id="310:5722"] { display: block !important; }
 </style>
-  <script defer src="assets/portfolio-layout/book-turn.js?v=rounded-spine"></script>
+  <script defer src="assets/portfolio-layout/book-turn.js?v=experience"></script>
 
 
 

@@ -172,6 +172,28 @@
     card.setAttribute('role','group');
     targets.add(card);
   }
+  if (!reduced) {
+    for (const row of root.querySelectorAll('.lh-persona-row')) {
+      const group = document.createElement('div');
+      group.className = 'lh-persona-repeat';
+      group.append(...row.children);
+
+      const copyGroup = () => {
+        const copy = group.cloneNode(true);
+        copy.inert = true;
+        copy.setAttribute('aria-hidden', 'true');
+        for (const element of copy.querySelectorAll('[id], [data-node-id], [tabindex]')) {
+          element.removeAttribute('id');
+          element.removeAttribute('data-node-id');
+          element.removeAttribute('tabindex');
+        }
+        return copy;
+      };
+
+      row.append(copyGroup(), group, copyGroup(), copyGroup());
+      row.classList.add('lh-persona-row--loop');
+    }
+  }
   for (const glass of root.querySelectorAll('.lh-design-frame .lh-live-mockup')) targets.add(glass);
   if (!reduced) {
     const reveal = new IntersectionObserver(entries => {

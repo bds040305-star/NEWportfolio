@@ -149,20 +149,39 @@
 
 #view-lh .lh-editorial-cover { top: 80px; }
 
-#view-lh .lh-persona-row--top { --lh-persona-travel: 120px; }
-#view-lh .lh-persona-row--bottom { --lh-persona-travel: -120px; }
+#view-lh .lh-persona-row--loop {
+  width: max-content;
+  gap: 0;
+}
+
+#view-lh .lh-persona-repeat {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 88px;
+  padding-inline-end: 88px;
+}
 
 @media (prefers-reduced-motion: no-preference) {
-  #view-lh .lh-persona-row {
-    animation: lh-persona-sway 5s ease-in-out infinite alternate;
+  #view-lh .lh-persona-row--loop {
+    animation: lh-persona-loop 28s linear infinite;
   }
 
-  #view-lh .lh-persona-row:is(:hover, :focus-within) {
+  #view-lh .lh-persona-row--loop:hover {
     animation-play-state: paused;
+  }
+
+  #view-lh .lh-persona-row--loop:focus-within {
+    animation: none;
+    translate: -25% 0;
   }
 }
 
-@keyframes lh-persona-sway {
-  from { translate: 0 0; }
-  to { translate: var(--lh-persona-travel) 0; }
+@media (prefers-reduced-motion: reduce) {
+  #view-lh .lh-persona-repeat[inert] { display: none; }
+}
+
+@keyframes lh-persona-loop {
+  from { translate: -25% 0; }
+  to { translate: -50% 0; }
 }

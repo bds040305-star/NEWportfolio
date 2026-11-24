@@ -95,3 +95,56 @@ body .design-middle :is(.card p, .apple-feature-panel p, .apple-feature-panel li
   font: var(--case-body) !important;
 }
 body .design-middle :is(.caption p, .dm-persona-copy p) { font: var(--case-caption) !important; }
+
+#haevichi-section-0 .hae-hero-summary {
+  position: absolute;
+  inset: 382px auto auto 245px;
+  width: 1428px;
+  margin: 0;
+  color: #456078;
+  z-index: 2;
+}
+
+.apple-auth-section {
+  background: #101522;
+  color: #f3f5f8;
+}
+.apple-auth-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 44px);
+}
+.apple-auth-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: clamp(20px, 3vw, 58px) clamp(14px, 2vw, 39px) 24px;
+  border-radius: 21px;
+  background: rgba(0, 0, 0, .5);
+  text-align: center;
+}
+.apple-auth-preview {
+  width: 100%;
+  aspect-ratio: 373 / 261;
+  object-fit: contain;
+}
+.apple-auth-step figcaption { margin-top: 16px; }
+.apple-auth-number { display: block; font: 700 14px/21px var(--case-font); color: #a8c5ed; }
+.apple-auth-icon {
+  display: grid;
+  place-items: center;
+  width: clamp(52px, 4.5vw, 85px);
+  aspect-ratio: 1;
+  margin: 12px auto 14px;
+  border-radius: 50%;
+  background: #2e2e2e;
+}
+.apple-auth-icon img { width: 47%; height: 47%; object-fit: contain; }
+body .design-middle .apple-auth-step h3 { margin: 0; font: var(--case-feature-title) !important; }
+body .design-middle .apple-auth-step p { margin: 4px 0 0; color: #d5d5d5; font: var(--case-caption) !important; }
+
+@media (max-width: 760px) {
+  .apple-auth-grid { grid-template-columns: minmax(0, 1fr); }
+  .apple-auth-preview { max-width: 374px; }
+}

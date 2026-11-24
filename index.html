@@ -4909,26 +4909,37 @@ body.vertical-ready { scroll-behavior: auto !important; }
   }
 </style>
 <script id="section02-scrolltrigger-word-motion">
-(function () {
-  function initSection02WordMotion() {
-    if (!window.gsap || !window.ScrollTrigger) return;
+(function(){
+  function init(){
+    if(!window.gsap||!window.ScrollTrigger)return;
     gsap.registerPlugin(ScrollTrigger);
     const section=document.getElementById('monkeyBridge');
+    const sticky=document.getElementById('monkeyBridgeSticky');
     const top=section?.querySelector('.bridge-word-left');
     const bottom=section?.querySelector('.bridge-word-right');
     if(!section||!top||!bottom||section.dataset.section02MotionReady==='true')return;
     section.dataset.section02MotionReady='true';
 
-    // One centered line per headline, with plenty of visible travel.
-    gsap.set([top,bottom],{xPercent:-50,x:0});
-    const travel=(el)=>{
-      const viewport=section.clientWidth||window.innerWidth;
-      return Math.max(0,(viewport-el.getBoundingClientRect().width)/2-Math.max(16,viewport*.025));
+    const lines=[top,bottom];
+    const vw=()=>sticky.clientWidth||window.innerWidth;
+    const fit=()=>{
+      // Original single-line lettering is retained. Size only as much as needed
+      // to leave genuine left-right space for the scroll-linked travel.
+      lines.forEach(el=>{
+        el.style.fontSize='100px';
+        const range=document.createRange();
+        range.selectNodeContents(el);
+        const natural=range.getBoundingClientRect().width;
+        const size=Math.min(100,100*(vw()*.76)/Math.max(natural,1));
+        el.style.fontSize=Math.max(16,size).toFixed(2)+'px';
+      });
     };
-
-    // Scroll down: top travels left -> right; bottom travels right -> left.
-    // Scroll up: scrub automatically reverses each line on the same path.
-    const timeline=gsap.timeline({
+    fit();
+    // With both headlines anchored at the viewport center, the exact edges
+    // are +/- half the spare viewport width. No cropped letters at either end.
+    const travel=el=>Math.max(0,(vw()-el.offsetWidth)/2-4);
+    gsap.set(lines,{xPercent:-50});
+    const tl=gsap.timeline({
       scrollTrigger:{
         trigger:section,
         start:'top 80%',
@@ -4938,14 +4949,20 @@ body.vertical-ready { scroll-behavior: auto !important; }
       },
       defaults:{ease:'none'}
     });
-    timeline
-      .fromTo(top,{x:()=>-travel(top)},{x:()=>travel(top),immediateRender:false},0)
+    tl.fromTo(top,{x:()=>-travel(top)},{x:()=>travel(top),immediateRender:false},0)
       .fromTo(bottom,{x:()=>travel(bottom)},{x:()=>-travel(bottom),immediateRender:false},0);
-
-    window.addEventListener('load',()=>ScrollTrigger.refresh(),{once:true});
+    let resizeQueued=false;
+    function refit(){
+      if(resizeQueued)return;
+      resizeQueued=true;
+      requestAnimationFrame(()=>{resizeQueued=false;fit();ScrollTrigger.refresh()});
+    }
+    window.addEventListener('resize',refit,{passive:true});
+    window.addEventListener('load',refit,{once:true});
+    document.fonts?.ready?.then(refit);
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initSection02WordMotion,{once:true});
-  else initSection02WordMotion();
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
 })();
 </script>
 
@@ -5866,6 +5883,24 @@ html,body { max-width:none!important; }
   }
 }
 /* Keep the original 3D monkey, ScrollTrigger and card dragging untouched. */
+</style>
+
+<style id="bridge-true-viewport-edges-20261124">
+/* Reset earlier -8% / right:-10% anchors. The animation uses centered coordinates. */
+#monkeyBridge #monkeyBridgeSticky .bridge-word-left,
+#monkeyBridge #monkeyBridgeSticky .bridge-word-right{
+  position:absolute;
+  left:50%!important;
+  right:auto!important;
+  width:max-content!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+  white-space:nowrap!important;
+  text-align:center!important;
+}
+#monkeyBridge #monkeyBridgeSticky .bridge-word-left{top:30%}
+#monkeyBridge #monkeyBridgeSticky .bridge-word-right{top:62%}
 </style>
 </body>
 </html>

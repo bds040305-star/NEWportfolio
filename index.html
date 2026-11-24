@@ -5793,41 +5793,79 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
 </style>
   <script defer src="assets/portfolio-layout/book-turn.js?v=paper-landing"></script>
 
-<style id="hero-wide-type-fit-20261124">
-/* Both original moving headlines stay in one line. Fit within the viewport. */
-#monkeyBridge .bridge-word.bridge-word-left,
-#monkeyBridge .bridge-word.bridge-word-right {
-  left: 50% !important;
-  right: auto !important;
-  width: max-content !important;
-  max-width: none !important;
-  text-align: center;
-  white-space: nowrap;
-  font-size: clamp(22px, 6vw, 120px);
-  letter-spacing: -.065em;
-  pointer-events: none;
+
+
+<style id="fullbleed-1920-content-1440-20261124">
+/* Visual canvas fills the viewport, with a 1920px desktop design reference.
+   Only STATIC content is constrained to 1440px.
+   Marquee tracks retain their original drag and scroll animations. */
+html,body { max-width:none!important; }
+#verticalMain.vertical-main {
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:none!important;
+  margin-inline:0!important;
+  overflow-x:clip!important;
 }
-#monkeyBridge .bridge-word.bridge-word-left {top:30%}
-#monkeyBridge .bridge-word.bridge-word-right {top:62%}
-</style>
-<script id="hero-wide-type-fit-script-20261124">
-(()=>{
-  function fit(){
-    document.querySelectorAll('#monkeyBridge .bridge-word').forEach(el=>{
-      el.style.fontSize='120px';
-      const r=document.createRange();r.selectNodeContents(el);
-      const measured=r.getBoundingClientRect().width;
-      /* Reserve room for scroll movement while keeping both ends visible. */
-      const maxWidth=(document.getElementById('monkeyBridge')?.clientWidth||window.innerWidth)*.66;
-      el.style.fontSize=Math.min(120,Math.max(12,120*maxWidth/Math.max(measured,1))).toFixed(2)+'px';
-    });
-    if(window.ScrollTrigger)window.ScrollTrigger.refresh();
+/* Expand the three requested sections independently from any narrower content wrapper. */
+#monkeyBridge.monkey-bridge,
+#works.v-section.v-order,
+#keywords.v-section.v-keywords {
+  box-sizing:border-box!important;
+  width:100vw!important;
+  max-width:none!important;
+  margin-left:calc(50% - 50vw)!important;
+  margin-right:calc(50% - 50vw)!important;
+}
+/* Background stays full-screen; 1440px is solely the static content grid. */
+#works .project-marquee-head,
+#keywords > .portfolio-display,
+#keywords > .portfolio-skills-caption {
+  box-sizing:border-box!important;
+  width:calc(100% - 48px)!important;
+  max-width:1440px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+#works .project-marquee-head {
+  padding-left:0!important;
+  padding-right:0!important;
+}
+/* Crucial: motion viewport uses the full SCREEN, not a 1440px internal mask. */
+#works .project-marquee-wrap,
+#works #projectMarqueeViewport,
+#keywords .keyword-cloud {
+  box-sizing:border-box!important;
+  width:100vw!important;
+  max-width:none!important;
+  margin-left:calc(50% - 50vw)!important;
+  margin-right:calc(50% - 50vw)!important;
+}
+#works #projectMarqueeViewport {
+  overflow:hidden!important;
+  /* Do not fade/cut carousel cards at the former inner 1440px boundary. */
+  -webkit-mask-image:none!important;
+  mask-image:none!important;
+}
+#keywords .keyword-cloud {
+  overflow:hidden!important;
+  /* Hide partial chips gently ONLY at the real viewport edges. */
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 2.5%,#000 97.5%,transparent 100%)!important;
+  mask-image:linear-gradient(90deg,transparent 0,#000 2.5%,#000 97.5%,transparent 100%)!important;
+}
+#keywords .keyword-row,
+#keywords .keyword-row.reverse {
+  max-width:none!important;
+  /* Existing infinite marquee movement is deliberately unchanged. */
+}
+@media (max-width:760px){
+  #works .project-marquee-head,
+  #keywords > .portfolio-display,
+  #keywords > .portfolio-skills-caption {
+    width:calc(100% - 44px)!important;
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fit,{once:true});
-  else fit();
-  document.fonts?.ready?.then(fit);
-  window.addEventListener('resize',fit,{passive:true});
-})();
-</script>
+}
+/* Keep the original 3D monkey, ScrollTrigger and card dragging untouched. */
+</style>
 </body>
 </html>

@@ -13,7 +13,7 @@
 #view-lh .lh-font-noto-sans-kr-black{font-family:"Noto Sans KR",sans-serif;font-weight:400}
 @font-face {
   font-family: "42dot Sans";
-  src: url("source/42dotSans.woff?v=6") format("woff");
+  src: url("source/42dotSans.woff?v=9") format("woff");
   font-weight: 100 900;
   font-display: swap;
 }
@@ -145,6 +145,7 @@
 #view-lh .lh-editorial-center {
   left: 50%;
   translate: -50% 0;
+  text-align: center;
 }
 
 #view-lh .lh-editorial-cover { top: 80px; }
@@ -184,4 +185,34 @@
 @keyframes lh-persona-loop {
   from { translate: -25% 0; }
   to { translate: -50% 0; }
+}
+
+#view-lh .lh-editorial-left { left: 240px; }
+
+#view-lh .lh-type-specimens {
+  position: absolute;
+  top: 281px;
+  left: 1218px;
+  width: 359px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+#view-lh .lh-type-family {
+  color: #11243b;
+  font: 700 23px/32px "42dot Sans", sans-serif;
+}
+
+#view-lh .lh-type-specimen {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  white-space: nowrap;
+}
+
+#view-lh .lh-type-specimen > span {
+  color: #405773;
+  font: 400 13px/18px "42dot Sans", sans-serif;
 }

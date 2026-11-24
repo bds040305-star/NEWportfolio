@@ -13,7 +13,7 @@
 #view-lh .lh-font-noto-sans-kr-black{font-family:"Noto Sans KR",sans-serif;font-weight:400}
 @font-face {
   font-family: "42dot Sans";
-  src: url("source/42dotSans.woff") format("woff");
+  src: url("source/42dotSans.woff?v=6") format("woff");
   font-weight: 100 900;
   font-display: swap;
 }
@@ -91,3 +91,60 @@
   font: 600 12px/16px Pretendard, sans-serif;
   white-space: nowrap;
 }
+
+/* Case-study type scale from the “다음에 할 일” artboard. */
+#view-lh :is(.lh-editorial-label, .lh-editorial-heading, .lh-editorial-lead, .lh-editorial-subheading, .lh-editorial-body) {
+  font-family: "42dot Sans", sans-serif;
+}
+
+#view-lh .lh-editorial-label {
+  color: #0054aa;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 42px;
+}
+
+#view-lh .lh-editorial-heading {
+  color: #11243b;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 70px;
+}
+
+#view-lh .lh-editorial-lead {
+  color: #405773;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 45px;
+}
+
+#view-lh .lh-editorial-subheading {
+  color: #11243b;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 38px;
+}
+
+#view-lh .lh-editorial-body {
+  color: #405773;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 30px;
+}
+
+#view-lh .lh-editorial-inverse { color: #fff; }
+
+#view-lh :is(.lh-editorial-heading, .lh-editorial-lead, .lh-editorial-subheading, .lh-editorial-body) :is(p, span) {
+  color: inherit;
+  font: inherit;
+}
+
+#view-lh .lh-editorial-heading .lh-editorial-accent { color: #0054aa; }
+#view-lh .lh-editorial-inverse .lh-editorial-accent { color: #a8d4ff; }
+
+#view-lh .lh-editorial-center {
+  left: 50%;
+  translate: -50% 0;
+}
+
+#view-lh .lh-editorial-cover { top: 80px; }

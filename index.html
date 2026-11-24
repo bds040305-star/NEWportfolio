@@ -2014,6 +2014,44 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 @container (max-width: 420px) {
   .book-about-name, .book-about-contact { grid-column: 1 / -1; }
 }
+
+@container (min-width: 951px) {
+  .portfolio-book[data-state="about"] > .book-about-live {
+    position: relative;
+    isolation: isolate;
+  }
+  .book-about-live::before,
+  .book-about-live::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .book-about-live::before {
+    z-index: -2;
+    inset: 2% 1.5% 2.2%;
+    background: linear-gradient(90deg, #f5f4f3 6%, #f7f6f5 44%, #eeeae7 49%, #f6f5f4 54%, #f5f4f3 94%);
+  }
+  .book-about-live::after {
+    z-index: -1;
+    background: url("assets/portfolio-layout/book-about.webp") center / 100% 100% no-repeat;
+    mask-image:
+      linear-gradient(to right, #000 3.8%, transparent 6%, transparent 46.4%, #000 48%, #000 52%, transparent 54%, transparent 93.5%, #000 96%),
+      linear-gradient(to bottom, #000 4%, transparent 7.8%, transparent 93%, #000 97%);
+  }
+  .book-about-live > .book-about-page {
+    background: transparent;
+    border-radius: 0;
+  }
+  .book-about-contact { width: 38%; }
+  .book-about-contact a:not(:hover):not(:focus-visible) { text-decoration: none; }
+}
+@media (min-width: 1000px) {
+  .portfolio-contents > .portfolio-book,
+  .portfolio-contents > .portfolio-book[data-state="about"] {
+    width: min(100%, 1137px);
+  }
+}
 </style>
 </head>
 <body>

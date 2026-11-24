@@ -1,0 +1,202 @@
+@font-face {
+  font-family: "42dot Sans";
+  src: url("case-study/42dotSans.woff") format("woff");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+#hae-page .hae-research,
+.hae-first-test-evidence,
+.hae-journey-note {
+  --hae-case-ink: #102841;
+  --hae-case-blue: #1a5fa1;
+  --hae-case-muted: #456078;
+  --hae-case-surface: #f4f8fc;
+  color: var(--hae-case-ink);
+  font-family: "42dot Sans", Pretendard, sans-serif;
+}
+
+#hae-page .hae-research { background: #fff; }
+
+.hae-research :is(p, h2, h3, ol, ul, figure),
+.hae-first-test-evidence :is(p, h3, h4) { margin: 0; }
+
+.hae-research-header {
+  position: absolute;
+  top: 90px;
+  left: 240px;
+  width: 1440px;
+  display: grid;
+  gap: 14px;
+}
+
+.hae-research-label { color: var(--hae-case-blue); }
+.hae-research-header .hae-research-label { font-size: 29px; font-weight: 700; line-height: 42px; }
+.hae-research-header h2 { font-size: 58px; font-weight: 700; line-height: 82px; }
+.hae-research-lead { color: var(--hae-case-muted); font-size: 30px; line-height: 44px; }
+
+.hae-source-panel {
+  position: absolute;
+  top: 324px;
+  left: 240px;
+  width: 1440px;
+  box-sizing: border-box;
+  display: grid;
+  gap: 32px;
+  padding: 34px 38px;
+  border-radius: 24px;
+  background: var(--hae-case-surface);
+  list-style: none;
+}
+
+.hae-source-panel li { display: grid; gap: 8px; }
+.hae-source-panel h3 { font-size: 32px; line-height: 46px; }
+.hae-source-panel p { color: var(--hae-case-muted); font-size: 26px; line-height: 39px; }
+.hae-source-panel a { color: var(--hae-case-blue); font-size: 23px; font-weight: 700; line-height: 34px; justify-self: start; }
+.hae-source-panel a:hover { text-decoration: underline; }
+.hae-research .hae-project-observation { position: absolute; top: 1016px; left: 240px; width: 1440px; color: var(--hae-case-muted); font-size: 25px; line-height: 38px; }
+
+.hae-journey-note { position: absolute; top: 1200px; left: 244px; margin: 0; font-size: 23px; line-height: 33px; color: var(--hae-case-muted); }
+
+.hae-research-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 28px; }
+
+.hae-first-design-grid { position: absolute; top: 349px; left: 243px; width: 1435px; }
+.hae-first-design-grid > article { position: relative; box-sizing: border-box; height: 408px; padding: 24px 29px; border-radius: 20px; background: var(--hae-case-surface); }
+.hae-first-design-grid h3 { font-size: 27px; line-height: 40px; }
+.hae-first-design-grid article > p { margin-top: 8px; color: var(--hae-case-muted); font-size: 22px; line-height: 32px; }
+
+.hae-research-booking {
+  position: absolute;
+  bottom: 126px;
+  left: 29px;
+  width: 611px;
+  height: 65px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1.1fr 1.3fr repeat(3,.34fr) 1fr .9fr;
+  align-items: center;
+  gap: 16px;
+  padding: 0 18px;
+  background: #3b3b3b;
+  color: #fff;
+  font-size: 8px;
+  line-height: 11px;
+}
+.hae-research-booking span { border-bottom: 1px solid #757575; padding-bottom: 4px; }
+.hae-research-booking small { display: block; color: #e7e7e7; font-size: 7px; }
+.hae-research-booking strong { background: var(--hae-case-blue); text-align: center; padding: 5px; }
+
+.hae-research .hae-research-room-tabs {
+  display: grid;
+  grid-template-columns: repeat(4,142px);
+  gap: 13px;
+  position: absolute;
+  top: 171px;
+  list-style: none;
+  padding: 0;
+}
+.hae-research-room-tabs li { background: #eaf3fb; padding: 11px 9px; border-radius: 7px; font-size: 18px; font-weight: 700; }
+.hae-research-room-tabs li:first-child { background: var(--hae-case-blue); color: white; }
+.hae-first-design-photo { position: absolute; top: 237px; left: 29px; width: 395px; height: 158px; border-radius: 22px; object-fit: cover; }
+.hae-first-design-note { position: absolute; top: 814px; left: 243px; color: var(--hae-case-muted); font-size: 24px; line-height: 35px; }
+
+.hae-first-test-evidence { position: absolute; top: 1530px; left: 243px; width: 1433px; }
+.hae-first-test-evidence h3 { font-size: 32px; line-height: 46px; }
+.hae-first-test-evidence > p { margin-top: 12px; color: var(--hae-case-muted); font-size: 22px; line-height: 32px; }
+.hae-first-test-evidence .hae-research-grid { margin-top: 28px; gap: 64px; }
+.hae-first-test-evidence h4 { margin-bottom: 15px; color: var(--hae-case-blue); font-size: 23px; line-height: 34px; }
+.hae-evidence-pending {
+  display: grid;
+  place-items: center;
+  height: 270px;
+  border: 2px dashed #b9cee3;
+  border-radius: 14px;
+  background: var(--hae-case-surface);
+  color: var(--hae-case-muted);
+  font-size: 20px;
+}
+
+.hae-research-tasks {
+  position: absolute;
+  top: 416px;
+  left: 241px;
+  width: 1433px;
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 33px;
+}
+.hae-research-tasks li {
+  box-sizing: border-box;
+  height: 142px;
+  padding: 21px 29px;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 25px;
+  border-radius: 18px;
+  background: var(--hae-case-surface);
+}
+.hae-research-tasks h3, .hae-research-result h3 { color: var(--hae-case-blue); font-size: 32px; line-height: 47px; }
+.hae-research-tasks p { font-size: 26px; line-height: 43px; }
+.hae-research-result {
+  position: absolute;
+  top: 988px;
+  left: 241px;
+  width: 1433px;
+  box-sizing: border-box;
+  height: 193px;
+  padding: 25px 29px;
+  border-radius: 18px;
+  background: #e8f2fb;
+}
+.hae-research-result p { margin-top: 14px; color: var(--hae-case-muted); font-size: 26px; line-height: 38px; }
+.hae-final-previews { position: absolute; top: 1336px; left: 241px; width: 1433px; }
+.hae-final-previews > h3, .hae-ia-menu h3, .hae-ia-flow h3 { font-size: 42px; line-height: 61px; }
+.hae-final-previews > p { margin-top: 10px; color: var(--hae-case-muted); font-size: 26px; line-height: 38px; }
+.hae-final-previews .hae-research-grid { margin-top: 37px; gap: 30px; }
+.hae-final-previews figcaption { margin-bottom: 27px; color: var(--hae-case-blue); font-size: 27px; font-weight: 700; line-height: 39px; }
+.hae-final-previews img { display: block; width: 100%; height: 342px; object-fit: contain; }
+
+#haevichi-section-9 .hae-research-header { top: 77px; left: 238px; }
+.hae-ia-menu { position: absolute; inset: 325px 238px auto; }
+.hae-ia-menu > p:not(.hae-ia-contribution) { position: absolute; right: 0; top: 34px; color: var(--hae-case-blue); font-size: 23px; font-weight: 700; }
+.hae-ia-menu img { position: absolute; width: 1646px; height: 830px; left: -101px; top: 110px; object-fit: contain; }
+.hae-ia-menu .hae-ia-contribution { position: absolute; top: 1003px; left: 6px; color: var(--hae-case-muted); font-size: 25px; line-height: 37px; }
+.hae-ia-flow { position: absolute; top: 1389px; left: 238px; width: 1442px; border-top: 1px solid #b9cee3; padding-top: 74px; }
+.hae-ia-flow > p { margin-top: 13px; color: var(--hae-case-muted); font-size: 25px; line-height: 37px; }
+.hae-ia-flow ol { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 29px; padding: 0; margin-top: 66px; list-style: none; }
+.hae-ia-flow li { position: relative; display: grid; align-content: center; gap: 5px; height: 140px; box-sizing: border-box; padding: 18px; background: var(--hae-case-surface); border: 1px solid #c6d8e9; border-radius: 13px; }
+.hae-ia-flow li:not(:last-child)::after { content: "→"; position: absolute; left: calc(100% + 4px); top: 47px; color: var(--hae-case-muted); font-size: 26px; }
+.hae-ia-flow li span { color: var(--hae-case-blue); font-size: 18px; font-weight: 700; }
+.hae-ia-flow li strong { font-size: 23px; }
+.hae-ia-flow li small { color: var(--hae-case-muted); font-size: 17px; }
+.hae-ia-flow aside { margin-top: 57px; padding: 16px 22px; border-radius: 13px; background: var(--hae-case-surface); font-size: 24px; line-height: 35px; }
+.hae-ia-flow aside p { color: var(--hae-case-muted); font-size: 20px; line-height: 30px; }
+
+#hae-page .hae-first-design-grid,
+#hae-page .hae-first-test-evidence,
+#hae-page .hae-final-previews {
+  width: 1433px;
+  height: auto;
+}
+
+#hae-page .hae-ia-menu { width: auto; height: auto; }
+#hae-page .hae-ia-flow { width: 1442px; height: auto; }
+
+.hae-source-panel h3,
+.hae-first-design-grid h3,
+.hae-research-tasks h3,
+.hae-research-result h3,
+.hae-final-previews > h3,
+.hae-ia-menu h3,
+.hae-ia-flow h3,
+.hae-first-test-evidence :is(h3, h4) { font-weight: 700; }
+
+.hae-offer-preview {
+  position: absolute;
+  left: 202px;
+  top: 731px;
+  width: 1305px;
+  height: auto;
+  pointer-events: none;
+}

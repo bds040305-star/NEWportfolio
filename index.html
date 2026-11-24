@@ -2028,11 +2028,14 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 }
 .book-about-contact { width: 38%; }
 .book-about-contact a:not(:hover):not(:focus-visible) { text-decoration: none; }
+.portfolio-contents > .portfolio-book {
+  width: min(100%, 65vw, 1240px);
+}
+@media (max-width: 700px) {
+  .portfolio-contents > .portfolio-book { width: min(calc(100% + 16px), 555px); }
+}
 @media (min-width: 1000px) {
-  .portfolio-contents > .portfolio-book,
-  .portfolio-contents > .portfolio-book:is([data-state="about"], [data-state="experience"]) {
-    width: min(100%, 1137px);
-  }
+  .portfolio-contents > .portfolio-book { width: min(calc(100% + 16px), 1240px); }
 }
 </style>
 <style id="book-contents-spine-style">

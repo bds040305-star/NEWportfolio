@@ -1,0 +1,97 @@
+@font-face {
+  font-family: "42dot Sans";
+  src: url("../haevichi/case-study/42dotSans.woff?v=2") format("woff");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --case-font: "42dot Sans", Pretendard, sans-serif;
+  --case-label: 700 32px/42px var(--case-font);
+  --case-heading: 700 56px/70px var(--case-font);
+  --case-lead: 400 30px/45px var(--case-font);
+  --case-subheading: 700 42px/61px var(--case-font);
+  --case-card-title: 700 32px/46px var(--case-font);
+  --case-feature-title: 700 27px/40px var(--case-font);
+  --case-body: 400 26px/38px var(--case-font);
+  --case-caption: 400 22px/33px var(--case-font);
+}
+
+[data-case-type="label"] { --case-type: var(--case-label); }
+[data-case-type="heading"] { --case-type: var(--case-heading); }
+[data-case-type="lead"] { --case-type: var(--case-lead); }
+
+/* Exported scenes use absolute placement and scale the entire artboard. */
+[data-case-type], [data-case-type] :is(p, span) {
+  font: var(--case-type) !important;
+}
+[data-case-type] { height: auto !important; }
+:is(#wells-section-1 [data-case-type="label"], [data-node-id="113:8991"], [data-node-id="113:9141"], [data-node-id="113:9284"], [data-node-id="113:8878"], [data-node-id="113:8980"], [data-node-id="113:9232"])[data-case-type] {
+  left: 50% !important;
+  translate: -50% 0;
+  transform: none;
+  width: max-content !important;
+  text-align: center;
+}
+#wells-section-1 > div > [data-case-type="label"] { top: 36px; }
+#wells-section-5 [data-case-type="heading"] { top: 122px; left: 50%; }
+#wells-section-5 [data-case-type="lead"] { top: 284px; }
+#haevichi-section-1 [data-case-type="heading"] { width: max-content !important; }
+
+body .hae-research-header .hae-research-label,
+body :is(.wf-overview, .wf-reflection) .wf-kicker,
+body .design-middle .section-head .ey { font: var(--case-label); text-transform: none; }
+body .hae-research-header h2,
+body :is(.wf-overview, .wf-reflection) h2,
+body .wf-hero-copy h1,
+body .apple-haevichi-hero .p-title { font: var(--case-heading); }
+
+body .hae-research-header .hae-research-lead,
+body :is(.wf-overview, .wf-reflection) > p:not(.wf-kicker),
+body .apple-haevichi-hero .p-hook { font: var(--case-lead); }
+
+body .design-middle .section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 21px;
+}
+body .design-middle .section-head h2 { margin: 21px 0 0; }
+body .design-middle .section-head--center { text-align: center; }
+body .apple-haevichi-hero .p-hook { max-width: 1212px; }
+
+body .hae-research .hae-ia-title { font: var(--case-subheading); }
+body :is(.wf-overview-reason, .wf-barrier-card, .wf-reflection-notes li) h3 { font: var(--case-card-title); }
+body :is(.wf-overview-reason, .wf-barrier-card) p { font: var(--case-body); }
+body .design-middle :is(.card .k, .apple-feature-ey),
+body .wf-evidence-grid a { font: var(--case-caption); }
+body #view-lh .lh-editorial-subheading { font: var(--case-card-title); }
+body #view-lh .lh-editorial-body { font: var(--case-body); }
+
+@media (max-width: 760px) {
+  .dm-apple, .apple-haevichi-hero {
+    --case-label: 700 18px/25px var(--case-font);
+    --case-heading: 700 34px/43px var(--case-font);
+    --case-lead: 400 19px/29px var(--case-font);
+    --case-subheading: 700 28px/38px var(--case-font);
+    --case-card-title: 700 23px/31px var(--case-font);
+    --case-feature-title: 700 21px/30px var(--case-font);
+    --case-body: 400 17px/26px var(--case-font);
+    --case-caption: 400 15px/22px var(--case-font);
+  }
+  body .design-middle .section-head { gap: 12px; }
+  body .design-middle .section-head h2 { margin-top: 12px; }
+}
+
+/* Match editorial roles where the Apple case study's legacy rules use !important. */
+body .design-middle .section-head h2 {
+  font: var(--case-heading) !important;
+  margin-bottom: 0 !important;
+}
+body .design-middle .section-head p { font: var(--case-lead) !important; }
+body .design-middle :is(.highlight-band h3, .style-slab h3) { font: var(--case-subheading) !important; }
+body .design-middle :is(.card h3, .apple-feature-panel h3, .dm-persona-copy h3) { font: var(--case-card-title) !important; }
+body .design-middle :is(.caption h3, .apple-ia-card h3) { font: var(--case-feature-title) !important; }
+body .design-middle :is(.card p, .apple-feature-panel p, .apple-feature-panel li, .highlight-band p, .dm-persona-copy blockquote) {
+  font: var(--case-body) !important;
+}
+body .design-middle :is(.caption p, .dm-persona-copy p) { font: var(--case-caption) !important; }

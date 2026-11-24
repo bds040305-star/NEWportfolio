@@ -1984,7 +1984,21 @@ html body #dasom-monkey-3d.scroll-companion canvas {
 }
 .book-about-tools ul { padding: .32em .7em .5em; }
 .book-about-tools li { padding: .13em 0; }
-.book-about-tools li::before { content: "·"; font-weight: 900; color: var(--book-orange); margin-right: .48em; }
+.book-about-tools > div { background: #eee8e3; }
+.book-about-tools li {
+  display: flex;
+  align-items: baseline;
+  gap: .42em;
+}
+.book-about-tools li::before {
+  content: "";
+  flex: 0 0 1em;
+  height: 1em;
+  margin: 0;
+  align-self: center;
+  background: url("assets/portfolio-layout/book-about.webp") no-repeat
+    -47.9em calc(-.05em * var(--book-tool-icon-y)) / 58.4em 29.2em;
+}
 @container (max-width: 950px) {
   .portfolio-book[data-state="about"] > .book-about-live { grid-template-columns: 1fr; }
   .book-about-page {
@@ -2255,9 +2269,9 @@ html body #dasom-monkey-3d.scroll-companion canvas {
           </div>
           <section class="book-about-tools">
             <h3>Tools</h3>
-            <div><h4>DESIGN</h4><ul><li>Figma (상)</li><li>Photoshop (중)</li><li>Illustrator (중)</li></ul></div>
-            <div><h4>FRONT-END</h4><ul><li>VS Code (중)</li><li>HTML (상)</li><li>CSS (상)</li><li>JavaScript (중)</li><li>GSAP (상)</li><li>three.js (중)</li></ul></div>
-            <div><h4>AI</h4><ul><li>ChatGPT (상)</li><li>GitHub (중)</li><li>Claude (상)</li><li>Midjourney (중)</li></ul></div>
+            <div><h4>DESIGN</h4><ul><li style="--book-tool-icon-y: 117">Figma (상)</li><li style="--book-tool-icon-y: 144">Photoshop (중)</li><li style="--book-tool-icon-y: 169">Illustrator (중)</li></ul></div>
+            <div><h4>FRONT-END</h4><ul><li style="--book-tool-icon-y: 236">VS Code (중)</li><li style="--book-tool-icon-y: 261">HTML (상)</li><li style="--book-tool-icon-y: 287">CSS (상)</li><li style="--book-tool-icon-y: 313">JavaScript (중)</li><li style="--book-tool-icon-y: 339">GSAP (상)</li><li style="--book-tool-icon-y: 364">three.js (중)</li></ul></div>
+            <div><h4>AI</h4><ul><li style="--book-tool-icon-y: 433">ChatGPT (상)</li><li style="--book-tool-icon-y: 457">GitHub (중)</li><li style="--book-tool-icon-y: 483">Claude (상)</li><li style="--book-tool-icon-y: 509">Midjourney (중)</li></ul></div>
           </section>
         </div>
       </article>

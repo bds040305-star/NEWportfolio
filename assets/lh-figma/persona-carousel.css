@@ -1,16 +1,19 @@
 /* LH Persona — identical motion principle to the main portfolio Keyword.
    Continuous leftward linear strips, duplicated sets, no masking overlays. */
 [data-frame-id="124:16332"] [data-node-id="124:16332"]{isolation:isolate}
-#lh-persona-carousel-layer{position:absolute;inset:0;z-index:4;pointer-events:none}
-#lh-persona-carousel-layer .lh-persona-lane{position:absolute;left:0;width:1920px;height:150px;overflow:hidden;pointer-events:auto}
-#lh-persona-carousel-layer .lh-persona-track{display:flex;align-items:center;width:max-content;will-change:transform;animation:lhPersonaFlow 43s linear infinite}
-#lh-persona-carousel-layer [data-lane="bottom"] .lh-persona-track{margin-left:200px;animation-duration:43s;animation-delay:0s}
-#lh-persona-carousel-layer [data-lane="top"] .lh-persona-track{margin-left:56px;animation-duration:43s;animation-delay:0s}
+#lh-persona-carousel-layer{position:absolute;inset:0;z-index:4;overflow:hidden;pointer-events:none}
+#lh-persona-carousel-layer .lh-persona-lane{position:absolute;left:0;width:100%;height:calc(150px * var(--lh-layout-scale,1));overflow:hidden;pointer-events:auto}
+#lh-persona-carousel-layer .lh-persona-track{display:flex;align-items:center;width:max-content;scale:var(--lh-layout-scale,1);transform-origin:top left;will-change:transform;animation:lhPersonaFlow 43s linear infinite}
+#lh-persona-carousel-layer [data-lane="bottom"] .lh-persona-track{animation-delay:-19s}
+#lh-persona-carousel-layer [data-lane="top"] .lh-persona-track{animation-delay:-7s}
 #lh-persona-carousel-layer .lh-persona-group{display:flex;align-items:center;gap:88px;padding-right:88px;flex:none}
-#lh-persona-carousel-layer .lh-persona-card{width:509px;height:149px;flex:none}
+#lh-persona-carousel-layer .lh-persona-card{width:509px;height:149px;flex:none;line-height:0}
 #lh-persona-carousel-layer .lh-persona-card>[data-node-id],
-#lh-persona-carousel-layer .lh-persona-card>div{position:relative!important;inset:auto!important;width:100%!important;height:100%!important;translate:none!important;transform:none!important;opacity:1!important;visibility:visible!important;filter:none!important}
+#lh-persona-carousel-layer .lh-persona-card>div{position:relative!important;inset:auto!important;width:100%!important;height:100%!important;translate:none!important;transform:none!important;opacity:1!important;visibility:visible!important;filter:none!important;box-shadow:inset 0 0 0 1px #dfe7f2}
 #lh-persona-carousel-layer .lh-persona-card img{visibility:visible!important;opacity:1!important}
 /* Both lanes use the same speed and phase; their DOM card sequences are offset by two positions. */
 @keyframes lhPersonaFlow{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
 @media(prefers-reduced-motion:reduce){#lh-persona-carousel-layer .lh-persona-track{animation:none!important}}
+
+#lh-persona-carousel-layer .lh-persona-track:hover,
+#lh-persona-carousel-layer .lh-persona-track:focus-within{animation-play-state:paused}

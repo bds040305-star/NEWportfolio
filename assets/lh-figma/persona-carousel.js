@@ -23,7 +23,7 @@ function start(){
     return copy;
   }
   function lane(name,offset,makeOriginals){
-    const viewport=document.createElement('div');viewport.className='lh-persona-lane';viewport.dataset.lane=name;viewport.style.top=offset+'px';
+    const viewport=document.createElement('div');viewport.className='lh-persona-lane';viewport.dataset.lane=name;viewport.style.top='calc('+offset+'px * var(--lh-layout-scale,1))';
     const track=document.createElement('div');track.className='lh-persona-track';
     for(let duplicate=0;duplicate<2;duplicate++){
       const group=document.createElement('div');group.className='lh-persona-group';

@@ -2083,8 +2083,8 @@ html body #dasom-monkey-3d.scroll-companion canvas {
   <section class="monkey-bridge" id="monkeyBridge" aria-label="주황색에서 흰색으로 이어지는 UX/UI 인터랙션">
     <div class="monkey-bridge-sticky" id="monkeyBridgeSticky">
       <div id="dasom-monkey-3d" role="img" aria-label="드래그해서 돌려 볼 수 있는 3D 원숭이"></div>
-      <div class="bridge-word bridge-word-left">UX RESEARCH × UI DESIGN</div>
-      <div class="bridge-word bridge-word-right">INTERACTION → EXPERIENCE</div>
+      <div class="bridge-word bridge-word-left" aria-label="UX RESEARCH × UI DESIGN"><span class="bridge-side bridge-side-left">UX RESEARCH</span><span class="bridge-side bridge-side-right">UI DESIGN</span></div>
+      <div class="bridge-word bridge-word-right" aria-label="INTERACTION → EXPERIENCE"><span class="bridge-side bridge-side-left">INTERACTION</span><span class="bridge-side bridge-side-right">EXPERIENCE</span></div>
       <a class="portfolio-pill portfolio-bridge-link" href="#works">SCROLL DOWN <span class="portfolio-scroll-arrow" aria-hidden="true">↓</span></a>
     </div>
   </section>
@@ -5788,39 +5788,57 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
   <script defer src="assets/portfolio-layout/book-turn.js?v=paper-landing"></script>
 
 <style id="hero-wide-type-fit-20261124">
-/* Only the two orange bridge lines. Keep 3D monkey, layering and other sections unchanged. */
+/* Split each headline around the central 3D monkey so every letter is readable. */
 #monkeyBridge .bridge-word.bridge-word-left,
 #monkeyBridge .bridge-word.bridge-word-right {
   box-sizing: border-box;
-  left: 3.5vw !important;
-  right: auto !important;
-  width: 93vw;
-  text-align: center;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  padding: 0 1.8vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   white-space: nowrap;
-  font-size: clamp(30px, 7.1vw, 150px);
-  letter-spacing: -.065em;
+  text-align: left;
+  max-width: none;
+  overflow: visible;
+  pointer-events: none;
 }
 #monkeyBridge .bridge-word.bridge-word-left { top: 30%; }
 #monkeyBridge .bridge-word.bridge-word-right { top: 62%; }
+#monkeyBridge .bridge-word .bridge-side {
+  display: block;
+  flex: 0 0 37vw;
+  width: 37vw;
+  max-width: 37vw;
+  min-width: 0;
+  font-size: clamp(18px, 5.2vw, 120px);
+  line-height: 1;
+  white-space: nowrap;
+}
+#monkeyBridge .bridge-word .bridge-side-right { text-align: right; }
 @media (max-width: 700px) {
   #monkeyBridge .bridge-word.bridge-word-left,
-  #monkeyBridge .bridge-word.bridge-word-right { left: 3.5vw !important; right: auto !important; width: 93vw; }
+  #monkeyBridge .bridge-word.bridge-word-right { padding: 0 2vw; }
+  #monkeyBridge .bridge-word .bridge-side { flex-basis: 37vw; width: 37vw; max-width: 37vw; }
 }
 </style>
 <script id="hero-wide-type-fit-script-20261124">
 (()=>{
   const fit=()=>{
-    const words=document.querySelectorAll('#monkeyBridge .bridge-word');
-    words.forEach(el=>{
-      const available=Math.max(1,window.innerWidth*.93-30);
-      el.style.fontSize='150px';
-      const r=document.createRange();r.selectNodeContents(el);
-      const natural=r.getBoundingClientRect().width;
-      const size=Math.min(150,150*available/Math.max(1,natural));
-      el.style.fontSize=Math.max(17,size).toFixed(2)+'px';
+    const spans=document.querySelectorAll('#monkeyBridge .bridge-word .bridge-side');
+    spans.forEach(el=>{
+      el.style.fontSize='120px';
+      const range=document.createRange();
+      range.selectNodeContents(el);
+      const measured=range.getBoundingClientRect().width;
+      const allowed=Math.max(1,el.clientWidth-3);
+      const font=Math.min(120,120*allowed/Math.max(1,measured));
+      el.style.fontSize=Math.max(10,font).toFixed(2)+'px';
     });
   };
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fit,{once:true});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fit,{once:true});
   else fit();
   document.fonts?.ready?.then(fit);
   window.addEventListener('resize',fit,{passive:true});

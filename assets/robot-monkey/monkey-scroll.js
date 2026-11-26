@@ -264,8 +264,9 @@ export function followPortfolioScroll(host) {
     if (crossingToSkills) {
       const cloud = keywordCloud.getBoundingClientRect();
       const rest = restSpace.getBoundingClientRect();
-      const laneScale = Math.min(mobile ? .22 : .29, (vw - cloud.right - 16) / canvasWidth);
-      const laneCenter = (cloud.right + vw) * .5;
+      const laneWidth = Math.max(108, Math.min(vw * .24, 290));
+      const laneScale = Math.min(mobile ? .22 : .29, (laneWidth - 16) / canvasWidth);
+      const laneCenter = vw - laneWidth * .5;
       const laneTop = Math.min(skillsY, cloud.top - laneScale * canvasHeight * .5 - 8);
       const laneBottom = cloud.bottom + laneScale * canvasHeight * .5 + 8;
       const restScale = mobile ? .54 : .56;

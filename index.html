@@ -2023,11 +2023,13 @@ body.wave-main-active .character-img.wave.active{
 #contents{grid-template-columns:minmax(0,1fr);overflow-anchor:none}
 @media(min-width:761px) and (prefers-reduced-motion:no-preference){
   .portfolio-contents > .portfolio-book{max-width:66vw;justify-self:center}
+  #contents-title{margin-bottom:clamp(105px, 15vh, 145px)}
 }
 @media(max-width:760px) and (prefers-reduced-motion:no-preference){
   #contents-title{margin-bottom:110px}
   .portfolio-contents > .portfolio-book{width:min(100%,555px)}
 }
+#dasom-monkey-3d[data-cover-grip]{clip-path:var(--cover-grip-clip)}
 #dasom-monkey-3d[data-first-book-peek]{clip-path:var(--first-book-peek-clip)}
 #dasom-monkey-3d[data-first-book-peek] canvas{transform:rotate(var(--first-book-peek-lean,0deg))}
 </style>
@@ -5925,7 +5927,7 @@ body.project-confirm-open .monkey-guide-dialogue{display:none}
 </style>
 
 <script src="assets/vendor/three-r128.min.js"></script>
-<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=centered-book-peek"></script>
+<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=two-hand-cover"></script>
 <style id="dasom-monkey-drag-cue-style">
 #dasom-monkey-3d{cursor:grab;user-select:none;-webkit-user-select:none}
 #dasom-monkey-3d:active{cursor:grabbing}

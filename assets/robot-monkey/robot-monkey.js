@@ -125,6 +125,46 @@ export async function mountRobotMonkey(host, options = {}) {
   if (!head || !head.material.aoMap || !head.material.map) {
     throw new Error('The model is missing its face UV or baked material.');
   }
+  const gripArms = ['L', 'R'].map(side => {
+    const shoulder = model.getObjectByName(THREE.PropertyBinding.sanitizeNodeName('upper_arm.' + side));
+    const elbow = model.getObjectByName(THREE.PropertyBinding.sanitizeNodeName('forearm.' + side));
+    const wrist = model.getObjectByName(THREE.PropertyBinding.sanitizeNodeName('hand.' + side));
+    return { shoulder, elbow, wrist, rest: [shoulder.quaternion.clone(), elbow.quaternion.clone()] };
+  });
+  const jointPosition = new THREE.Vector3();
+  const wristPosition = new THREE.Vector3();
+  const gripTarget = new THREE.Vector3();
+  const fromWrist = new THREE.Vector3();
+  const toGrip = new THREE.Vector3();
+  const parentRotation = new THREE.Quaternion();
+  const adjustment = new THREE.Quaternion();
+  let bookGrip = false;
+  let gripLine = .57;
+
+  function poseBookGrip() {
+    gripLine = 0;
+    for (const [index, arm] of gripArms.entries()) {
+      const { shoulder, elbow, wrist, rest } = arm;
+      shoulder.quaternion.copy(rest[0]);
+      elbow.quaternion.copy(rest[1]);
+      shoulder.getWorldPosition(gripTarget);
+      gripTarget.add(new THREE.Vector3(index === 0 ? .06 : -.06, .16, .24));
+      for (let pass = 0; pass < 6; pass++) {
+        for (const joint of [elbow, shoulder]) {
+          joint.getWorldPosition(jointPosition);
+          wrist.getWorldPosition(wristPosition);
+          joint.parent.getWorldQuaternion(parentRotation).invert();
+          fromWrist.copy(wristPosition).sub(jointPosition).applyQuaternion(parentRotation).normalize();
+          toGrip.copy(gripTarget).sub(jointPosition).applyQuaternion(parentRotation).normalize();
+          adjustment.setFromUnitVectors(fromWrist, toGrip);
+          joint.quaternion.premultiply(adjustment);
+        }
+      }
+      wrist.getWorldPosition(wristPosition).project(camera);
+      gripLine += (1 - wristPosition.y) / 4;
+    }
+  }
+
   const faceMaterial = head.material;
   const defaultEmission = faceMaterial.emissiveMap;
   const ledChannel = faceMaterial.aoMap.channel;
@@ -303,6 +343,11 @@ export async function mountRobotMonkey(host, options = {}) {
   const api = {
     setExpression, play, setView,
     wave: greet,
+    setBookGrip(active) {
+      if (active && !bookGrip) setView('front');
+      bookGrip = active;
+    },
+    getBookGripLine() { return gripLine; },
     setGuideMotion({ heading = 0, walking = false, greeting = false } = {}) {
       guideYaw = heading;
       if (activePointer !== null || (actionName !== 'idle' && actionName !== 'walk')) return;
@@ -363,6 +408,7 @@ export async function mountRobotMonkey(host, options = {}) {
     if (!sequencedFace) talk = speaking && !paused && !reduced.matches ? Number(Math.sin(elapsed * 16) > .05) : 0;
     updateFace();
     pivot.rotation.set(pitch, yaw + guideYaw, 0);
+    if (bookGrip) poseBookGrip();
     renderer.render(scene, camera);
   });
   host.dataset.loaded = 'true';

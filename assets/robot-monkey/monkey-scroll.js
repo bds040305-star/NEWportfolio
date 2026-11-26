@@ -22,6 +22,25 @@ export function followPortfolioScroll(host) {
   let peekStart = null;
   let blinkTimer;
   let blinked = false;
+  let coverPeekStart = null;
+  let coverBlinked = false;
+
+  function updateCoverGrip(now, active, width) {
+    const model = host.robotMonkey;
+    if (!active || !model) return null;
+    coverPeekStart ??= now;
+    const elapsed = now - coverPeekStart;
+    const phase = Math.max(0, Math.min(1, (elapsed - 140) / 700));
+    const rise = 1 - (1 - phase) ** 3;
+    const handLine = model.getBookGripLine();
+    if (elapsed < 1310) schedule();
+    if (elapsed >= 1010 && !coverBlinked) {
+      coverBlinked = true;
+      model.setBlink(1);
+      blinkTimer = setTimeout(() => model.setBlink(null), 150);
+    }
+    return { rise, handLine, handOverlap: Math.min(34, width * .073) };
+  }
 
   book.addEventListener('book-turn-start', ({ detail }) => {
     if (reducedMotion.matches) return;
@@ -119,6 +138,27 @@ export function followPortfolioScroll(host) {
     let opacity = interpolate(4);
     const bookOnscreen = bounds.bottom > 0 && bounds.top < vh;
     const peeking = peekStart !== null && bookOnscreen;
+    const coverActive = book.dataset.state === 'contents' && !waitingForBook &&
+      bounds.top > 58 && bounds.top < vh * .85 && document.body.classList.contains('vertical-ready');
+    const model = host.robotMonkey;
+    model?.setBookGrip(coverActive);
+    host.toggleAttribute('data-cover-grip', coverActive);
+    const coverScale = mobile ? .58 : .72;
+    const coverWidth = canvasWidth * coverScale;
+    const coverHeight = canvasHeight * coverScale;
+    const grip = updateCoverGrip(now, coverActive, coverWidth);
+    if (grip) {
+      scale = coverScale;
+      const centerX = bounds.left + bounds.width * .25;
+      x = centerX / vw;
+      const riseOffset = coverHeight * .54 * (1 - grip.rise);
+      screenY = bounds.top + coverHeight * (.5 - grip.handLine) + riseOffset;
+      const upper = screenY - coverHeight * .5;
+      const cut = Math.max(0, Math.min(100, (upper + coverHeight - bounds.top - grip.handOverlap) / coverHeight * 100));
+      const spineCut = Math.max(0, (centerX + coverWidth * .5 - (bounds.left + bounds.width * .50)) / coverWidth * 100);
+      host.style.setProperty('--cover-grip-clip', `inset(0 ${spineCut}% ${cut}% 0)`);
+      opacity = Math.min(1, grip.rise * 4);
+    }
     host.toggleAttribute('data-first-book-peek', peeking);
     if (waitingForBook && bookOnscreen) opacity = 0;
     if (peekStart !== null && bounds.bottom <= 0) opacity *= Math.min(1, -bounds.bottom / (vh * .18));
@@ -162,12 +202,11 @@ export function followPortfolioScroll(host) {
     const turning = turn > 0 && turn < 1;
     const turnHeading = Math.PI * 2 * turn * turn * (3 - 2 * turn);
     const travelHeading = turning ? 0 : Math.sign(to[1] - from[1]) * .5 * Math.sin(Math.PI * t);
-    const heading = turnHeading + travelHeading;
-    const walking = Math.abs(delta) > .5 && !turning;
+    const heading = coverActive ? 0 : turnHeading + travelHeading;
+    const walking = !coverActive && Math.abs(delta) > .5 && !turning;
     const greeting = lastY < turnEnd && y >= turnEnd;
-    const model = host.robotMonkey;
     let dialogueScene = null;
-    if (model && !peeking && !waitingForBook && document.body.classList.contains('vertical-ready')) {
+    if (model && !coverActive && !peeking && !waitingForBook && document.body.classList.contains('vertical-ready')) {
       if (y < turnStart) {
         if (y < contentsApproach * .8) dialogueScene = 'welcome';
         else if (y < Math.min(poses[3][0], turnStart * .76)) dialogueScene = 'contents';
@@ -200,6 +239,8 @@ export function followPortfolioScroll(host) {
       originalParent.prepend(host);
       host.removeAttribute('data-offstage');
       host.removeAttribute('data-first-book-peek');
+      host.removeAttribute('data-cover-grip');
+      host.robotMonkey?.setBookGrip(false);
       waitingForBook = false;
       peekStart = null;
       clearTimeout(blinkTimer);

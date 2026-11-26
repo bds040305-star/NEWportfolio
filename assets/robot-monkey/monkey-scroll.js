@@ -39,7 +39,7 @@ export function followPortfolioScroll(host) {
       model.setBlink(1);
       blinkTimer = setTimeout(() => model.setBlink(null), 150);
     }
-    return { rise, handLine, handOverlap: Math.min(34, width * .073) };
+    return { rise, handLine, edgeLift: Math.min(38, width * .085) };
   }
 
   book.addEventListener('book-turn-start', ({ detail }) => {
@@ -152,9 +152,9 @@ export function followPortfolioScroll(host) {
       const centerX = bounds.left + bounds.width * .25;
       x = centerX / vw;
       const riseOffset = coverHeight * .54 * (1 - grip.rise);
-      screenY = bounds.top + coverHeight * (.5 - grip.handLine) + riseOffset;
+      screenY = bounds.top + coverHeight * (.5 - grip.handLine) + riseOffset - grip.edgeLift;
       const upper = screenY - coverHeight * .5;
-      const cut = Math.max(0, Math.min(100, (upper + coverHeight - bounds.top - grip.handOverlap) / coverHeight * 100));
+      const cut = Math.max(0, Math.min(100, (upper + coverHeight - bounds.top) / coverHeight * 100));
       const spineCut = Math.max(0, (centerX + coverWidth * .5 - (bounds.left + bounds.width * .50)) / coverWidth * 100);
       host.style.setProperty('--cover-grip-clip', `inset(0 ${spineCut}% ${cut}% 0)`);
       opacity = Math.min(1, grip.rise * 4);

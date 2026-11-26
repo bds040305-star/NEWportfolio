@@ -1,4 +1,4 @@
-import { createMonkeyDialogue } from './monkey-dialogue.js';
+import { createMonkeyDialogue } from './monkey-dialogue.js?v=skills-walk';
 
 export function followPortfolioScroll(host) {
   const hero = document.getElementById('intro');
@@ -8,6 +8,7 @@ export function followPortfolioScroll(host) {
   const bookControls = contents.querySelector('.portfolio-book-controls');
   const contentsTitle = document.getElementById('contents-title');
   const keywords = document.getElementById('keywords');
+  const skillsTitle = keywords.querySelector('h2 span');
   const bridge = document.getElementById('monkeyBridge');
   const works = document.getElementById('works');
   const projectTitle = works.querySelector('.project-title span');
@@ -155,10 +156,26 @@ export function followPortfolioScroll(host) {
     let screenY = (sourceY + (to[2] - sourceY) * eased) * vh;
     let scale = interpolate(3);
     let opacity = interpolate(4);
+    const turnStart = poses[4][0];
+    const skillsBounds = skillsTitle.getBoundingClientRect();
+    const skillsScale = Math.min(mobile ? .24 : .28, (vw - skillsBounds.right - 14) / canvasWidth);
+    const skillsX = (skillsBounds.right + 8 + canvasWidth * skillsScale * .5) / vw;
+    const skillsY = skillsBounds.top + skillsBounds.height * .5;
+    const dockAt = Math.min(skillsBounds.top + y - vh * .39, turnStart - vh * .26);
+    const leaveSkills = turnStart - vh * .12;
     const bookOnscreen = bounds.bottom > 0 && bounds.top < vh;
     const landing = experienceLanding.getBoundingClientRect();
     const landingOnscreen = experienceFrameTime !== null && landing.bottom > 0 && landing.top < vh;
-    const peeking = peekStart !== null && (bookOnscreen || landingOnscreen);
+    const landingScale = mobile ? .58 * 1.12 : .72 * 1.12;
+    const landingHeight = canvasHeight * landingScale;
+    const lift = Math.min(landingHeight * .10, Math.max(0, landing.top - bookControls.getBoundingClientRect().bottom - 6));
+    const landingY = landing.top + landingHeight * .5 - lift;
+    const landingX = Math.min(vw - canvasWidth * landingScale * .5, bounds.left + bounds.width * .83) / vw;
+    const hasExperience = experienceFrameTime !== null;
+    const departure = Math.min(landingY + y - vh * .43, dockAt - vh * .18);
+    const arrivedAtLanding = experienceElapsed >= experiencePause + experienceWalkDuration;
+    const crossingToSkills = hasExperience && y >= departure && y < turnStart && (arrivedAtLanding || y >= dockAt);
+    const peeking = peekStart !== null && (bookOnscreen || landingOnscreen) && !crossingToSkills;
     const experienceWalking = peeking && experienceFrameTime !== null;
     if (experienceFrameTime !== null) {
       // Keep the steps visible even when rendering drops a frame.
@@ -215,15 +232,9 @@ export function followPortfolioScroll(host) {
       const lean = (mobile ? 9 : 13) * reach * release;
       if (experienceWalking) {
         const approach = stride * stride * (3 - 2 * stride);
-        const finalScale = scale * 1.12;
-        const halfWidth = canvasWidth * finalScale * .5;
-        const standingX = Math.min(vw - halfWidth, bounds.left + bounds.width * .83);
-        const landingHeight = canvasHeight * finalScale;
-        const lift = Math.min(landingHeight * .10, Math.max(0, landing.top - bookControls.getBoundingClientRect().bottom - 6));
-        const standingY = landing.top + landingHeight * .5 - lift;
-        x += (standingX / vw - x) * approach;
-        screenY += (standingY - screenY) * approach;
-        scale += (finalScale - scale) * approach;
+        x += (landingX - x) * approach;
+        screenY += (landingY - screenY) * approach;
+        scale += (landingScale - scale) * approach;
         if (stride < 1) schedule();
       }
       host.style.setProperty('--first-book-peek-clip', clip);
@@ -236,27 +247,42 @@ export function followPortfolioScroll(host) {
         blinkTimer = setTimeout(() => host.robotMonkey?.setBlink(null), 160);
       }
     }
+    const settledBySkills = crossingToSkills && y >= dockAt && y <= leaveSkills;
+    if (crossingToSkills) {
+      const approach = Math.min(1, (y - departure) / (dockAt - departure));
+      const enter = approach * approach * (3 - 2 * approach);
+      const release = Math.max(0, (y - leaveSkills) / (turnStart - leaveSkills));
+      const exit = release * release * (3 - 2 * release);
+      const weight = enter * (1 - exit);
+      const startX = approach < 1 ? landingX : x;
+      const startY = approach < 1 ? landingY : screenY;
+      const startScale = approach < 1 ? landingScale : scale;
+      x = startX + (skillsX - startX) * weight;
+      screenY = startY + (skillsY - startY) * weight;
+      scale = startScale + (skillsScale - startScale) * weight;
+      opacity = 1;
+      if (host.dataset.motion === 'eat') model?.play('idle');
+    }
     host.style.setProperty('--monkey-x', `${x * 100}vw`);
     host.style.setProperty('--monkey-y', `${screenY}px`);
-    host.inert = opacity < .9 || (!peeking && scale < .45 && nextIndex < 9);
+    host.inert = opacity < .9 || (!peeking && !settledBySkills && scale < .45 && nextIndex < 9);
     host.style.setProperty('--monkey-scale', scale);
     host.style.setProperty('--monkey-opacity', opacity);
 
-    const turnStart = poses[4][0];
     const turnEnd = poses[5][0];
     const turn = Math.max(0, Math.min(1, (y - turnStart) / (turnEnd - turnStart)));
     const turning = turn > 0 && turn < 1;
     const turnHeading = Math.PI * 2 * turn * turn * (3 - 2 * turn);
     const travelHeading = turning ? 0 : Math.sign(to[1] - from[1]) * .5 * Math.sin(Math.PI * t);
     const heading = coverActive || peeking ? 0 : turnHeading + travelHeading;
-    const walking = !coverActive && !peeking && Math.abs(delta) > .5 && !turning;
+    const walking = !coverActive && !peeking && !settledBySkills && Math.abs(delta) > .5 && !turning;
     const greeting = lastY < turnEnd && y >= turnEnd;
-    let dialogueScene = null;
-    if (model && !coverActive && !peeking && !waitingForBook && document.body.classList.contains('vertical-ready')) {
+    let dialogueScene = settledBySkills ? 'keywords' : null;
+    if (model && !crossingToSkills && !coverActive && !peeking && !waitingForBook && document.body.classList.contains('vertical-ready')) {
       if (y < turnStart) {
         if (y < contentsApproach * .8) dialogueScene = 'welcome';
         else if (y < Math.min(poses[3][0], turnStart * .76)) dialogueScene = 'contents';
-        else dialogueScene = 'keywords';
+        else if (!hasExperience) dialogueScene = 'keywords';
       } else if (y > turnEnd + (poses[8][0] - turnEnd) * .38 && y < leaveTitle) {
         dialogueScene = 'projects';
       }

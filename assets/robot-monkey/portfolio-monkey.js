@@ -1,5 +1,5 @@
 import { mountRobotMonkey } from './robot-monkey.js?v=two-hand-cover';
-import { followPortfolioScroll } from './monkey-scroll.js?v=experience-banana-closer';
+import { followPortfolioScroll } from './monkey-scroll.js?v=skills-walk';
 
 const host = document.getElementById('dasom-monkey-3d');
 if (host) {

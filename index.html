@@ -2019,6 +2019,12 @@ body.wave-main-active .character-img.wave.active{
   .portfolio-contents > .portfolio-book { width: min(calc(100% + 16px), 1240px); }
 }
 </style>
+<style>
+.portfolio-contents > .portfolio-book{margin-bottom:76px}
+@media(min-width:761px){
+  .portfolio-contents > .portfolio-book{max-width:82vw}
+}
+</style>
 <style id="book-contents-spine-style">
 .portfolio-book[data-state="contents"] > .portfolio-book-half:first-child {
   clip-path: polygon(0 0, 76% 0, 86% .35%, 93% 1.25%, 97% 2.1%, 100% 2.4%, 100% 97.6%, 97% 97.9%, 93% 98.75%, 86% 99.65%, 76% 100%, 0 100%);
@@ -5913,7 +5919,7 @@ body.project-confirm-open .monkey-guide-dialogue{display:none}
 </style>
 
 <script src="assets/vendor/three-r128.min.js"></script>
-<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=project-playground"></script>
+<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=book-page-docks"></script>
 <style id="dasom-monkey-drag-cue-style">
 #dasom-monkey-3d{cursor:grab;user-select:none;-webkit-user-select:none}
 #dasom-monkey-3d:active{cursor:grabbing}

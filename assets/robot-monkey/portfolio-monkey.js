@@ -1,5 +1,5 @@
-import { mountRobotMonkey } from './robot-monkey.js?v=orange-shell';
-import { followPortfolioScroll } from './monkey-scroll.js?v=scroll-restored';
+import { mountRobotMonkey } from './robot-monkey.js?v=guide-dialogue';
+import { followPortfolioScroll } from './monkey-scroll.js?v=project-playground';
 
 const host = document.getElementById('dasom-monkey-3d');
 if (host) {

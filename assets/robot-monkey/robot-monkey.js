@@ -221,6 +221,27 @@ export async function mountRobotMonkey(host, options = {}) {
   for (const clip of Object.values(motionNames)) {
     if (!actions.has(clip)) throw new Error(`Missing animation: ${clip}`);
   }
+  const longStride = gltf.animations.find(clip => clip.name === motionNames.walk).clone();
+  longStride.name = 'Character_Walk_Long_Stride';
+  const stepRotation = new THREE.Quaternion();
+  const strideRotation = new THREE.Quaternion();
+  for (const track of longStride.tracks) {
+    const { nodeName, propertyName } = THREE.PropertyBinding.parseTrackName(track.name);
+    if (!/^(thigh|shin|foot|CTRL_foot)[LR]$/.test(nodeName)) continue;
+    const joint = model.getObjectByName(nodeName);
+    if (propertyName === 'quaternion') {
+      for (let offset = 0; offset < track.values.length; offset += 4) {
+        stepRotation.fromArray(track.values, offset);
+        strideRotation.copy(joint.quaternion).slerp(stepRotation, 1.55).normalize().toArray(track.values, offset);
+      }
+    } else if (propertyName === 'position' && /foot[LR]$/.test(nodeName)) {
+      for (let offset = 0; offset < track.values.length; offset += 3) {
+        track.values[offset + 1] = joint.position.y + (track.values[offset + 1] - joint.position.y) * 1.55;
+        track.values[offset + 2] = joint.position.z + (track.values[offset + 2] - joint.position.z) * 1.3;
+      }
+    }
+  }
+  actions.set(longStride.name, mixer.clipAction(longStride));
   let currentAction, actionName = 'idle', expression = 0, manualBlink = null;
   let autoBlink = true, speaking = false, brightness = 1, faceTimer;
   let previousColumn = -1, previousExpression = -1, previousAtlas = null, eatFace = null, blink = 0, talk = 0;
@@ -410,9 +431,10 @@ export async function mountRobotMonkey(host, options = {}) {
     setGuideMotion({ heading = 0, walking = false, greeting = false, careful = false } = {}) {
       guideYaw = heading;
       guidePitch = careful ? .12 : 0;
-      if (activePointer !== null || (actionName !== 'idle' && actionName !== 'walk')) return;
-      play(greeting ? 'wave' : walking ? 'walk' : 'idle');
-      if (actionName === 'walk') currentAction.setEffectiveTimeScale(careful ? .66 : 1);
+      if (activePointer !== null || (actionName !== 'idle' && actionName !== 'walk' && actionName !== longStride.name)) return;
+      const gait = careful ? longStride.name : 'walk';
+      play(greeting ? 'wave' : walking ? gait : 'idle');
+      if (actionName === longStride.name) currentAction.setEffectiveTimeScale(.66);
     },
     eatBanana, scratchHead, playRandom,
     setBlink(value = null) { manualBlink = value === null ? null : THREE.MathUtils.clamp(Number(value), 0, 1); blink = manualBlink ?? 0; updateFace(); return api; },

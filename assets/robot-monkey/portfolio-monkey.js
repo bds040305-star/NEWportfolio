@@ -1,5 +1,5 @@
-import { mountRobotMonkey } from './robot-monkey.js?v=guide-render-performance';
-import { followPortfolioScroll } from './monkey-scroll.js?v=larger-skills-walk';
+import { mountRobotMonkey } from './robot-monkey.js?v=longer-monkey-stride';
+import { followPortfolioScroll } from './monkey-scroll.js?v=longer-monkey-stride';
 
 const host = document.getElementById('dasom-monkey-3d');
 if (host) {

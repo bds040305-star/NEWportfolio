@@ -2019,6 +2019,16 @@ body.wave-main-active .character-img.wave.active{
   .portfolio-contents > .portfolio-book { width: min(calc(100% + 16px), 1240px); }
 }
 </style>
+<style>
+@media(min-width:761px) and (prefers-reduced-motion:no-preference){
+  .portfolio-book[data-monkey-peek]{max-width:77vw}
+}
+@media(max-width:760px) and (prefers-reduced-motion:no-preference){
+  #contents:has(.portfolio-book[data-monkey-peek]) #contents-title{margin-bottom:98px}
+}
+#dasom-monkey-3d[data-first-book-peek]{clip-path:var(--first-book-peek-clip)}
+#dasom-monkey-3d[data-first-book-peek] canvas{transform:rotate(var(--first-book-peek-lean,0deg))}
+</style>
 <style id="book-contents-spine-style">
 .portfolio-book[data-state="contents"] > .portfolio-book-half:first-child {
   clip-path: polygon(0 0, 76% 0, 86% .35%, 93% 1.25%, 97% 2.1%, 100% 2.4%, 100% 97.6%, 97% 97.9%, 93% 98.75%, 86% 99.65%, 76% 100%, 0 100%);
@@ -5913,7 +5923,7 @@ body.project-confirm-open .monkey-guide-dialogue{display:none}
 </style>
 
 <script src="assets/vendor/three-r128.min.js"></script>
-<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=project-playground"></script>
+<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=first-book-peek"></script>
 <style id="dasom-monkey-drag-cue-style">
 #dasom-monkey-3d{cursor:grab;user-select:none;-webkit-user-select:none}
 #dasom-monkey-3d:active{cursor:grabbing}
@@ -5985,7 +5995,7 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
 #about .ha-about-portrait > [data-node-id="310:5721"] { display: none !important; }
 #about .ha-about-portrait > [data-node-id="310:5722"] { display: block !important; }
 </style>
-  <script defer src="assets/portfolio-layout/book-turn.js?v=experience"></script>
+  <script defer src="assets/portfolio-layout/book-turn.js?v=first-book-peek"></script>
 
 
 

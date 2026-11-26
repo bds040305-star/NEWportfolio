@@ -94,6 +94,8 @@ const shade=ctx.createLinearGradient(lo,0,hi,0);shade.addColorStop(0,'rgba(57,44
         return;
       }
     }
+    const transition = { from: current, to };
+    book.dispatchEvent(new CustomEvent('book-turn-start', { detail: transition }));
     function finish(animateLanding = false) {
       current = to;
       const image = to === 'contents' ? imgC : imgA;
@@ -108,6 +110,7 @@ const shade=ctx.createLinearGradient(lo,0,hi,0);shade.addColorStop(0,'rgba(57,44
       function settle() {
         cv.classList.remove('active');
         turning = false;
+        book.dispatchEvent(new CustomEvent('book-turn-finish', { detail: transition }));
       }
       if (animateLanding) {
         const fade = cv.animate([{ opacity: 1 }, { opacity: 0 }], {

@@ -3,6 +3,8 @@ import { createMonkeyDialogue } from './monkey-dialogue.js';
 export function followPortfolioScroll(host) {
   const hero = document.getElementById('intro');
   const contents = document.getElementById('contents');
+  const book = contents.querySelector('.portfolio-book');
+  const contentsTitle = document.getElementById('contents-title');
   const keywords = document.getElementById('keywords');
   const bridge = document.getElementById('monkeyBridge');
   const works = document.getElementById('works');
@@ -16,9 +18,34 @@ export function followPortfolioScroll(host) {
   let frame = 0;
   let previousY = window.scrollY;
   let stopTimer;
+  let waitingForBook = false;
+  let peekStart = null;
+  let blinkTimer;
+  let blinked = false;
+
+  book.addEventListener('book-turn-start', ({ detail }) => {
+    if (reducedMotion.matches) return;
+    waitingForBook = detail.from === 'contents' && detail.to === 'about';
+    peekStart = null;
+    blinked = false;
+    clearTimeout(blinkTimer);
+    host.robotMonkey?.setBlink(null);
+    book.removeAttribute('data-monkey-peek');
+    schedule();
+  });
+  book.addEventListener('book-turn-finish', () => {
+    if (!waitingForBook || reducedMotion.matches) return;
+    waitingForBook = false;
+    peekStart = performance.now();
+    book.setAttribute('data-monkey-peek', '');
+    if (smallScreen.matches && book.getBoundingClientRect().top < 150) {
+      window.scrollBy({ top: contentsTitle.getBoundingClientRect().top - 72, behavior: 'instant' });
+    }
+    schedule();
+  });
 
   host.addEventListener('robot-monkey-ready', schedule);
-  function update() {
+  function update(now) {
     frame = 0;
     const y = window.scrollY;
     const delta = y - previousY;
@@ -88,16 +115,49 @@ export function followPortfolioScroll(host) {
     const t = Math.max(0, (y - from[0]) / (to[0] - from[0]));
     const eased = t * t * (3 - 2 * t);
     const interpolate = index => from[index] + (to[index] - from[index]) * eased;
-    const x = interpolate(1);
+    let x = interpolate(1);
     // Bring the model back from the top edge as the first tile enters view.
     const sourceY = from === titleHold ? Math.max(from[2], -.12) : from[2];
-    const screenY = (sourceY + (to[2] - sourceY) * eased) * vh;
+    let screenY = (sourceY + (to[2] - sourceY) * eased) * vh;
+    let scale = interpolate(3);
+    let opacity = interpolate(4);
+    const bounds = book.getBoundingClientRect();
+    const bookOnscreen = bounds.bottom > 0 && bounds.top < vh;
+    const peeking = peekStart !== null && bookOnscreen;
+    host.toggleAttribute('data-first-book-peek', peeking);
+    if (waitingForBook && bookOnscreen) opacity = 0;
+    if (peekStart !== null && bounds.bottom <= 0) opacity *= Math.min(1, -bounds.bottom / (vh * .18));
+    if (peeking) {
+      const elapsed = Math.max(0, now - peekStart);
+      const t = Math.max(0, Math.min(1, (elapsed - 215) / 730));
+      const reach = 1 - (1 - t) ** 3 + .055 * Math.sin(Math.PI * t);
+      scale = mobile ? .58 : .72;
+      const width = canvasWidth * scale;
+      const height = canvasHeight * scale;
+      const centerX = mobile ? bounds.left + bounds.width * .76
+        : bounds.right + Math.min((vw - bounds.right) * .53, width * .27) - width * .49 * (1 - reach);
+      x = centerX / vw;
+      screenY = mobile ? bounds.top + height * (.48 - .55 * reach) : bounds.top + bounds.height * .46;
+      const percent = (pixels, dimension) => Math.max(0, Math.min(100, 100 * pixels / dimension));
+      const top = screenY - height * .5;
+      const clip = mobile
+        ? `inset(${percent(contentsTitle.getBoundingClientRect().bottom + 5 - top, height)}% 0 ${percent(top + height - bounds.top, height)}% 0)`
+        : `inset(0 0 28% ${percent(bounds.right - centerX + width * .5, width)}%)`;
+      host.style.setProperty('--first-book-peek-clip', clip);
+      host.style.setProperty('--first-book-peek-lean', `${(mobile ? 9 : 13) * reach}deg`);
+      opacity = Math.min(1, t * 5);
+      if (elapsed < 1080) schedule();
+      else if (!blinked && host.robotMonkey) {
+        blinked = true;
+        host.robotMonkey.setBlink(1);
+        blinkTimer = setTimeout(() => host.robotMonkey?.setBlink(null), 160);
+      }
+    }
     host.style.setProperty('--monkey-x', `${x * 100}vw`);
     host.style.setProperty('--monkey-y', `${screenY}px`);
-    const scale = interpolate(3);
-    host.inert = scale < .45 && nextIndex < 9;
+    host.inert = opacity < .9 || (!peeking && scale < .45 && nextIndex < 9);
     host.style.setProperty('--monkey-scale', scale);
-    host.style.setProperty('--monkey-opacity', interpolate(4));
+    host.style.setProperty('--monkey-opacity', opacity);
 
     const turnStart = poses[4][0];
     const turnEnd = poses[5][0];
@@ -110,7 +170,7 @@ export function followPortfolioScroll(host) {
     const greeting = lastY < turnEnd && y >= turnEnd;
     const model = host.robotMonkey;
     let dialogueScene = null;
-    if (model && document.body.classList.contains('vertical-ready')) {
+    if (model && !peeking && !waitingForBook && document.body.classList.contains('vertical-ready')) {
       if (y < turnStart) {
         if (y < contentsApproach * .8) dialogueScene = 'welcome';
         else if (y < Math.min(poses[3][0], turnStart * .76)) dialogueScene = 'contents';
@@ -142,6 +202,12 @@ export function followPortfolioScroll(host) {
       updateDialogue(null);
       originalParent.prepend(host);
       host.removeAttribute('data-offstage');
+      host.removeAttribute('data-first-book-peek');
+      book.removeAttribute('data-monkey-peek');
+      waitingForBook = false;
+      peekStart = null;
+      clearTimeout(blinkTimer);
+      host.robotMonkey?.setBlink(null);
       host.removeAttribute('data-in-playground');
       host.inert = false;
       cancelAnimationFrame(frame);
@@ -156,7 +222,7 @@ export function followPortfolioScroll(host) {
   }
 
   const layout = new ResizeObserver(schedule);
-  [hero, contents, keywords, bridge, works, projectTitle, playgroundTile].forEach(section => layout.observe(section));
+  [hero, contents, book, keywords, bridge, works, projectTitle, playgroundTile].forEach(section => layout.observe(section));
   new MutationObserver(schedule).observe(document.body, { attributes: true, attributeFilter: ['class'] });
   const titleHeader = projectTitle.closest('.project-marquee-head');
   titleHeader.addEventListener('transitionend', schedule);

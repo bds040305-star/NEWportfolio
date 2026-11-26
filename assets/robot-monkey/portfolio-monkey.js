@@ -1,7 +1,9 @@
-import { mountRobotMonkey } from './robot-monkey.js?v=original-position';
+import { mountRobotMonkey } from './robot-monkey.js?v=orange-shell';
+import { followPortfolioScroll } from './monkey-scroll.js?v=scroll-restored';
 
 const host = document.getElementById('dasom-monkey-3d');
 if (host) {
+  followPortfolioScroll(host);
   window.robotMonkeyReady = mountRobotMonkey(host, {
     zoom: .85,
     randomMotions: ['wave', 'eat', 'scratch']

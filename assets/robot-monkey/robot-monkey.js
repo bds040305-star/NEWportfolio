@@ -173,7 +173,6 @@ export async function mountRobotMonkey(host, options = {}) {
   let currentAction, actionName = 'idle', expression = 0, manualBlink = null;
   let autoBlink = true, speaking = false, brightness = 1, faceTimer;
   let previousColumn = -1, previousExpression = -1, previousAtlas = null, eatFace = null, blink = 0, talk = 0;
-  let guideYaw = 0;
   let yaw = 0, pitch = 0, activePointer = null, lastX = 0, lastY = 0, dragDistance = 0;
   let visible = true, paused = false, disposed = false, elapsed = 0, lastTime = 0;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -241,7 +240,6 @@ export async function mountRobotMonkey(host, options = {}) {
   function scratchHead() { return play('scratch'); }
   function playRandom() {
     if (['eat', 'scratch', 'wave', 'legacyWave'].includes(actionName) && currentAction.isRunning()) return api;
-    host.dispatchEvent(new Event('robot-monkey-interact'));
     return play(randomMotions[Math.floor(Math.random() * randomMotions.length)]);
   }
   function applyFaceSequence() {
@@ -303,11 +301,6 @@ export async function mountRobotMonkey(host, options = {}) {
   const api = {
     setExpression, play, setView,
     wave: greet,
-    setGuideMotion({ heading = 0, walking = false, greeting = false } = {}) {
-      guideYaw = heading;
-      if (activePointer !== null || (actionName !== 'idle' && actionName !== 'walk')) return;
-      play(greeting ? 'wave' : walking ? 'walk' : 'idle');
-    },
     eatBanana, scratchHead, playRandom,
     setBlink(value = null) { manualBlink = value === null ? null : THREE.MathUtils.clamp(Number(value), 0, 1); blink = manualBlink ?? 0; updateFace(); return api; },
     setAutoBlink(value) { autoBlink = Boolean(value); if (!autoBlink && manualBlink === null) blink = 0; updateFace(); return api; },
@@ -321,7 +314,7 @@ export async function mountRobotMonkey(host, options = {}) {
       mixer.update(0);
       applyFaceSequence();
       updateFace();
-      pivot.rotation.set(pitch, yaw + guideYaw, 0);
+      pivot.rotation.set(pitch, yaw, 0);
       renderer.render(scene, camera);
       return api;
     },
@@ -362,7 +355,7 @@ export async function mountRobotMonkey(host, options = {}) {
     } else blink = 0;
     if (!sequencedFace) talk = speaking && !paused && !reduced.matches ? Number(Math.sin(elapsed * 16) > .05) : 0;
     updateFace();
-    pivot.rotation.set(pitch, yaw + guideYaw, 0);
+    pivot.rotation.set(pitch, yaw, 0);
     renderer.render(scene, camera);
   });
   host.dataset.loaded = 'true';

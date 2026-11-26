@@ -1,9 +1,7 @@
-import { mountRobotMonkey } from './robot-monkey.js?v=guide-dialogue';
-import { followPortfolioScroll } from './monkey-scroll.js?v=book-margin';
+import { mountRobotMonkey } from './robot-monkey.js?v=original-position';
 
 const host = document.getElementById('dasom-monkey-3d');
 if (host) {
-  followPortfolioScroll(host);
   window.robotMonkeyReady = mountRobotMonkey(host, {
     zoom: .85,
     randomMotions: ['wave', 'eat', 'scratch']

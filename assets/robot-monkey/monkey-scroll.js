@@ -5,6 +5,7 @@ export function followPortfolioScroll(host) {
   const contents = document.getElementById('contents');
   const book = contents.querySelector('.portfolio-book');
   const experienceLanding = contents.querySelector('.experience-monkey-landing');
+  const bookControls = contents.querySelector('.portfolio-book-controls');
   const contentsTitle = document.getElementById('contents-title');
   const keywords = document.getElementById('keywords');
   const bridge = document.getElementById('monkeyBridge');
@@ -217,7 +218,9 @@ export function followPortfolioScroll(host) {
         const finalScale = scale * 1.12;
         const halfWidth = canvasWidth * finalScale * .5;
         const standingX = Math.min(vw - halfWidth, bounds.left + bounds.width * .83);
-        const standingY = landing.top + canvasHeight * finalScale * .5;
+        const landingHeight = canvasHeight * finalScale;
+        const lift = Math.min(landingHeight * .10, Math.max(0, landing.top - bookControls.getBoundingClientRect().bottom - 6));
+        const standingY = landing.top + landingHeight * .5 - lift;
         x += (standingX / vw - x) * approach;
         screenY += (standingY - screenY) * approach;
         scale += (finalScale - scale) * approach;

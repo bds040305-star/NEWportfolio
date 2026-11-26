@@ -24,11 +24,17 @@ export function followPortfolioScroll(host) {
   let blinkTimer;
   let peekBlinked = false;
   let wasTurning = false;
+  let introPeekStarted = false;
 
   function getBookPose(now, mobile, vw, width, height) {
     const bounds = book.getBoundingClientRect();
     const state = book.dataset.state;
     const pageTurning = pageCanvas.classList.contains('active');
+    const opening = state === 'contents' && !introPeekStarted;
+    if (opening && host.robotMonkey && document.body.classList.contains('vertical-ready')) {
+      introPeekStarted = true;
+      peekStart = now;
+    }
     if (state !== bookState || wasTurning !== pageTurning) {
       bookState = state;
       wasTurning = pageTurning;
@@ -40,11 +46,15 @@ export function followPortfolioScroll(host) {
         host.robotMonkey?.setBlink(null);
       }
     }
-    const elapsed = peekStart === undefined ? Infinity : now - peekStart;
-    const progress = Math.max(0, Math.min(1, (elapsed - 135) / 620));
+    const isContents = state === 'contents';
+    const elapsed = opening ? 0 : peekStart === undefined ? Infinity : now - peekStart;
+    const delay = isContents ? 215 : 135;
+    const revealDuration = isContents ? 730 : 620;
+    const blinkAt = isContents ? 1050 : 760;
+    const progress = Math.max(0, Math.min(1, (elapsed - delay) / revealDuration));
     const reach = 1 - (1 - progress) ** 3 + .055 * Math.sin(Math.PI * progress);
-    if (!pageTurning && elapsed < 1040) schedule();
-    if (state !== 'contents' && !pageTurning && peekStart !== undefined && elapsed >= 760 && !peekBlinked) {
+    if (!pageTurning && introPeekStarted && elapsed < blinkAt + 220) schedule();
+    if (!pageTurning && peekStart !== undefined && elapsed >= blinkAt && !peekBlinked) {
       peekBlinked = true;
       host.robotMonkey?.setBlink(1);
       blinkTimer = setTimeout(() => {
@@ -53,12 +63,7 @@ export function followPortfolioScroll(host) {
       }, 160);
     }
 
-    if (state === 'contents') {
-      return { x: (bounds.left + bounds.width * .25) / vw,
-        y: bounds.top + bounds.height * .47, opacity: pageTurning ? 0 : reach };
-    }
-
-    const side = state === 'about' ? 1 : -1;
+    const side = state === 'experience' ? -1 : 1;
     const edge = side > 0 ? bounds.right : bounds.left;
     const gutter = side > 0 ? vw - edge : edge;
     const slide = width * .44 * (1 - reach);
@@ -217,6 +222,9 @@ export function followPortfolioScroll(host) {
       originalParent.prepend(host);
       host.removeAttribute('data-offstage');
       host.removeAttribute('data-book-peek');
+      introPeekStarted = false;
+      peekStart = undefined;
+      peekBlinked = false;
       if (blinkTimer) {
         clearTimeout(blinkTimer);
         blinkTimer = undefined;

@@ -2064,6 +2064,13 @@ body.wave-main-active .character-img.wave.active{
 .portfolio-book:not([data-state="experience"]) > .book-experience,
 .portfolio-book[data-state="experience"] > .book-about-live:not(.book-experience) { display: none; }
 .portfolio-book[data-state="experience"] > .portfolio-book-nav { visibility: hidden; }
+.portfolio-book[data-state] > .book-about-live.book-spread-incoming {
+  display: grid;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
 .book-experience-copy { padding: 13% 10% 8% 13%; }
 .book-about-right .book-experience-copy { padding-inline: 10% 13%; }
 .book-experience-copy h3 { font-size: 3.25cqw; }
@@ -6010,7 +6017,7 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
 </dialog>
 <script defer src="assets/hero-about/hero-about.js?v=book-boundary"></script>
 
-  <script defer src="assets/portfolio-layout/book-turn.js?v=about-navigation"></script>
+  <script defer src="assets/portfolio-layout/book-turn.js?v=smooth-experience"></script>
 
 
 

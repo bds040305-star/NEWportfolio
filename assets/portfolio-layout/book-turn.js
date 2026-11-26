@@ -125,7 +125,32 @@ const shade=ctx.createLinearGradient(lo,0,hi,0);shade.addColorStop(0,'rgba(57,44
       }
       if (restoreFocus) (to === 'contents' ? forward : back).focus({preventScroll:true});
     }
-    if (!ctx || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      finish();
+      return;
+    }
+    if (current === 'experience' || to === 'experience') {
+      const incoming = book.querySelector(to === 'experience'
+        ? '.book-experience'
+        : '.book-about-live:not(.book-experience)');
+      incoming.setAttribute('aria-hidden', 'true');
+      incoming.inert = true;
+      incoming.classList.add('book-spread-incoming');
+      const reveal = incoming.animate([
+        { clipPath: to === 'experience' ? 'inset(0 100% 0 0)' : 'inset(0 0 0 100%)', opacity: .35 },
+        { clipPath: 'inset(0 0 0 0)', opacity: 1 }
+      ], { duration: 440, easing: 'cubic-bezier(.35, 0, .2, 1)', fill: 'both' });
+      reveal.onfinish = reveal.oncancel = () => {
+        reveal.onfinish = reveal.oncancel = null;
+        reveal.cancel();
+        incoming.classList.remove('book-spread-incoming');
+        incoming.removeAttribute('aria-hidden');
+        incoming.inert = false;
+        finish();
+      };
+      return;
+    }
+    if (!ctx) {
       finish();
       return;
     }

@@ -2361,6 +2361,7 @@ body.wave-main-active .character-img.wave.active{
           </div>
         </div>
       </article>
+      <button type="button" id="book-monkey-trigger" aria-label="책에서 원숭이 불러내기" title="원숭이 불러내기" hidden></button>
       <nav class="portfolio-book-nav" aria-label="포트폴리오 책 목차">
         <a href="#intro" data-ds-dest="intro" aria-label="01 Intro"></a>
         <button type="button" id="book-hotspot" aria-label="02 About Me 페이지 넘기기"></button>
@@ -5879,8 +5880,36 @@ h2 {
   transform:translate3d(var(--monkey-x, 38vw),var(--monkey-y, 55vh),0)
     translate(-50%,-50%) scale(var(--monkey-scale, .76));
 }
+#book-monkey-trigger{
+  position:absolute;z-index:4;inset:6% 51% 8% 4%;padding:0;border:0;
+  border-radius:22px;background:transparent;cursor:pointer;
+}
+#book-monkey-trigger:hover{background:#fe621910}
+#book-monkey-trigger:focus-visible{outline:3px solid #ce4200;outline-offset:3px}
+.portfolio-book:not([data-state="contents"]) #book-monkey-trigger,
+.portfolio-book:has(canvas.active) #book-monkey-trigger{visibility:hidden}
+@media(min-width:761px){
+  .portfolio-contents > .portfolio-book{width:min(77vw,1240px)}
+}
+@media(max-width:760px){
+  .portfolio-contents > .portfolio-book{margin-bottom:62px}
+}
 #playground-monkey-box img{transition:opacity .3s ease}
-body:has(#dasom-monkey-3d.loaded[data-in-playground]) #playground-monkey-box img{opacity:.24}
+body:has(#dasom-monkey-3d.loaded[data-in-playground]) #book-monkey-trigger{
+  position:absolute;z-index:4;inset:6% 51% 8% 4%;padding:0;border:0;
+  border-radius:22px;background:transparent;cursor:pointer;
+}
+#book-monkey-trigger:hover{background:#fe621910}
+#book-monkey-trigger:focus-visible{outline:3px solid #ce4200;outline-offset:3px}
+.portfolio-book:not([data-state="contents"]) #book-monkey-trigger,
+.portfolio-book:has(canvas.active) #book-monkey-trigger{visibility:hidden}
+@media(min-width:761px){
+  .portfolio-contents > .portfolio-book{width:min(77vw,1240px)}
+}
+@media(max-width:760px){
+  .portfolio-contents > .portfolio-book{margin-bottom:62px}
+}
+#playground-monkey-box img{opacity:.24}
 #dasom-monkey-3d.is-scroll-guide.loaded{opacity:var(--monkey-opacity, 1);transition:none}
 body:not(.vertical-ready) #dasom-monkey-3d.is-scroll-guide,
 body.case-overlay-open #dasom-monkey-3d.is-scroll-guide,
@@ -5913,7 +5942,7 @@ body.project-confirm-open .monkey-guide-dialogue{display:none}
 </style>
 
 <script src="assets/vendor/three-r128.min.js"></script>
-<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=project-playground"></script>
+<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=book-entrance"></script>
 <style id="dasom-monkey-drag-cue-style">
 #dasom-monkey-3d{cursor:grab;user-select:none;-webkit-user-select:none}
 #dasom-monkey-3d:active{cursor:grabbing}

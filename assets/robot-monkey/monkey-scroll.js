@@ -4,7 +4,7 @@ export function followPortfolioScroll(host) {
   const hero = document.getElementById('intro');
   const contents = document.getElementById('contents');
   const book = contents.querySelector('.portfolio-book');
-  const bookSpace = contents.querySelector('.book-monkey-space');
+  const bookControls = contents.querySelector('.portfolio-book-controls');
   const keywords = document.getElementById('keywords');
   const bridge = document.getElementById('monkeyBridge');
   const works = document.getElementById('works');
@@ -22,9 +22,13 @@ export function followPortfolioScroll(host) {
   let bookPosition;
   let bookMove;
 
-  function getBookPosition(now) {
+  function getBookPosition(now, mobile) {
     const state = book.dataset.state;
-    const destination = { contents: 0, about: 1, experience: .5 }[state] ?? .5;
+    const destination = {
+      contents: [0, mobile ? 1 : .55],
+      about: [1, mobile ? 1 : .55],
+      experience: [.5, 1]
+    }[state];
     if (state !== bookState) {
       bookMove = { start: now, from: bookPosition ?? destination };
       bookState = state;
@@ -32,13 +36,25 @@ export function followPortfolioScroll(host) {
     if (!bookMove) return bookPosition = destination;
 
     const progress = Math.min(1, (now - bookMove.start) / 760);
-    if (progress === 1) {
+    const [x, row] = bookMove.from;
+    const [endX, endRow] = destination;
+    // Follow the gutter down, cross below the book, then ascend the opposite gutter.
+    const path = [[x, row], [x, 1], [endX, 1], destination];
+    const activeLegs = path.slice(1).filter((point, index) =>
+      point[0] !== path[index][0] || point[1] !== path[index][1]);
+    const route = [path[0], ...activeLegs];
+    if (progress === 1 || route.length === 1) {
       bookMove = undefined;
-      return bookPosition = destination;
+      return bookPosition = [endX, endRow];
     }
-    const ease = progress * progress * (3 - 2 * progress);
+    const step = progress * (route.length - 1);
+    const leg = Math.floor(step);
+    const t = step - leg;
+    const ease = t * t * (3 - 2 * t);
     schedule();
-    return bookPosition = bookMove.from + (destination - bookMove.from) * ease;
+    const from = route[leg];
+    const to = route[leg + 1];
+    return bookPosition = [from[0] + (to[0] - from[0]) * ease, from[1] + (to[1] - from[1]) * ease];
   }
 
   host.addEventListener('robot-monkey-ready', schedule);
@@ -112,14 +128,17 @@ export function followPortfolioScroll(host) {
     const t = Math.max(0, (y - from[0]) / (to[0] - from[0]));
     const eased = t * t * (3 - 2 * t);
     const interpolate = index => from[index] + (to[index] - from[index]) * eased;
-    const stage = bookSpace.getBoundingClientRect();
-    const handoff = Math.max(0, Math.min(1, -stage.top / (vh * .20)));
+    const bounds = book.getBoundingClientRect();
+    const handoff = Math.max(0, Math.min(1, -bookControls.getBoundingClientRect().bottom / (vh * .20)));
     const bookWeight = 1 - handoff * handoff * (3 - 2 * handoff);
-    const dockColumn = getBookPosition(now);
-    const dockScale = mobile ? .58 : .72;
-    const horizontalRoom = Math.max(0, Math.min(stage.width, vw) - canvasWidth * dockScale);
-    const dockX = (vw * .5 + (dockColumn - .5) * horizontalRoom * .80) / vw;
-    const bookY = stage.top + stage.height * .5;
+    const [dockColumn, dockRow] = getBookPosition(now, mobile);
+    const dockScale = mobile ? Math.min(68 / canvasWidth, 61 / canvasHeight) :
+      Math.min(.28, (Math.min(bounds.left, vw - bounds.right) - 16) / canvasWidth, 68 / canvasHeight);
+    const leftDock = mobile ? bounds.left + 38 : bounds.left * .5;
+    const rightDock = mobile ? bounds.right - 38 : (bounds.right + vw) * .5;
+    const dockX = (leftDock + (rightDock - leftDock) * dockColumn) / vw;
+    // The side gutters connect continuously to the reserved space below the book.
+    const bookY = bounds.top + bounds.height * dockRow + 38 * Math.max(0, (dockRow - .55) / .45);
     const x = interpolate(1) + (dockX - interpolate(1)) * bookWeight;
     // Bring the model back from the top edge as the first tile enters view.
     const sourceY = from === titleHold ? Math.max(from[2], -.12) : from[2];
@@ -189,7 +208,7 @@ export function followPortfolioScroll(host) {
   }
 
   const layout = new ResizeObserver(schedule);
-  [hero, contents, book, bookSpace, keywords, bridge, works, projectTitle, playgroundTile].forEach(section => layout.observe(section));
+  [hero, contents, book, bookControls, keywords, bridge, works, projectTitle, playgroundTile].forEach(section => layout.observe(section));
   new MutationObserver(schedule).observe(book, { attributes: true, attributeFilter: ['data-state'] });
   new MutationObserver(schedule).observe(document.body, { attributes: true, attributeFilter: ['class'] });
   const titleHeader = projectTitle.closest('.project-marquee-head');

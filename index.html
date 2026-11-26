@@ -266,6 +266,8 @@
 .intro-copy{z-index:12!important;left:50%!important;top:53.0%!important;translate:-50% -50%!important;width:min(48vw,800px)!important;pointer-events:none!important}
 .masked-title{width:100%!important;aspect-ratio:1448/1086!important;margin:0!important;overflow:visible!important}
 .masked-title img{filter:brightness(0) invert(1) drop-shadow(0 4px 1px rgba(126,30,7,.18))!important}
+/* Show only the lettering in both layers of the shutter reveal. */
+.masked-title img{clip-path:polygon(0.00% 29.56%, 28.67% 29.56%, 28.67% 32.22%, 100.00% 32.22%, 100.00% 63.56%, 42.50% 63.56%, 36.67% 64.00%, 31.67% 65.33%, 28.33% 66.89%, 26.67% 68.00%, 25.00% 69.33%, 23.33% 70.44%, 21.67% 71.78%, 0.00% 71.78%)}
 .title-blur{opacity:.26!important}
 .title-sharp{opacity:1!important}
 
@@ -2247,7 +2249,7 @@ body.wave-main-active .character-img.wave.active{
 
       <div class="intro-copy">
         <p class="intro-kicker">WELCOME TO MY CREATIVE SPACE</p>
-        <h1 class="masked-title" aria-label="Dasom — We're small, but mighty">
+        <h1 class="masked-title" aria-label="Dasom">
           <span class="title-blur"><img loading="lazy" decoding="async" src="assets/portfolio-media/2e1f661ea172e1515747147d.webp" alt=""></span>
           <span class="title-sharp"><img loading="lazy" decoding="async" src="assets/portfolio-media/aa7f0556bfdab7f2746012ba.webp" alt=""></span>
         </h1>

@@ -1,4 +1,4 @@
-import { mountRobotMonkey } from './robot-monkey.js?v=mouse-lift';
+import { mountRobotMonkey } from './robot-monkey.js?v=guide-render-performance';
 import { followPortfolioScroll } from './monkey-scroll.js?v=half-book-peek';
 
 const host = document.getElementById('dasom-monkey-3d');
@@ -7,6 +7,7 @@ if (host) {
   window.robotMonkeyReady = mountRobotMonkey(host, {
     zoom: .85,
     mouseLift: true,
+    optimizeGuide: true,
     randomMotions: ['wave', 'eat', 'scratch']
   }).then(api => {
     window.robotMonkey = api;

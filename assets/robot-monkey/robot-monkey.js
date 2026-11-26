@@ -16,7 +16,9 @@ export async function mountRobotMonkey(host, options = {}) {
   if (host.robotMonkey) return host.robotMonkey;
   const lifetime = new AbortController();
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, options.pixelRatio || 1.5));
+  const optimizeGuide = options.optimizeGuide === true;
+  const maxPixelRatio = Math.min(devicePixelRatio || 1, options.pixelRatio || (optimizeGuide ? 1.25 : 1.5));
+  renderer.setPixelRatio(maxPixelRatio);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.NeutralToneMapping;
   renderer.toneMappingExposure = 1;
@@ -45,7 +47,9 @@ export async function mountRobotMonkey(host, options = {}) {
   const key = new THREE.DirectionalLight(0xffffff, 2);
   key.position.set(-3, 5, 5);
   key.castShadow = true;
-  key.shadow.mapSize.set(1024, 1024);
+  const shadowSize = optimizeGuide ? 512 : 1024;
+  key.shadow.mapSize.set(shadowSize, shadowSize);
+  key.shadow.autoUpdate = !optimizeGuide;
   key.shadow.camera.left = key.shadow.camera.bottom = -2;
   key.shadow.camera.right = key.shadow.camera.top = 2;
   key.shadow.normalBias = .015;
@@ -303,10 +307,25 @@ export async function mountRobotMonkey(host, options = {}) {
     host.dataset.expression = expressionNames[expression];
     return true;
   }
+  let renderWidth, renderHeight, lastShadow = -Infinity;
+  function updateRenderScale() {
+    if (!optimizeGuide) return;
+    const scale = Number(host.style.getPropertyValue('--monkey-scale')) || 1;
+    // Wait for a meaningful size change before reallocating the drawing buffer.
+    const tier = scale < .34 ? .42 : scale < .67 ? .75 : 1;
+    const ratio = maxPixelRatio * tier;
+    if (renderer.getPixelRatio() !== ratio) {
+      renderer.setDrawingBufferSize(renderWidth, renderHeight, ratio);
+    }
+  }
   function resize() {
     const width = host.clientWidth || 600;
     const height = host.clientHeight || 600;
+    renderWidth = width;
+    renderHeight = height;
     renderer.setSize(width, height, false);
+    updateRenderScale();
+    lastShadow = -Infinity;
     camera.aspect = width / height;
     const halfFov = THREE.MathUtils.degToRad(camera.fov / 2);
     const distance = Math.max(size.y / (2 * Math.tan(halfFov)), size.x / (2 * Math.tan(halfFov) * camera.aspect)) * 1.14;
@@ -409,6 +428,7 @@ export async function mountRobotMonkey(host, options = {}) {
       applyFaceSequence();
       updateFace();
       pivot.rotation.set(pitch + guidePitch, yaw + guideYaw, 0);
+      key.shadow.needsUpdate = true;
       renderer.render(scene, camera);
       return api;
     },
@@ -436,9 +456,15 @@ export async function mountRobotMonkey(host, options = {}) {
   resize();
   renderer.setAnimationLoop(time => {
     if (disposed) return;
-    const dt = lastTime ? Math.min((time - lastTime) / 1000, .05) : 0;
+    const hiddenGuide = optimizeGuide && host.style.getPropertyValue('--monkey-opacity') === '0';
+    if (!visible || document.hidden || hiddenGuide) { lastTime = 0; lastShadow = -Infinity; return; }
+    const poseChanging = held || activePointer !== null || actionName !== 'idle' ||
+      Math.abs(pivot.rotation.y - yaw - guideYaw) > .001 ||
+      Math.abs(pivot.rotation.x - pitch - guidePitch) > .001;
+    if (optimizeGuide && lastTime && !poseChanging && time - lastTime < 31) return;
+    const dt = lastTime ? Math.min((time - lastTime) / 1000, optimizeGuide ? .12 : .05) : 0;
     lastTime = time;
-    if (!visible || document.hidden) { lastTime = 0; return; }
+    updateRenderScale();
     if (!paused && !reduced.matches) { elapsed += dt; mixer.update(dt); }
     const sequencedFace = applyFaceSequence();
     if (sequencedFace) { /* Body and face share the clip clock, including pause/seek. */ }
@@ -452,6 +478,10 @@ export async function mountRobotMonkey(host, options = {}) {
     updateFace();
     pivot.rotation.set(pitch + guidePitch, yaw + guideYaw, 0);
     if (bookGrip && !held) poseBookGrip();
+    if (optimizeGuide && time - lastShadow >= (poseChanging ? 31 : 64)) {
+      key.shadow.needsUpdate = true;
+      lastShadow = time;
+    }
     renderer.render(scene, camera);
   });
   host.dataset.loaded = 'true';

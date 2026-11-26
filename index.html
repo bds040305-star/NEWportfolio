@@ -5046,15 +5046,20 @@ body.vertical-ready { scroll-behavior: auto !important; }
         particles.rotation.x = pointer.y * .025;
         renderer.render(scene, camera);
       };
-      raf = requestAnimationFrame(render);
+      const studioVisibility = new IntersectionObserver(([entry]) => {
+        if (disposed) return;
+        if (entry.isIntersecting && !raf) raf = requestAnimationFrame(render);
+        else if (!entry.isIntersecting && raf) { cancelAnimationFrame(raf); raf = 0; }
+      });
+      studioVisibility.observe(studio);
       threeScene = { renderer, scene, resize, dispose: () => {
-        disposed = true; cancelAnimationFrame(raf);
+        disposed = true; cancelAnimationFrame(raf); studioVisibility.disconnect();
         window.removeEventListener('pointermove', onPointer);
         window.removeEventListener('resize', resize);
         scene.traverse((obj) => { if (obj.geometry) obj.geometry.dispose(); if (obj.material) { if (Array.isArray(obj.material)) obj.material.forEach(m => m.dispose()); else obj.material.dispose(); } });
         renderer.dispose(); canvas.remove();
       }};
-      document.addEventListener('visibilitychange', () => { if (!document.hidden && !disposed) renderer.render(scene, camera); });
+      document.addEventListener('visibilitychange', () => { if (!document.hidden && !disposed && raf) renderer.render(scene, camera); });
     } catch (error) {
       const canvas = studio.querySelector('#portfolioThreeCanvas');
       if (canvas) canvas.remove();
@@ -5712,8 +5717,13 @@ h2 {
     const move=e=>{const r=visual.getBoundingClientRect();tx=((e.clientX-r.left)/Math.max(1,r.width)-.5)*2;ty=((e.clientY-r.top)/Math.max(1,r.height)-.5)*2;};
     visual.addEventListener('pointermove',move,{passive:true});window.addEventListener('resize',resize,{passive:true});resize();
     const render=t=>{if(disposed)return;raf=requestAnimationFrame(render);if(document.hidden||t-last<30)return;last=t;px+=(tx-px)*.035;py+=(ty-py)*.035;ring1.rotation.z+=.0012+orbit.energy*.001;ring2.rotation.z-=.001;group.rotation.y=px*.14;group.rotation.x=py*.1;particles.rotation.y+=.0003;particles.rotation.x=py*.035;material.opacity=.25+orbit.energy*.25;renderer.render(scene,camera);};
-    raf=requestAnimationFrame(render);
-    window.addEventListener('pagehide',()=>{disposed=true;cancelAnimationFrame(raf);visual.removeEventListener('pointermove',move);window.removeEventListener('resize',resize);scene.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material.dispose();}});renderer.dispose();},{once:true});
+    const orbitVisibility = new IntersectionObserver(([entry]) => {
+      if (disposed) return;
+      if (entry.isIntersecting && !raf) raf = requestAnimationFrame(render);
+      else if (!entry.isIntersecting && raf) { cancelAnimationFrame(raf); raf = 0; }
+    });
+    orbitVisibility.observe(visual);
+    window.addEventListener('pagehide',()=>{disposed=true;cancelAnimationFrame(raf);orbitVisibility.disconnect();visual.removeEventListener('pointermove',move);window.removeEventListener('resize',resize);scene.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material.dispose();}});renderer.dispose();},{once:true});
   }catch(err){visual.querySelector('#makeItThreeCanvas')?.remove();console.warn('[Make It] Three.js visual unavailable:',err);}
 })();
 </script>
@@ -5943,7 +5953,7 @@ body.project-confirm-open .monkey-guide-dialogue{display:none}
 </style>
 
 <script src="assets/vendor/three-r128.min.js"></script>
-<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=half-book-peek"></script>
+<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=guide-render-performance"></script>
 <style id="dasom-monkey-drag-cue-style">
 #dasom-monkey-3d{cursor:grab;user-select:none;-webkit-user-select:none}
 #dasom-monkey-3d:active{cursor:grabbing}

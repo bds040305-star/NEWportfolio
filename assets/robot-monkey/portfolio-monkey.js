@@ -1,4 +1,4 @@
-import { mountRobotMonkey } from './robot-monkey.js?v=smaller-model';
+import { mountRobotMonkey } from './robot-monkey.js?v=orange-shell';
 
 const host = document.getElementById('dasom-monkey-3d');
 if (host) {

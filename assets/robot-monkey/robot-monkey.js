@@ -85,6 +85,17 @@ export async function mountRobotMonkey(host, options = {}) {
     host.dataset.error = 'model-load-failed';
     throw error;
   }
+  function tintOrangeShell(shader) {
+    shader.fragmentShader = shader.fragmentShader.replace('#include <map_fragment>', `
+      #include <map_fragment>
+      vec3 base = diffuseColor.rgb;
+      // Target the orange paint while preserving the neutral and cream details.
+      float orange = smoothstep(.24, .50, (base.r - base.g) / max(base.r, .05))
+        * smoothstep(.06, .18, base.g - base.b);
+      diffuseColor.g *= 1.0 - .27 * orange;
+    `);
+  }
+
   const pivot = new THREE.Group();
   const model = gltf.scene;
   pivot.add(model);
@@ -105,6 +116,7 @@ export async function mountRobotMonkey(host, options = {}) {
     object.receiveShadow = false;
     object.frustumCulled = false;
     if (object.name === 'Character_Head' || object.userData.webFace) head = object;
+    if (object.material.name.startsWith('Web_Character_')) object.material.onBeforeCompile = tintOrangeShell;
     if (object.userData.bananaProp || object.name.startsWith('GEO_Banana_')) {
       bananaMeshes.push(object);
       object.visible = false;
@@ -138,6 +150,7 @@ export async function mountRobotMonkey(host, options = {}) {
   faceMaterial.emissive.set(0xffffff);
   faceMaterial.emissiveIntensity = 3;
   faceMaterial.onBeforeCompile = shader => {
+    tintOrangeShell(shader);
     shader.uniforms.monkeyScreenMask = { value: mask };
     shader.uniforms.monkeyCellBounds = { value: cellBounds };
     shader.fragmentShader = 'uniform sampler2D monkeyScreenMask;\nuniform vec4 monkeyCellBounds;\n' + shader.fragmentShader;
@@ -150,7 +163,7 @@ export async function mountRobotMonkey(host, options = {}) {
       totalEmissiveRadiance *= texture2D(monkeyScreenMask, vMapUv).r * monkeyInside;
     `);
   };
-  faceMaterial.customProgramCacheKey = () => 'robot-monkey-v36-face-mask-1';
+  faceMaterial.customProgramCacheKey = () => 'robot-monkey-orange-face-mask';
   faceMaterial.needsUpdate = true;
   const mixer = new THREE.AnimationMixer(model);
   const actions = new Map(gltf.animations.map(clip => [clip.name, mixer.clipAction(clip)]));

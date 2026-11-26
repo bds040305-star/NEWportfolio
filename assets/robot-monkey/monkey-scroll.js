@@ -4,6 +4,7 @@ export function followPortfolioScroll(host) {
   const hero = document.getElementById('intro');
   const contents = document.getElementById('contents');
   const book = contents.querySelector('.portfolio-book');
+  const contentsTitle = document.getElementById('contents-title');
   const pageCanvas = book.querySelector('canvas');
   const keywords = document.getElementById('keywords');
   const bridge = document.getElementById('monkeyBridge');
@@ -69,7 +70,7 @@ export function followPortfolioScroll(host) {
     const top = y - height * .5;
     const percent = (pixels, dimension) => Math.max(0, Math.min(100, 100 * pixels / dimension));
     const clip = mobile
-      ? `inset(0 0 ${percent(top + height - bounds.top, height)}% 0)`
+      ? `inset(${percent(contentsTitle.getBoundingClientRect().bottom + 5 - top, height)}% 0 ${percent(top + height - bounds.top, height)}% 0)`
       : `inset(0 ${side < 0 ? percent(left + width - edge, width) : 0}% 42% ${side > 0 ? percent(edge - left, width) : 0}%)`;
     return { x: x / vw, y, clip, lean: side * (mobile ? 9 : 13) * reach,
       opacity: pageTurning ? 0 : Math.min(1, progress * 5) };

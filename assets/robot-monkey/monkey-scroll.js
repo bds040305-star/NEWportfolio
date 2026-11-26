@@ -64,7 +64,7 @@ export function followPortfolioScroll(host) {
     const slide = width * .44 * (1 - reach);
     const x = mobile ? bounds.left + bounds.width * (side > 0 ? .76 : .24)
       : edge + side * (Math.min(gutter * .58, width * .27) - slide);
-    const y = mobile ? bounds.top + height * (.48 - .42 * reach)
+    const y = mobile ? bounds.top + height * (.48 - .55 * reach)
       : bounds.top + bounds.height * .44;
     const left = x - width * .5;
     const top = y - height * .5;

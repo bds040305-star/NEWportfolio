@@ -170,8 +170,8 @@ export function followPortfolioScroll(host) {
     const leaveSkills = dockAt + vh * .18;
     const laneAt = leaveSkills + vh * .15;
     const floorAt = restAt - vh * .17;
-    const progressBetween = (start, end) => {
-      const phase = Math.max(0, Math.min(1, (y - start) / (end - start)));
+    const progressBetween = (start, end, value = y) => {
+      const phase = Math.max(0, Math.min(1, (value - start) / (end - start)));
       return phase * phase * (3 - 2 * phase);
     };
     const bookOnscreen = bounds.bottom > 0 && bounds.top < vh;
@@ -248,19 +248,32 @@ export function followPortfolioScroll(host) {
       x = centerX / vw;
       screenY = mobile ? bounds.top + height * (.48 - .55 * reach) : bounds.top + bounds.height * .46;
       const release = 1 - Math.min(1, stride * 2.4);
-      const percent = (pixels, dimension) => Math.max(0, Math.min(100, 100 * pixels / dimension)) * release;
-      const top = screenY - height * .5;
-      const clip = mobile
-        ? `inset(${percent(contentsTitle.getBoundingClientRect().bottom + 5 - top, height)}% 0 ${percent(top + height - bounds.top, height)}% 0)`
-        : `inset(0 0 0 ${percent(bounds.right - centerX + width * .5, width)}%)`;
+      const percent = (pixels, dimension) => Math.max(0, Math.min(100, 100 * pixels / dimension));
+      const peekTop = screenY - height * .5;
       const lean = (mobile ? 9 : 13) * reach * release;
       if (experienceWalking) {
         const approach = stride * stride * (3 - 2 * stride);
-        x += (landingX - x) * approach;
+        if (mobile) {
+          x += (landingX - x) * approach;
+        } else {
+          const sideX = Math.max(centerX, Math.min(bounds.right + width * .22, vw - width * .32)) / vw;
+          x += (sideX - x) * progressBetween(0, .32, stride);
+          x += (landingX - x) * progressBetween(.57, 1, stride);
+        }
         screenY += (landingY - screenY) * approach;
         scale += (landingScale - scale) * approach;
         if (!replayBookOnScroll && stride < 1) schedule();
       }
+      // Mask against the true book edge after moving, including the bottom corner.
+      const movingWidth = canvasWidth * scale;
+      const movingHeight = canvasHeight * scale;
+      const leftCut = percent(bounds.right - x * vw + movingWidth * .5, movingWidth);
+      const bottomEdge = percent(bounds.bottom - screenY + movingHeight * .5, movingHeight);
+      const clip = mobile
+        ? `inset(${percent(contentsTitle.getBoundingClientRect().bottom + 5 - peekTop, height) * release}% 0 ${percent(peekTop + height - bounds.top, height) * release}% 0)`
+        : leftCut === 0 || bottomEdge === 0 ? 'inset(0 0 0 0)'
+        : bottomEdge === 100 ? `inset(0 0 0 ${leftCut}%)`
+        : `polygon(${leftCut}% 0, 100% 0, 100% 100%, 0 100%, 0 ${bottomEdge}%, ${leftCut}% ${bottomEdge}%)`;
       host.style.setProperty('--first-book-peek-clip', clip);
       host.style.setProperty('--first-book-peek-lean', `${lean}deg`);
       opacity = Math.min(1, t * 5);

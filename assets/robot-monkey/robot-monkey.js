@@ -213,7 +213,7 @@ export async function mountRobotMonkey(host, options = {}) {
   let currentAction, actionName = 'idle', expression = 0, manualBlink = null;
   let autoBlink = true, speaking = false, brightness = 1, faceTimer;
   let previousColumn = -1, previousExpression = -1, previousAtlas = null, eatFace = null, blink = 0, talk = 0;
-  let guideYaw = 0;
+  let guideYaw = 0, guidePitch = 0;
   let yaw = 0, pitch = 0, activePointer = null, lastX = 0, lastY = 0, dragDistance = 0;
   let visible = true, paused = false, disposed = false, elapsed = 0, lastTime = 0;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -348,10 +348,12 @@ export async function mountRobotMonkey(host, options = {}) {
       bookGrip = active;
     },
     getBookGripLine() { return gripLine; },
-    setGuideMotion({ heading = 0, walking = false, greeting = false } = {}) {
+    setGuideMotion({ heading = 0, walking = false, greeting = false, careful = false } = {}) {
       guideYaw = heading;
+      guidePitch = careful ? .12 : 0;
       if (activePointer !== null || (actionName !== 'idle' && actionName !== 'walk')) return;
       play(greeting ? 'wave' : walking ? 'walk' : 'idle');
+      if (actionName === 'walk') currentAction.setEffectiveTimeScale(careful ? .66 : 1);
     },
     eatBanana, scratchHead, playRandom,
     setBlink(value = null) { manualBlink = value === null ? null : THREE.MathUtils.clamp(Number(value), 0, 1); blink = manualBlink ?? 0; updateFace(); return api; },
@@ -366,7 +368,7 @@ export async function mountRobotMonkey(host, options = {}) {
       mixer.update(0);
       applyFaceSequence();
       updateFace();
-      pivot.rotation.set(pitch, yaw + guideYaw, 0);
+      pivot.rotation.set(pitch + guidePitch, yaw + guideYaw, 0);
       renderer.render(scene, camera);
       return api;
     },
@@ -407,7 +409,7 @@ export async function mountRobotMonkey(host, options = {}) {
     } else blink = 0;
     if (!sequencedFace) talk = speaking && !paused && !reduced.matches ? Number(Math.sin(elapsed * 16) > .05) : 0;
     updateFace();
-    pivot.rotation.set(pitch, yaw + guideYaw, 0);
+    pivot.rotation.set(pitch + guidePitch, yaw + guideYaw, 0);
     if (bookGrip) poseBookGrip();
     renderer.render(scene, camera);
   });

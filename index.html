@@ -2415,6 +2415,7 @@ body.wave-main-active .character-img.wave.active{
           <span class="keyword-chip">HTML/CSS</span><span class="keyword-chip">JavaScript</span><span class="keyword-chip new">Zustand</span><span class="keyword-chip">TMDB API</span><span class="keyword-chip">ScrollTrigger</span><span class="keyword-chip hot">Interaction</span><span class="keyword-chip">GitHub</span><span class="keyword-chip">User Flow</span><span class="keyword-chip">Information Architecture</span><span class="keyword-chip">Frontend</span><span class="keyword-chip hot">Creative Coding</span><span class="keyword-chip">Animation</span><span class="keyword-chip">Component Design</span><span class="keyword-chip">API Integration</span><span class="keyword-chip">Performance</span><span class="keyword-chip">Mobile UX</span><span class="keyword-chip">Storytelling</span><span class="keyword-chip">Prototyping</span>
         </div>
       </div>
+      <div class="skills-monkey-rest" aria-hidden="true"></div>
     </section>
   <section class="monkey-bridge" id="monkeyBridge" aria-label="주황색에서 흰색으로 이어지는 UX/UI 인터랙션">
     <div class="monkey-bridge-sticky" id="monkeyBridgeSticky">
@@ -5937,7 +5938,7 @@ body.project-confirm-open .monkey-guide-dialogue{display:none}
 </style>
 
 <script src="assets/vendor/three-r128.min.js"></script>
-<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=skills-walk"></script>
+<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=skills-careful"></script>
 <style id="dasom-monkey-drag-cue-style">
 #dasom-monkey-3d{cursor:grab;user-select:none;-webkit-user-select:none}
 #dasom-monkey-3d:active{cursor:grabbing}
@@ -6103,6 +6104,19 @@ html,body { max-width:none!important; }
 #monkeyBridge:not([data-section02-motion-ready]) .bridge-word{transform:translateX(-50%)}
 #monkeyBridge #monkeyBridgeSticky .bridge-word-left{top:30%}
 #monkeyBridge #monkeyBridgeSticky .bridge-word-right{top:62%}
+</style>
+<style>
+.skills-monkey-rest{display:none}
+@media(prefers-reduced-motion:no-preference){
+  #keywords .keyword-cloud{
+    width:calc(100vw - clamp(108px,24vw,290px))!important;
+    margin-right:0!important;
+  }
+  .skills-monkey-rest{display:block;height:min(46.5vh,443px);flex:none}
+}
+@media(max-width:760px) and (prefers-reduced-motion:no-preference){
+  .skills-monkey-rest{height:35.1vh}
+}
 </style>
 </body>
 </html>

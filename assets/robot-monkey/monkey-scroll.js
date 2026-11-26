@@ -1,4 +1,4 @@
-import { createMonkeyDialogue } from './monkey-dialogue.js?v=skills-walk';
+import { createMonkeyDialogue } from './monkey-dialogue.js?v=skills-careful';
 
 export function followPortfolioScroll(host) {
   const hero = document.getElementById('intro');
@@ -9,6 +9,8 @@ export function followPortfolioScroll(host) {
   const contentsTitle = document.getElementById('contents-title');
   const keywords = document.getElementById('keywords');
   const skillsTitle = keywords.querySelector('h2 span');
+  const keywordCloud = keywords.querySelector('.keyword-cloud');
+  const restSpace = keywords.querySelector('.skills-monkey-rest');
   const bridge = document.getElementById('monkeyBridge');
   const works = document.getElementById('works');
   const projectTitle = works.querySelector('.project-title span');
@@ -161,8 +163,15 @@ export function followPortfolioScroll(host) {
     const skillsScale = Math.min(mobile ? .24 : .28, (vw - skillsBounds.right - 14) / canvasWidth);
     const skillsX = (skillsBounds.right + 8 + canvasWidth * skillsScale * .5) / vw;
     const skillsY = skillsBounds.top + skillsBounds.height * .5;
-    const dockAt = Math.min(skillsBounds.top + y - vh * .39, turnStart - vh * .26);
-    const leaveSkills = turnStart - vh * .12;
+    const restAt = turnStart - vh * .17;
+    const dockAt = Math.min(skillsBounds.top + y - vh * .39, restAt - vh * .72);
+    const leaveSkills = dockAt + vh * .18;
+    const laneAt = leaveSkills + vh * .15;
+    const floorAt = restAt - vh * .17;
+    const progressBetween = (start, end) => {
+      const phase = Math.max(0, Math.min(1, (y - start) / (end - start)));
+      return phase * phase * (3 - 2 * phase);
+    };
     const bookOnscreen = bounds.bottom > 0 && bounds.top < vh;
     const landing = experienceLanding.getBoundingClientRect();
     const landingOnscreen = experienceFrameTime !== null && landing.bottom > 0 && landing.top < vh;
@@ -174,7 +183,9 @@ export function followPortfolioScroll(host) {
     const hasExperience = experienceFrameTime !== null;
     const departure = Math.min(landingY + y - vh * .43, dockAt - vh * .18);
     const arrivedAtLanding = experienceElapsed >= experiencePause + experienceWalkDuration;
-    const crossingToSkills = hasExperience && y >= departure && y < turnStart && (arrivedAtLanding || y >= dockAt);
+    const crossingToSkills = y < turnStart && (hasExperience
+      ? y >= departure && (arrivedAtLanding || y >= dockAt)
+      : y >= dockAt && !bookOnscreen);
     const peeking = peekStart !== null && (bookOnscreen || landingOnscreen) && !crossingToSkills;
     const experienceWalking = peeking && experienceFrameTime !== null;
     if (experienceFrameTime !== null) {
@@ -248,24 +259,53 @@ export function followPortfolioScroll(host) {
       }
     }
     const settledBySkills = crossingToSkills && y >= dockAt && y <= leaveSkills;
+    const carefulDescent = crossingToSkills && y > leaveSkills && y < restAt;
+    const relieved = crossingToSkills && y >= restAt && y < turnStart - vh * .035;
     if (crossingToSkills) {
-      const approach = Math.min(1, (y - departure) / (dockAt - departure));
-      const enter = approach * approach * (3 - 2 * approach);
-      const release = Math.max(0, (y - leaveSkills) / (turnStart - leaveSkills));
-      const exit = release * release * (3 - 2 * release);
+      const cloud = keywordCloud.getBoundingClientRect();
+      const rest = restSpace.getBoundingClientRect();
+      const laneScale = Math.min(mobile ? .22 : .29, (vw - cloud.right - 16) / canvasWidth);
+      const laneCenter = (cloud.right + vw) * .5;
+      const laneTop = Math.min(skillsY, cloud.top - laneScale * canvasHeight * .5 - 8);
+      const laneBottom = cloud.bottom + laneScale * canvasHeight * .5 + 8;
+      const restScale = mobile ? .54 : .56;
+      const restY = rest.top + canvasHeight * restScale * .5;
+      let targetX = skillsX;
+      let targetY = skillsY;
+      let targetScale = skillsScale;
+      if (y >= leaveSkills && y < laneAt) {
+        const move = progressBetween(leaveSkills, laneAt);
+        targetX += (laneCenter / vw - targetX) * move;
+        targetY += (laneTop - targetY) * move;
+        targetScale += (laneScale - targetScale) * move;
+      } else if (y >= laneAt && y < floorAt) {
+        const move = progressBetween(laneAt, floorAt);
+        targetX = (laneCenter + Math.sin(move * Math.PI * 3) * (mobile ? 3 : 6)) / vw;
+        targetY = laneTop + (laneBottom - laneTop) * move;
+        targetScale = laneScale;
+      } else if (y >= floorAt) {
+        const move = progressBetween(floorAt, restAt);
+        targetScale = laneScale + (restScale - laneScale) * move;
+        targetX = laneCenter / vw + (.50 - laneCenter / vw) * move;
+        targetY = Math.max(laneBottom + (restY - laneBottom) * move, cloud.bottom + targetScale * canvasHeight * .5 + 8);
+      }
+      const enter = hasExperience ? progressBetween(departure, dockAt) : 1;
+      const exit = progressBetween(restAt + vh * .085, turnStart);
+      if (enter < 1) {
+        x = landingX;
+        screenY = landingY;
+        scale = landingScale;
+      }
       const weight = enter * (1 - exit);
-      const startX = approach < 1 ? landingX : x;
-      const startY = approach < 1 ? landingY : screenY;
-      const startScale = approach < 1 ? landingScale : scale;
-      x = startX + (skillsX - startX) * weight;
-      screenY = startY + (skillsY - startY) * weight;
-      scale = startScale + (skillsScale - startScale) * weight;
+      x += (targetX - x) * weight;
+      screenY += (targetY - screenY) * weight;
+      scale += (targetScale - scale) * weight;
       opacity = 1;
       if (host.dataset.motion === 'eat') model?.play('idle');
     }
     host.style.setProperty('--monkey-x', `${x * 100}vw`);
     host.style.setProperty('--monkey-y', `${screenY}px`);
-    host.inert = opacity < .9 || (!peeking && !settledBySkills && scale < .45 && nextIndex < 9);
+    host.inert = opacity < .9 || (!peeking && !settledBySkills && !relieved && scale < .45 && nextIndex < 9);
     host.style.setProperty('--monkey-scale', scale);
     host.style.setProperty('--monkey-opacity', opacity);
 
@@ -274,10 +314,10 @@ export function followPortfolioScroll(host) {
     const turning = turn > 0 && turn < 1;
     const turnHeading = Math.PI * 2 * turn * turn * (3 - 2 * turn);
     const travelHeading = turning ? 0 : Math.sign(to[1] - from[1]) * .5 * Math.sin(Math.PI * t);
-    const heading = coverActive || peeking ? 0 : turnHeading + travelHeading;
-    const walking = !coverActive && !peeking && !settledBySkills && Math.abs(delta) > .5 && !turning;
+    const heading = coverActive || peeking || relieved || settledBySkills ? 0 : carefulDescent ? -.20 : turnHeading + travelHeading;
+    const walking = !coverActive && !peeking && !settledBySkills && !relieved && Math.abs(delta) > .5 && !turning;
     const greeting = lastY < turnEnd && y >= turnEnd;
-    let dialogueScene = settledBySkills ? 'keywords' : null;
+    let dialogueScene = relieved ? 'skillsRelief' : settledBySkills ? 'keywords' : null;
     if (model && !crossingToSkills && !coverActive && !peeking && !waitingForBook && document.body.classList.contains('vertical-ready')) {
       if (y < turnStart) {
         if (y < contentsApproach * .8) dialogueScene = 'welcome';
@@ -299,11 +339,11 @@ export function followPortfolioScroll(host) {
         model.setGuideMotion({ walking: stepping });
       }
     } else if (model && !waitingForExperience && (delta || !stopTimer)) {
-      model.setGuideMotion({ heading, walking, greeting });
+      model.setGuideMotion({ heading, walking, greeting, careful: carefulDescent });
       clearTimeout(stopTimer);
       stopTimer = setTimeout(() => {
         stopTimer = undefined;
-        model.setGuideMotion({ heading });
+        model.setGuideMotion({ heading, careful: carefulDescent });
       }, 160);
     }
   }

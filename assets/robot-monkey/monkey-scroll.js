@@ -131,7 +131,7 @@ export function followPortfolioScroll(host) {
       const height = canvasHeight * scale;
       const rightMargin = width * .46 + 12;
       const mobileCenter = Math.min(vw - rightMargin, bounds.left + bounds.width * .76);
-      const gutterCenter = (bounds.right + vw) * .5;
+      const gutterCenter = Math.min((bounds.right + vw) * .5, vw - width * .40 - 12);
       const centerX = mobile ? mobileCenter : gutterCenter - width * .57 * (1 - reach);
       x = centerX / vw;
       screenY = mobile ? bounds.top + height * (.48 - .55 * reach) : bounds.top + bounds.height * .46;

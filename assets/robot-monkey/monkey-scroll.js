@@ -134,15 +134,17 @@ export function followPortfolioScroll(host) {
       scale = mobile ? .58 : .72;
       const width = canvasWidth * scale;
       const height = canvasHeight * scale;
-      const centerX = mobile ? bounds.left + bounds.width * .76
-        : bounds.right + Math.min((vw - bounds.right) * .53, width * .27) - width * .49 * (1 - reach);
+      const rightMargin = width * .46 + 12;
+      const mobileCenter = Math.min(vw - rightMargin, bounds.left + bounds.width * .76);
+      const gutterCenter = (bounds.right + vw) * .5;
+      const centerX = mobile ? mobileCenter : gutterCenter - width * .57 * (1 - reach);
       x = centerX / vw;
       screenY = mobile ? bounds.top + height * (.48 - .55 * reach) : bounds.top + bounds.height * .46;
       const percent = (pixels, dimension) => Math.max(0, Math.min(100, 100 * pixels / dimension));
       const top = screenY - height * .5;
       const clip = mobile
         ? `inset(${percent(contentsTitle.getBoundingClientRect().bottom + 5 - top, height)}% 0 ${percent(top + height - bounds.top, height)}% 0)`
-        : `inset(0 0 28% ${percent(bounds.right - centerX + width * .5, width)}%)`;
+        : `inset(0 0 0 ${percent(bounds.right - centerX + width * .5, width)}%)`;
       host.style.setProperty('--first-book-peek-clip', clip);
       host.style.setProperty('--first-book-peek-lean', `${(mobile ? 9 : 13) * reach}deg`);
       opacity = Math.min(1, t * 5);

@@ -5884,13 +5884,34 @@ body:not(.vertical-ready) #dasom-monkey-3d.is-scroll-guide,
 body.case-overlay-open #dasom-monkey-3d.is-scroll-guide,
 body.project-confirm-open #dasom-monkey-3d.is-scroll-guide,
 #dasom-monkey-3d.is-scroll-guide[data-offstage]{display:none}
+.monkey-guide-dialogue{
+  position:fixed;z-index:46;
+  --dialogue-center:clamp(106px, var(--dialogue-x, 50vw), 100vw - 106px);
+  left:var(--dialogue-center);
+  top:max(88px, var(--dialogue-y, 35vh));transform:translate(-50%, -100%);
+  max-width:min(195px, calc(100vw - 32px));margin:0;padding:8px 13px;
+  border:1px solid #efc8aa;border-radius:16px;
+  background:#fff9ef;color:#492918;box-shadow:0 5px 18px #572b171a;
+  font:600 13px/1.45 'Pretendard',sans-serif;text-align:center;
+  word-break:keep-all;pointer-events:none;
+}
+.monkey-guide-dialogue::after{
+  content:'';position:absolute;top:100%;
+  left:clamp(12px,calc(50% + var(--dialogue-x, 50vw) - var(--dialogue-center)),calc(100% - 12px));
+  width:8px;height:8px;background:inherit;border-right:inherit;border-bottom:inherit;
+  transform:translate(-50%,-4px) rotate(45deg);
+}
+body:not(.vertical-ready) .monkey-guide-dialogue,
+body.case-overlay-open .monkey-guide-dialogue,
+body.project-confirm-open .monkey-guide-dialogue{display:none}
+
 
 #dasom-monkey-3d canvas{display:block;width:100%;height:100%;background:transparent!important}
 @media(max-width:760px){#dasom-monkey-3d{left:50%;top:56%;width:100vw;height:65vh}}
 </style>
 
 <script src="assets/vendor/three-r128.min.js"></script>
-<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=scroll-motion"></script>
+<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=guide-dialogue"></script>
 <style id="dasom-monkey-drag-cue-style">
 #dasom-monkey-3d{cursor:grab;user-select:none;-webkit-user-select:none}
 #dasom-monkey-3d:active{cursor:grabbing}

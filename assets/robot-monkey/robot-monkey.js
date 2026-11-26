@@ -241,6 +241,7 @@ export async function mountRobotMonkey(host, options = {}) {
   function scratchHead() { return play('scratch'); }
   function playRandom() {
     if (['eat', 'scratch', 'wave', 'legacyWave'].includes(actionName) && currentAction.isRunning()) return api;
+    host.dispatchEvent(new Event('robot-monkey-interact'));
     return play(randomMotions[Math.floor(Math.random() * randomMotions.length)]);
   }
   function applyFaceSequence() {

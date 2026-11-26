@@ -1,3 +1,5 @@
+import { createMonkeyDialogue } from './monkey-dialogue.js';
+
 export function followPortfolioScroll(host) {
   const hero = document.getElementById('intro');
   const contents = document.getElementById('contents');
@@ -5,6 +7,7 @@ export function followPortfolioScroll(host) {
   const bridge = document.getElementById('monkeyBridge');
   const works = document.getElementById('works');
   const originalParent = host.parentElement;
+  const updateDialogue = createMonkeyDialogue(host);
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const smallScreen = matchMedia('(max-width: 760px)');
 
@@ -47,6 +50,7 @@ export function followPortfolioScroll(host) {
     const last = poses.at(-1);
     host.toggleAttribute('data-offstage', y >= last[0]);
     if (y >= last[0]) {
+      updateDialogue(null);
       clearTimeout(stopTimer);
       stopTimer = undefined;
       host.robotMonkey?.setGuideMotion();
@@ -59,8 +63,10 @@ export function followPortfolioScroll(host) {
     const t = Math.max(0, (y - from[0]) / (to[0] - from[0]));
     const eased = t * t * (3 - 2 * t);
     const interpolate = index => from[index] + (to[index] - from[index]) * eased;
-    host.style.setProperty('--monkey-x', `${interpolate(1) * 100}vw`);
-    host.style.setProperty('--monkey-y', `${interpolate(2) * vh}px`);
+    const x = interpolate(1);
+    const screenY = interpolate(2) * vh;
+    host.style.setProperty('--monkey-x', `${x * 100}vw`);
+    host.style.setProperty('--monkey-y', `${screenY}px`);
     const scale = interpolate(3);
     host.inert = scale < .45;
     host.style.setProperty('--monkey-scale', scale);
@@ -76,6 +82,17 @@ export function followPortfolioScroll(host) {
     const walking = Math.abs(delta) > .5 && !turning;
     const greeting = lastY < turnEnd && y >= turnEnd;
     const model = host.robotMonkey;
+    let dialogueScene = null;
+    if (model && document.body.classList.contains('vertical-ready')) {
+      if (y < turnStart) {
+        if (y < contentsApproach * .8) dialogueScene = 'welcome';
+        else if (y < Math.min(poses[3][0], turnStart * .76)) dialogueScene = 'contents';
+        else dialogueScene = 'keywords';
+      } else if (y > turnEnd + (last[0] - turnEnd) * .38 && interpolate(4) > .24) {
+        dialogueScene = 'projects';
+      }
+    }
+    updateDialogue(dialogueScene, x, screenY, scale);
     if (model && (delta || !stopTimer)) {
       model.setGuideMotion({ heading, walking, greeting });
       clearTimeout(stopTimer);
@@ -95,6 +112,7 @@ export function followPortfolioScroll(host) {
     if (follow) {
       document.body.append(host);
     } else {
+      updateDialogue(null);
       originalParent.prepend(host);
       host.removeAttribute('data-offstage');
       host.inert = false;
@@ -111,6 +129,7 @@ export function followPortfolioScroll(host) {
 
   const layout = new ResizeObserver(schedule);
   [hero, contents, keywords, bridge, works].forEach(section => layout.observe(section));
+  new MutationObserver(schedule).observe(document.body, { attributes: true, attributeFilter: ['class'] });
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', schedule);
   reducedMotion.addEventListener('change', setMotionPreference);

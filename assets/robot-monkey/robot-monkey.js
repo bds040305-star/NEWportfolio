@@ -32,6 +32,7 @@ export async function mountRobotMonkey(host, options = {}) {
   host.setAttribute('aria-label', '반려로봇 원숭이. 드래그로 회전, 클릭 또는 Enter로 랜덤 동작');
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(32, 1, .01, 100);
+  camera.zoom = options.zoom ?? 1;
   const environment = new RoomEnvironment();
   const pmrem = new THREE.PMREMGenerator(renderer);
   const envTarget = pmrem.fromScene(environment, .04);

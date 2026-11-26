@@ -1,8 +1,11 @@
-import { mountRobotMonkey } from './robot-monkey.js';
+import { mountRobotMonkey } from './robot-monkey.js?v=smaller-model';
 
 const host = document.getElementById('dasom-monkey-3d');
 if (host) {
-  window.robotMonkeyReady = mountRobotMonkey(host, { randomMotions: ['wave', 'eat', 'scratch'] }).then(api => {
+  window.robotMonkeyReady = mountRobotMonkey(host, {
+    zoom: .85,
+    randomMotions: ['wave', 'eat', 'scratch']
+  }).then(api => {
     window.robotMonkey = api;
     return api;
   }).catch(error => {

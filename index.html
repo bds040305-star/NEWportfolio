@@ -2029,6 +2029,15 @@ body.wave-main-active .character-img.wave.active{
   #contents-title{margin-bottom:110px}
   .portfolio-contents > .portfolio-book{width:min(100%,555px)}
 }
+.experience-monkey-landing{display:none}
+@media(prefers-reduced-motion:no-preference){
+  #contents:has(.portfolio-book[data-state="experience"]) .experience-monkey-landing{
+    display:block;width:100%;height:min(66.94vh,637.06px)
+  }
+}
+@media(max-width:760px) and (prefers-reduced-motion:no-preference){
+  #contents:has(.portfolio-book[data-state="experience"]) .experience-monkey-landing{height:42.23vh}
+}
 #dasom-monkey-3d[data-cover-grip]{clip-path:var(--cover-grip-clip)}
 #dasom-monkey-3d[data-first-book-peek]{clip-path:var(--first-book-peek-clip)}
 #dasom-monkey-3d[data-first-book-peek] canvas{transform:rotate(var(--first-book-peek-lean,0deg))}
@@ -2388,6 +2397,7 @@ body.wave-main-active .character-img.wave.active{
       <button class="portfolio-about-link" id="book-back" type="button" hidden>← 목차로 돌아가기</button>
       <button class="portfolio-about-link" id="book-experience-next" type="button" hidden>경험 이야기 보기 →</button>
     </div>
+    <div class="experience-monkey-landing" aria-hidden="true"></div>
     <span class="portfolio-book-status" id="book-status" role="status">목차 페이지</span>
   </section>
 
@@ -5927,7 +5937,7 @@ body.project-confirm-open .monkey-guide-dialogue{display:none}
 </style>
 
 <script src="assets/vendor/three-r128.min.js"></script>
-<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=experience-steps"></script>
+<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=experience-clear-text"></script>
 <style id="dasom-monkey-drag-cue-style">
 #dasom-monkey-3d{cursor:grab;user-select:none;-webkit-user-select:none}
 #dasom-monkey-3d:active{cursor:grabbing}

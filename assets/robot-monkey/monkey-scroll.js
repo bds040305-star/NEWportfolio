@@ -4,6 +4,7 @@ export function followPortfolioScroll(host) {
   const hero = document.getElementById('intro');
   const contents = document.getElementById('contents');
   const book = contents.querySelector('.portfolio-book');
+  const experienceLanding = contents.querySelector('.experience-monkey-landing');
   const contentsTitle = document.getElementById('contents-title');
   const keywords = document.getElementById('keywords');
   const bridge = document.getElementById('monkeyBridge');
@@ -153,7 +154,9 @@ export function followPortfolioScroll(host) {
     let scale = interpolate(3);
     let opacity = interpolate(4);
     const bookOnscreen = bounds.bottom > 0 && bounds.top < vh;
-    const peeking = peekStart !== null && bookOnscreen;
+    const landing = experienceLanding.getBoundingClientRect();
+    const landingOnscreen = experienceFrameTime !== null && landing.bottom > 0 && landing.top < vh;
+    const peeking = peekStart !== null && (bookOnscreen || landingOnscreen);
     const experienceWalking = peeking && experienceFrameTime !== null;
     if (experienceFrameTime !== null) {
       // Keep the steps visible even when rendering drops a frame.
@@ -211,9 +214,9 @@ export function followPortfolioScroll(host) {
       if (experienceWalking) {
         const approach = stride * stride * (3 - 2 * stride);
         const finalScale = scale * 1.12;
-        const standingX = mobile ? vw * .72 : bounds.left + bounds.width * .90;
-        const bookLandingY = mobile ? bounds.bottom - height * .16 : bounds.top + bounds.height * .68;
-        const standingY = Math.min(bookLandingY, vh - canvasHeight * finalScale * .38 - 12);
+        const halfWidth = canvasWidth * finalScale * .5;
+        const standingX = Math.min(vw - halfWidth, bounds.left + bounds.width * .83);
+        const standingY = landing.top + canvasHeight * finalScale * .5;
         x += (standingX / vw - x) * approach;
         screenY += (standingY - screenY) * approach;
         scale += (finalScale - scale) * approach;
@@ -256,12 +259,14 @@ export function followPortfolioScroll(host) {
     }
     updateDialogue(dialogueScene, x, screenY, scale);
     if (model && experienceWalking) {
-      if (stride === 1 && !experiencePosed) {
+      const poseVisible = screenY > canvasHeight * scale * .28 &&
+        screenY < vh - canvasHeight * scale * .28;
+      if (stride === 1 && poseVisible && !experiencePosed) {
         experiencePosed = true;
         model.setGuideMotion();
         model.setExpression('happy', { duration: 1600 });
         model.wave();
-      } else if (stride < 1) {
+      } else if (!experiencePosed) {
         model.setGuideMotion({ walking: stepping });
       }
     } else if (model && !waitingForExperience && (delta || !stopTimer)) {
@@ -310,7 +315,7 @@ export function followPortfolioScroll(host) {
   }
 
   const layout = new ResizeObserver(schedule);
-  [hero, contents, book, keywords, bridge, works, projectTitle, playgroundTile].forEach(section => layout.observe(section));
+  [hero, contents, book, experienceLanding, keywords, bridge, works, projectTitle, playgroundTile].forEach(section => layout.observe(section));
   new MutationObserver(schedule).observe(document.body, { attributes: true, attributeFilter: ['class'] });
   const titleHeader = projectTitle.closest('.project-marquee-head');
   titleHeader.addEventListener('transitionend', schedule);

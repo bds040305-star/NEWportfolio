@@ -1,5 +1,5 @@
 import { mountRobotMonkey } from './robot-monkey.js?v=guide-dialogue';
-import { followPortfolioScroll } from './monkey-scroll.js?v=uncropped-book-peek';
+import { followPortfolioScroll } from './monkey-scroll.js?v=fixed-book-peek';
 
 const host = document.getElementById('dasom-monkey-3d');
 if (host) {

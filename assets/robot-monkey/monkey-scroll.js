@@ -30,17 +30,12 @@ export function followPortfolioScroll(host) {
     blinked = false;
     clearTimeout(blinkTimer);
     host.robotMonkey?.setBlink(null);
-    book.removeAttribute('data-monkey-peek');
     schedule();
   });
   book.addEventListener('book-turn-finish', () => {
     if (!waitingForBook || reducedMotion.matches) return;
     waitingForBook = false;
     peekStart = performance.now();
-    book.setAttribute('data-monkey-peek', '');
-    if (smallScreen.matches && book.getBoundingClientRect().top < 150) {
-      window.scrollBy({ top: contentsTitle.getBoundingClientRect().top - 72, behavior: 'instant' });
-    }
     schedule();
   });
 
@@ -60,6 +55,7 @@ export function followPortfolioScroll(host) {
     const bridgeStart = top(bridge);
     const worksStart = top(works);
     const vw = window.innerWidth;
+    const bounds = book.getBoundingClientRect();
     const title = projectTitle.getBoundingClientRect();
     const tile = playgroundTile.getBoundingClientRect();
     const canvasWidth = host.clientWidth || (mobile ? vw : Math.min(vw * .58, 810));
@@ -79,7 +75,7 @@ export function followPortfolioScroll(host) {
     const titleHold = [leaveTitle, titleX, titleY, titleScale, 1];
     // Each pose specifies scroll position, viewport coordinates, scale, and opacity.
     const poses = [
-      [0, mobile ? .46 : .31, mobile ? .38 : .45, mobile ? .58 : .72, 1],
+      [0, mobile ? .46 : (bounds.left + bounds.width * .25) / vw, mobile ? .38 : .45, mobile ? .58 : .72, 1],
       [contentsApproach, .66, .47, .51, 1],
       [contentsDock, mobile ? .81 : .87, mobile ? .64 : .72, mobile ? .28 : .32, 1],
       [top(keywords) - vh * .48, .77, .64, .34, 1],
@@ -121,7 +117,6 @@ export function followPortfolioScroll(host) {
     let screenY = (sourceY + (to[2] - sourceY) * eased) * vh;
     let scale = interpolate(3);
     let opacity = interpolate(4);
-    const bounds = book.getBoundingClientRect();
     const bookOnscreen = bounds.bottom > 0 && bounds.top < vh;
     const peeking = peekStart !== null && bookOnscreen;
     host.toggleAttribute('data-first-book-peek', peeking);
@@ -205,7 +200,6 @@ export function followPortfolioScroll(host) {
       originalParent.prepend(host);
       host.removeAttribute('data-offstage');
       host.removeAttribute('data-first-book-peek');
-      book.removeAttribute('data-monkey-peek');
       waitingForBook = false;
       peekStart = null;
       clearTimeout(blinkTimer);

@@ -24,6 +24,11 @@ export function followPortfolioScroll(host) {
   let blinked = false;
   let coverPeekStart = null;
   let coverBlinked = false;
+  let waitingForExperience = false;
+  let experienceStart = null;
+  let experiencePosed = false;
+  const experiencePause = 300;
+  const experienceWalkDuration = 1550;
 
   function updateCoverGrip(now, active, width) {
     const model = host.robotMonkey;
@@ -45,16 +50,25 @@ export function followPortfolioScroll(host) {
   book.addEventListener('book-turn-start', ({ detail }) => {
     if (reducedMotion.matches) return;
     waitingForBook = detail.from === 'contents' && detail.to === 'about';
-    peekStart = null;
+    waitingForExperience = detail.from === 'about' && detail.to === 'experience';
+    experienceStart = null;
+    experiencePosed = false;
+    if (waitingForExperience) peekStart ??= performance.now() - 1300;
+    else peekStart = null;
     blinked = false;
     clearTimeout(blinkTimer);
     host.robotMonkey?.setBlink(null);
     schedule();
   });
   book.addEventListener('book-turn-finish', () => {
-    if (!waitingForBook || reducedMotion.matches) return;
-    waitingForBook = false;
-    peekStart = performance.now();
+    if (reducedMotion.matches) return;
+    if (waitingForBook) {
+      waitingForBook = false;
+      peekStart = performance.now();
+    } else if (waitingForExperience) {
+      waitingForExperience = false;
+      experienceStart = performance.now();
+    } else return;
     schedule();
   });
 
@@ -138,6 +152,10 @@ export function followPortfolioScroll(host) {
     let opacity = interpolate(4);
     const bookOnscreen = bounds.bottom > 0 && bounds.top < vh;
     const peeking = peekStart !== null && bookOnscreen;
+    const experienceWalking = peeking && experienceStart !== null;
+    const experienceTime = experienceWalking ? now - experienceStart : 0;
+    const stride = Math.max(0, Math.min(1, (experienceTime - experiencePause) / experienceWalkDuration));
+    const stepping = stride > 0 && stride < 1;
     const coverActive = book.dataset.state === 'contents' && !waitingForBook &&
       bounds.top > 58 && bounds.top < vh * .85 && document.body.classList.contains('vertical-ready');
     const model = host.robotMonkey;
@@ -175,16 +193,28 @@ export function followPortfolioScroll(host) {
       const centerX = mobile ? mobileCenter : gutterCenter - width * .57 * (1 - reach);
       x = centerX / vw;
       screenY = mobile ? bounds.top + height * (.48 - .55 * reach) : bounds.top + bounds.height * .46;
-      const percent = (pixels, dimension) => Math.max(0, Math.min(100, 100 * pixels / dimension));
+      const release = 1 - Math.min(1, stride * 2.4);
+      const percent = (pixels, dimension) => Math.max(0, Math.min(100, 100 * pixels / dimension)) * release;
       const top = screenY - height * .5;
       const clip = mobile
         ? `inset(${percent(contentsTitle.getBoundingClientRect().bottom + 5 - top, height)}% 0 ${percent(top + height - bounds.top, height)}% 0)`
         : `inset(0 0 0 ${percent(bounds.right - centerX + width * .5, width)}%)`;
+      const lean = (mobile ? 9 : 13) * reach * release;
+      if (experienceWalking) {
+        const approach = stride * stride * (3 - 2 * stride);
+        const finalScale = scale * 1.12;
+        const standingX = mobile ? vw * .72 : bounds.left + bounds.width * .90;
+        const standingY = mobile ? bounds.bottom - height * .16 : bounds.top + bounds.height * .68;
+        x += (standingX / vw - x) * approach;
+        screenY += (standingY - screenY) * approach;
+        scale += (finalScale - scale) * approach;
+        if (stride < 1) schedule();
+      }
       host.style.setProperty('--first-book-peek-clip', clip);
-      host.style.setProperty('--first-book-peek-lean', `${(mobile ? 9 : 13) * reach}deg`);
+      host.style.setProperty('--first-book-peek-lean', `${lean}deg`);
       opacity = Math.min(1, t * 5);
       if (elapsed < 1080) schedule();
-      else if (!blinked && host.robotMonkey) {
+      else if (!waitingForExperience && !experienceWalking && !blinked && host.robotMonkey) {
         blinked = true;
         host.robotMonkey.setBlink(1);
         blinkTimer = setTimeout(() => host.robotMonkey?.setBlink(null), 160);
@@ -202,8 +232,8 @@ export function followPortfolioScroll(host) {
     const turning = turn > 0 && turn < 1;
     const turnHeading = Math.PI * 2 * turn * turn * (3 - 2 * turn);
     const travelHeading = turning ? 0 : Math.sign(to[1] - from[1]) * .5 * Math.sin(Math.PI * t);
-    const heading = coverActive ? 0 : turnHeading + travelHeading;
-    const walking = !coverActive && Math.abs(delta) > .5 && !turning;
+    const heading = coverActive || peeking ? 0 : turnHeading + travelHeading;
+    const walking = !coverActive && !peeking && Math.abs(delta) > .5 && !turning;
     const greeting = lastY < turnEnd && y >= turnEnd;
     let dialogueScene = null;
     if (model && !coverActive && !peeking && !waitingForBook && document.body.classList.contains('vertical-ready')) {
@@ -216,7 +246,16 @@ export function followPortfolioScroll(host) {
       }
     }
     updateDialogue(dialogueScene, x, screenY, scale);
-    if (model && (delta || !stopTimer)) {
+    if (model && experienceWalking) {
+      if (stride === 1 && !experiencePosed) {
+        experiencePosed = true;
+        model.setGuideMotion();
+        model.setExpression('happy', { duration: 1600 });
+        model.wave();
+      } else if (stride < 1) {
+        model.setGuideMotion({ walking: stepping });
+      }
+    } else if (model && !waitingForExperience && (delta || !stopTimer)) {
       model.setGuideMotion({ heading, walking, greeting });
       clearTimeout(stopTimer);
       stopTimer = setTimeout(() => {
@@ -242,6 +281,8 @@ export function followPortfolioScroll(host) {
       host.removeAttribute('data-cover-grip');
       host.robotMonkey?.setBookGrip(false);
       waitingForBook = false;
+      waitingForExperience = false;
+      experienceStart = null;
       peekStart = null;
       clearTimeout(blinkTimer);
       host.robotMonkey?.setBlink(null);

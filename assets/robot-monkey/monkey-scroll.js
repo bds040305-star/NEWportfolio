@@ -28,7 +28,7 @@ export function followPortfolioScroll(host) {
   let waitingForExperience = false;
   let experienceFrameTime = null;
   let experienceElapsed = 0;
-  let experiencePosed = false;
+  let experienceSnackStarted = false;
   const experiencePause = 300;
   const experienceWalkDuration = 1550;
 
@@ -55,7 +55,8 @@ export function followPortfolioScroll(host) {
     waitingForExperience = detail.from === 'about' && detail.to === 'experience';
     experienceFrameTime = null;
     experienceElapsed = 0;
-    experiencePosed = false;
+    if (experienceSnackStarted && host.dataset.motion === 'eat') host.robotMonkey?.play('idle');
+    experienceSnackStarted = false;
     if (waitingForExperience) peekStart ??= performance.now() - 1300;
     else peekStart = null;
     blinked = false;
@@ -259,14 +260,13 @@ export function followPortfolioScroll(host) {
     }
     updateDialogue(dialogueScene, x, screenY, scale);
     if (model && experienceWalking) {
-      const poseVisible = screenY > canvasHeight * scale * .28 &&
+      const snackVisible = screenY > canvasHeight * scale * .28 &&
         screenY < vh - canvasHeight * scale * .28;
-      if (stride === 1 && poseVisible && !experiencePosed) {
-        experiencePosed = true;
+      if (stride === 1 && snackVisible && !experienceSnackStarted) {
+        experienceSnackStarted = true;
         model.setGuideMotion();
-        model.setExpression('happy', { duration: 1600 });
-        model.wave();
-      } else if (!experiencePosed) {
+        model.eatBanana();
+      } else if (!experienceSnackStarted) {
         model.setGuideMotion({ walking: stepping });
       }
     } else if (model && !waitingForExperience && (delta || !stopTimer)) {

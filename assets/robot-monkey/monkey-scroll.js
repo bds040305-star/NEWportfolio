@@ -4,7 +4,7 @@ export function followPortfolioScroll(host) {
   const hero = document.getElementById('intro');
   const contents = document.getElementById('contents');
   const book = contents.querySelector('.portfolio-book');
-  const bookSpace = contents.querySelector('.book-monkey-space');
+  const pageCanvas = book.querySelector('canvas');
   const keywords = document.getElementById('keywords');
   const bridge = document.getElementById('monkeyBridge');
   const works = document.getElementById('works');
@@ -19,26 +19,60 @@ export function followPortfolioScroll(host) {
   let previousY = window.scrollY;
   let stopTimer;
   let bookState = book.dataset.state;
-  let bookPosition;
-  let bookMove;
+  let peekStart;
+  let blinkTimer;
+  let peekBlinked = false;
+  let wasTurning = false;
 
-  function getBookPosition(now) {
+  function getBookPose(now, mobile, vw, width, height) {
+    const bounds = book.getBoundingClientRect();
     const state = book.dataset.state;
-    const destination = { contents: 0, about: 1, experience: .5 }[state] ?? .5;
-    if (state !== bookState) {
-      bookMove = { start: now, from: bookPosition ?? destination };
+    const pageTurning = pageCanvas.classList.contains('active');
+    if (state !== bookState || wasTurning !== pageTurning) {
       bookState = state;
+      wasTurning = pageTurning;
+      peekStart = now;
+      peekBlinked = false;
+      if (blinkTimer) {
+        clearTimeout(blinkTimer);
+        blinkTimer = undefined;
+        host.robotMonkey?.setBlink(null);
+      }
     }
-    if (!bookMove) return bookPosition = destination;
+    const elapsed = peekStart === undefined ? Infinity : now - peekStart;
+    const progress = Math.max(0, Math.min(1, (elapsed - 135) / 620));
+    const reach = 1 - (1 - progress) ** 3 + .055 * Math.sin(Math.PI * progress);
+    if (!pageTurning && elapsed < 1040) schedule();
+    if (state !== 'contents' && !pageTurning && peekStart !== undefined && elapsed >= 760 && !peekBlinked) {
+      peekBlinked = true;
+      host.robotMonkey?.setBlink(1);
+      blinkTimer = setTimeout(() => {
+        host.robotMonkey?.setBlink(null);
+        blinkTimer = undefined;
+      }, 160);
+    }
 
-    const progress = Math.min(1, (now - bookMove.start) / 760);
-    if (progress === 1) {
-      bookMove = undefined;
-      return bookPosition = destination;
+    if (state === 'contents') {
+      return { x: (bounds.left + bounds.width * .25) / vw,
+        y: bounds.top + bounds.height * .47, opacity: pageTurning ? 0 : reach };
     }
-    const ease = progress * progress * (3 - 2 * progress);
-    schedule();
-    return bookPosition = bookMove.from + (destination - bookMove.from) * ease;
+
+    const side = state === 'about' ? 1 : -1;
+    const edge = side > 0 ? bounds.right : bounds.left;
+    const gutter = side > 0 ? vw - edge : edge;
+    const slide = width * .44 * (1 - reach);
+    const x = mobile ? bounds.left + bounds.width * (side > 0 ? .76 : .24)
+      : edge + side * (Math.min(gutter * .58, width * .27) - slide);
+    const y = mobile ? bounds.top + height * (.48 - .42 * reach)
+      : bounds.top + bounds.height * .44;
+    const left = x - width * .5;
+    const top = y - height * .5;
+    const percent = (pixels, dimension) => Math.max(0, Math.min(100, 100 * pixels / dimension));
+    const clip = mobile
+      ? `inset(0 0 ${percent(top + height - bounds.top, height)}% 0)`
+      : `inset(0 ${side < 0 ? percent(left + width - edge, width) : 0}% 42% ${side > 0 ? percent(edge - left, width) : 0}%)`;
+    return { x: x / vw, y, clip, lean: side * (mobile ? 9 : 13) * reach,
+      opacity: pageTurning ? 0 : Math.min(1, progress * 5) };
   }
 
   host.addEventListener('robot-monkey-ready', schedule);
@@ -112,14 +146,19 @@ export function followPortfolioScroll(host) {
     const t = Math.max(0, (y - from[0]) / (to[0] - from[0]));
     const eased = t * t * (3 - 2 * t);
     const interpolate = index => from[index] + (to[index] - from[index]) * eased;
-    const stage = bookSpace.getBoundingClientRect();
-    const handoff = Math.max(0, Math.min(1, -stage.top / (vh * .20)));
+    const bookBottom = book.getBoundingClientRect().bottom;
+    const handoff = Math.max(0, Math.min(1, -bookBottom / (vh * .24)));
     const bookWeight = 1 - handoff * handoff * (3 - 2 * handoff);
-    const dockColumn = getBookPosition(now);
     const dockScale = mobile ? .58 : .72;
-    const horizontalRoom = Math.max(0, Math.min(stage.width, vw) - canvasWidth * dockScale);
-    const dockX = (vw * .5 + (dockColumn - .5) * horizontalRoom * .80) / vw;
-    const bookY = stage.top + stage.height * .5;
+    const pose = getBookPose(now, mobile, vw, canvasWidth * dockScale, canvasHeight * dockScale);
+    const masked = Boolean(pose.clip) && bookWeight === 1;
+    host.toggleAttribute('data-book-peek', masked);
+    if (masked) {
+      host.style.setProperty('--book-peek-clip', pose.clip);
+      host.style.setProperty('--book-peek-lean', `${pose.lean}deg`);
+    }
+    const dockX = pose.x;
+    const bookY = pose.y;
     const x = interpolate(1) + (dockX - interpolate(1)) * bookWeight;
     // Bring the model back from the top edge as the first tile enters view.
     const sourceY = from === titleHold ? Math.max(from[2], -.12) : from[2];
@@ -128,9 +167,10 @@ export function followPortfolioScroll(host) {
     host.style.setProperty('--monkey-x', `${x * 100}vw`);
     host.style.setProperty('--monkey-y', `${screenY}px`);
     const scale = interpolate(3) + (dockScale - interpolate(3)) * bookWeight;
-    host.inert = bookWeight === 1 ? Boolean(bookMove) : scale < .45 && nextIndex < 9;
+    host.inert = bookWeight === 1 ? pose.opacity < .9 : scale < .45 && nextIndex < 9;
     host.style.setProperty('--monkey-scale', scale);
-    host.style.setProperty('--monkey-opacity', interpolate(4));
+    const bookOpacity = pose.clip && bookWeight < 1 ? 0 : pose.opacity;
+    host.style.setProperty('--monkey-opacity', interpolate(4) * (1 - bookWeight) + bookOpacity * bookWeight);
 
     const turnStart = poses[4][0];
     const turnEnd = poses[5][0];
@@ -139,11 +179,11 @@ export function followPortfolioScroll(host) {
     const turnHeading = Math.PI * 2 * turn * turn * (3 - 2 * turn);
     const travelHeading = turning ? 0 : Math.sign(to[1] - from[1]) * .5 * Math.sin(Math.PI * t);
     const heading = turnHeading + travelHeading * (1 - bookWeight);
-    const walking = !turning && (bookWeight === 1 ? Boolean(bookMove) : Math.abs(delta) > .5);
+    const walking = !turning && bookWeight < 1 && Math.abs(delta) > .5;
     const greeting = lastY < turnEnd && y >= turnEnd;
     const model = host.robotMonkey;
     let dialogueScene = null;
-    if (model && bookWeight === 0 && document.body.classList.contains('vertical-ready')) {
+    if (model && (!pose.clip || bookWeight === 0) && pose.opacity > .9 && document.body.classList.contains('vertical-ready')) {
       if (y < turnStart) {
         if (y < contentsApproach * .8) dialogueScene = 'welcome';
         else if (y < Math.min(poses[3][0], turnStart * .76)) dialogueScene = 'contents';
@@ -153,7 +193,7 @@ export function followPortfolioScroll(host) {
       }
     }
     updateDialogue(dialogueScene, x, screenY, scale);
-    if (model && (bookMove || delta || !stopTimer)) {
+    if (model && (delta || !stopTimer)) {
       model.setGuideMotion({ heading, walking, greeting });
       clearTimeout(stopTimer);
       stopTimer = setTimeout(() => {
@@ -175,6 +215,12 @@ export function followPortfolioScroll(host) {
       updateDialogue(null);
       originalParent.prepend(host);
       host.removeAttribute('data-offstage');
+      host.removeAttribute('data-book-peek');
+      if (blinkTimer) {
+        clearTimeout(blinkTimer);
+        blinkTimer = undefined;
+        host.robotMonkey?.setBlink(null);
+      }
       host.removeAttribute('data-in-playground');
       host.inert = false;
       cancelAnimationFrame(frame);
@@ -189,7 +235,8 @@ export function followPortfolioScroll(host) {
   }
 
   const layout = new ResizeObserver(schedule);
-  [hero, contents, book, bookSpace, keywords, bridge, works, projectTitle, playgroundTile].forEach(section => layout.observe(section));
+  [hero, contents, book, keywords, bridge, works, projectTitle, playgroundTile].forEach(section => layout.observe(section));
+  new MutationObserver(schedule).observe(pageCanvas, { attributes: true, attributeFilter: ['class'] });
   new MutationObserver(schedule).observe(book, { attributes: true, attributeFilter: ['data-state'] });
   new MutationObserver(schedule).observe(document.body, { attributes: true, attributeFilter: ['class'] });
   const titleHeader = projectTitle.closest('.project-marquee-head');

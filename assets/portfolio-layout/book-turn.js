@@ -118,11 +118,6 @@ const shade=ctx.createLinearGradient(lo,0,hi,0);shade.addColorStop(0,'rgba(57,44
         settle();
       }
       if (restoreFocus) (to === 'contents' ? forward : back).focus({preventScroll:true});
-      if (matchMedia('(max-width: 760px) and (prefers-reduced-motion: no-preference)').matches &&
-          book.getBoundingClientRect().top < 150) {
-        const heading = document.getElementById('contents-title');
-        window.scrollBy({ top: heading.getBoundingClientRect().top - 72, behavior: 'instant' });
-      }
     }
     if (!ctx || matchMedia('(prefers-reduced-motion: reduce)').matches) {
       finish();

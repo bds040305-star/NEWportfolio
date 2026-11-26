@@ -2020,14 +2020,9 @@ body.wave-main-active .character-img.wave.active{
 }
 </style>
 <style>
-@media(min-width:761px) and (prefers-reduced-motion:no-preference){
-  .portfolio-contents > .portfolio-book{max-width:77vw}
-}
-@media(max-width:760px) and (prefers-reduced-motion:no-preference){
-  #contents-title{margin-bottom:98px}
-}
-#dasom-monkey-3d[data-book-peek]{clip-path:var(--book-peek-clip)}
-#dasom-monkey-3d[data-book-peek] canvas{transform:rotate(var(--book-peek-lean,0deg))}
+.book-monkey-space{width:100%;height:min(59.76vh,568.8px)}
+@media(max-width:760px){.book-monkey-space{height:37.7vh}}
+@media(prefers-reduced-motion:reduce){.book-monkey-space{display:none}}
 </style>
 <style id="book-contents-spine-style">
 .portfolio-book[data-state="contents"] > .portfolio-book-half:first-child {
@@ -2384,6 +2379,7 @@ body.wave-main-active .character-img.wave.active{
       <button class="portfolio-about-link" id="book-back" type="button" hidden>← 목차로 돌아가기</button>
       <button class="portfolio-about-link" id="book-experience-next" type="button" hidden>경험 이야기 보기 →</button>
     </div>
+    <div class="book-monkey-space" aria-hidden="true"></div>
     <span class="portfolio-book-status" id="book-status" role="status">목차 페이지</span>
   </section>
 
@@ -5923,7 +5919,7 @@ body.project-confirm-open .monkey-guide-dialogue{display:none}
 </style>
 
 <script src="assets/vendor/three-r128.min.js"></script>
-<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=contents-side-peek"></script>
+<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=book-full-size"></script>
 <style id="dasom-monkey-drag-cue-style">
 #dasom-monkey-3d{cursor:grab;user-select:none;-webkit-user-select:none}
 #dasom-monkey-3d:active{cursor:grabbing}
@@ -5995,7 +5991,7 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
 #about .ha-about-portrait > [data-node-id="310:5721"] { display: none !important; }
 #about .ha-about-portrait > [data-node-id="310:5722"] { display: block !important; }
 </style>
-  <script defer src="assets/portfolio-layout/book-turn.js?v=peek-landing"></script>
+  <script defer src="assets/portfolio-layout/book-turn.js?v=experience"></script>
 
 
 

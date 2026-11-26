@@ -5904,6 +5904,11 @@ h2 {
   transform:translate3d(var(--monkey-x, 38vw),var(--monkey-y, 55vh),0)
     translate(-50%,-50%) scale(var(--monkey-scale, .76));
 }
+#dasom-monkey-3d.is-scroll-guide[data-lifted]{
+  translate:var(--monkey-lift-x,0px) var(--monkey-lift-y,0px);
+  clip-path:none;
+  z-index:47;
+}
 #playground-monkey-box img{transition:opacity .3s ease}
 body:has(#dasom-monkey-3d.loaded[data-in-playground]) #playground-monkey-box img{opacity:.24}
 #dasom-monkey-3d.is-scroll-guide.loaded{opacity:var(--monkey-opacity, 1);transition:none}
@@ -5938,7 +5943,7 @@ body.project-confirm-open .monkey-guide-dialogue{display:none}
 </style>
 
 <script src="assets/vendor/three-r128.min.js"></script>
-<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=skills-full-width"></script>
+<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=mouse-lift"></script>
 <style id="dasom-monkey-drag-cue-style">
 #dasom-monkey-3d{cursor:grab;user-select:none;-webkit-user-select:none}
 #dasom-monkey-3d:active{cursor:grabbing}

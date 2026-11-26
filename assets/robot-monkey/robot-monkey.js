@@ -7,7 +7,7 @@ export const expressionNames = ['neutral', 'happy', 'sad', 'surprised', 'sleepy'
 export const expressionLabels = ['기본', '기쁨', '시무룩', '놀람', '졸림', '애정·만족', '말하기', '화남'];
 export const motionNames = {
   idle: 'Character_Idle', wave: 'Character_Greet', legacyWave: 'Character_Arm_Wave',
-  walk: 'Character_Walk_InPlace', forward: 'Character_Walk_Forward', eat: 'Character_Eat_Banana', scratch: 'Character_Scratch_Head'
+  walk: 'Character_Walk_InPlace', forward: 'Character_Walk_Forward', eat: 'Character_Eat_Banana', scratch: 'Character_Scratch_Head', lift: 'Character_Drag_Struggle'
 };
 
 /** Self-contained WebGL2 viewer. Asset paths are relative to this module, including on GitHub Pages. */
@@ -29,7 +29,10 @@ export async function mountRobotMonkey(host, options = {}) {
   host.style.cursor = 'grab';
   host.tabIndex = 0;
   host.setAttribute('role', 'img');
-  host.setAttribute('aria-label', '반려로봇 원숭이. 드래그로 회전, 클릭 또는 Enter로 랜덤 동작');
+  const mouseLift = options.mouseLift === true;
+  host.setAttribute('aria-label', mouseLift
+    ? '반려로봇 원숭이. 마우스로 위로 드래그해 들어 올리기, 클릭 또는 Enter로 랜덤 동작'
+    : '반려로봇 원숭이. 드래그로 회전, 클릭 또는 Enter로 랜덤 동작');
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(32, 1, .01, 100);
   camera.zoom = options.zoom ?? 1;
@@ -60,10 +63,10 @@ export async function mountRobotMonkey(host, options = {}) {
   decoder.setWorkerLimit(1);
   const loader = new GLTFLoader().setDRACOLoader(decoder);
   const textures = new THREE.TextureLoader();
-  let gltf, atlas, mask, eating, greeting, eatAtlas, scratching;
+  let gltf, atlas, mask, eating, greeting, eatAtlas, scratching, struggling;
   try {
-    [gltf, atlas, mask, eating, greeting, eatAtlas, scratching] = await Promise.all([
-      loader.loadAsync(new URL('./robot-monkey.glb', import.meta.url).href),
+    [gltf, atlas, mask, eating, greeting, eatAtlas, scratching, struggling] = await Promise.all([
+      loader.loadAsync(new URL('./robot-monkey.glb?v=mouse-lift', import.meta.url).href),
       textures.loadAsync(new URL('./face-atlas.png', import.meta.url).href),
       textures.loadAsync(new URL('./face-mask.png', import.meta.url).href),
       fetch(new URL('./eat-banana.json', import.meta.url)).then(response => {
@@ -78,7 +81,11 @@ export async function mountRobotMonkey(host, options = {}) {
       fetch(new URL('./scratch-head.json', import.meta.url)).then(response => {
         if (!response.ok) throw new Error('Scratch face schedule is missing.');
         return response.json();
-      })
+      }),
+      mouseLift ? fetch(new URL('./drag-struggle.json', import.meta.url)).then(response => {
+        if (!response.ok) throw new Error('Lift face schedule is missing.');
+        return response.json();
+      }) : null
     ]);
   } catch (error) {
     decoder.dispose(); envTarget.dispose(); pmrem.dispose(); renderer.dispose(); renderer.domElement.remove();
@@ -215,6 +222,7 @@ export async function mountRobotMonkey(host, options = {}) {
   let previousColumn = -1, previousExpression = -1, previousAtlas = null, eatFace = null, blink = 0, talk = 0;
   let guideYaw = 0, guidePitch = 0;
   let yaw = 0, pitch = 0, activePointer = null, lastX = 0, lastY = 0, dragDistance = 0;
+  let liftGesture = null, held = false;
   let visible = true, paused = false, disposed = false, elapsed = 0, lastTime = 0;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   function updateFace() {
@@ -250,6 +258,7 @@ export async function mountRobotMonkey(host, options = {}) {
   }
   function play(name = 'idle') {
     const clipName = motionNames[name] || name;
+    if (held !== (clipName === motionNames.lift)) return api;
     const next = actions.get(clipName);
     if (!next) throw new RangeError(`Unknown animation: ${name}`);
     if (next === currentAction && next.isRunning()) return api;
@@ -285,7 +294,7 @@ export async function mountRobotMonkey(host, options = {}) {
     return play(randomMotions[Math.floor(Math.random() * randomMotions.length)]);
   }
   function applyFaceSequence() {
-    const sequence = actionName === 'eat' ? eating : actionName === 'wave' ? greeting : actionName === 'scratch' ? scratching : null;
+    const sequence = actionName === 'eat' ? eating : actionName === 'wave' ? greeting : actionName === 'scratch' ? scratching : actionName === 'lift' ? struggling : null;
     if (!sequence) return false;
     const index = Math.min(sequence.face_samples.length - 1, Math.max(0, Math.round(currentAction.time * sequence.fps)));
     const state = sequence.face_samples[index];
@@ -311,24 +320,55 @@ export async function mountRobotMonkey(host, options = {}) {
   visibilityObserver.observe(host);
   const eventOptions = { signal: lifetime.signal };
   host.addEventListener('pointerdown', event => {
-    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    if (activePointer !== null || (event.pointerType === 'mouse' && event.button !== 0)) return;
+    liftGesture = mouseLift && event.pointerType === 'mouse'
+      ? { x: event.clientX, y: event.clientY, yaw, pitch, expression }
+      : null;
     activePointer = event.pointerId; lastX = event.clientX; lastY = event.clientY; dragDistance = 0;
     host.setPointerCapture(event.pointerId); host.style.cursor = 'grabbing';
   }, eventOptions);
   host.addEventListener('pointermove', event => {
     if (activePointer !== event.pointerId) return;
     const dx = event.clientX - lastX, dy = event.clientY - lastY;
-    yaw += dx * .012; pitch = THREE.MathUtils.clamp(pitch + dy * .006, -.7, .7);
     dragDistance += Math.abs(dx) + Math.abs(dy); lastX = event.clientX; lastY = event.clientY;
+    if (liftGesture && event.clientY <= liftGesture.y - 8 && !held) {
+      held = true;
+      yaw = liftGesture.yaw;
+      pitch = liftGesture.pitch;
+      host.dataset.lifted = 'true';
+      play('lift');
+      applyFaceSequence();
+      updateFace();
+    }
+    if (held) {
+      host.style.setProperty('--monkey-lift-x', `${event.clientX - liftGesture.x}px`);
+      host.style.setProperty('--monkey-lift-y', `${Math.min(0, event.clientY - liftGesture.y)}px`);
+    } else {
+      yaw += dx * .012; pitch = THREE.MathUtils.clamp(pitch + dy * .006, -.7, .7);
+    }
   }, eventOptions);
   function release(event) {
     if (activePointer !== event.pointerId) return;
     activePointer = null; host.style.cursor = 'grab';
     if (host.hasPointerCapture(event.pointerId)) host.releasePointerCapture(event.pointerId);
-    if (event.type === 'pointerup' && dragDistance < 6) playRandom();
+    if (held) {
+      held = false;
+      delete host.dataset.lifted;
+      host.style.removeProperty('--monkey-lift-x');
+      host.style.removeProperty('--monkey-lift-y');
+      play('idle');
+      setExpression(liftGesture.expression);
+    } else if (event.type === 'pointerup' && dragDistance < 6) {
+      playRandom();
+    }
+    liftGesture = null;
   }
   host.addEventListener('pointerup', release, eventOptions);
   host.addEventListener('pointercancel', release, eventOptions);
+  host.addEventListener('lostpointercapture', release, eventOptions);
+  window.addEventListener('blur', () => {
+    if (activePointer !== null) release({ pointerId: activePointer, type: 'pointercancel' });
+  }, eventOptions);
   host.addEventListener('keydown', event => {
     if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); playRandom(); }
     else if (event.key === 'ArrowLeft') { event.preventDefault(); yaw -= .15; }
@@ -379,6 +419,7 @@ export async function mountRobotMonkey(host, options = {}) {
       clips: gltf.animations.map(c => c.name), triangles: renderer.info.render.triangles, faceUvChannel: ledChannel, threeVersion: THREE.REVISION }; },
     dispose() {
       if (disposed) return;
+      if (activePointer !== null) release({ pointerId: activePointer, type: 'pointercancel' });
       disposed = true; clearTimeout(faceTimer); lifetime.abort(); renderer.setAnimationLoop(null);
       resizeObserver.disconnect(); visibilityObserver.disconnect(); mixer.stopAllAction();
       model.traverse(o => { if (o.isMesh) { o.geometry.dispose(); for (const m of [o.material].flat()) {
@@ -410,7 +451,7 @@ export async function mountRobotMonkey(host, options = {}) {
     if (!sequencedFace) talk = speaking && !paused && !reduced.matches ? Number(Math.sin(elapsed * 16) > .05) : 0;
     updateFace();
     pivot.rotation.set(pitch + guidePitch, yaw + guideYaw, 0);
-    if (bookGrip) poseBookGrip();
+    if (bookGrip && !held) poseBookGrip();
     renderer.render(scene, camera);
   });
   host.dataset.loaded = 'true';

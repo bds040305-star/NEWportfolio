@@ -6,6 +6,8 @@ export function followPortfolioScroll(host) {
   const keywords = document.getElementById('keywords');
   const bridge = document.getElementById('monkeyBridge');
   const works = document.getElementById('works');
+  const projectTitle = works.querySelector('.project-title span');
+  const playgroundTile = document.querySelector('#playground-monkey-box img');
   const originalParent = host.parentElement;
   const updateDialogue = createMonkeyDialogue(host);
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
@@ -30,6 +32,24 @@ export function followPortfolioScroll(host) {
     const contentsDock = contentsStart + vh * (contentsStart > 0 ? .14 : .52);
     const bridgeStart = top(bridge);
     const worksStart = top(works);
+    const vw = window.innerWidth;
+    const title = projectTitle.getBoundingClientRect();
+    const tile = playgroundTile.getBoundingClientRect();
+    const canvasWidth = host.clientWidth || (mobile ? vw : Math.min(vw * .58, 810));
+    const canvasHeight = host.clientHeight || (mobile ? vh * .65 : Math.min(vh * .83, 790));
+    const tileScale = .94 * Math.min(tile.width / canvasWidth, tile.height / canvasHeight);
+    const titleGap = mobile ? 5 : 12;
+    const titleScale = Math.min(mobile ? .12 : .14, Math.max(.04, (vw - title.right - titleGap * 2) / canvasWidth));
+    const titleX = (title.right + titleGap + canvasWidth * titleScale * .5) / vw;
+    const titleY = (title.top + title.height * .57) / vh;
+    const tileX = (tile.left + tile.width * .5) / vw;
+    const tileY = (tile.top + tile.height * .5) / vh;
+    const tileTop = tile.top + y;
+    const titleDock = worksStart - vh * .18;
+    const leaveTitle = Math.max(titleDock + vh * .18, tileTop - vh * .92);
+    const enterTile = Math.max(leaveTitle + vh * .20, tileTop + tile.height * .5 - vh * .55);
+    const leaveTile = tileTop + tile.height;
+    const titleHold = [leaveTitle, titleX, titleY, titleScale, 1];
     // Each pose specifies scroll position, viewport coordinates, scale, and opacity.
     const poses = [
       [0, mobile ? .46 : .31, mobile ? .38 : .45, mobile ? .58 : .72, 1],
@@ -40,7 +60,10 @@ export function followPortfolioScroll(host) {
       [bridgeStart + vh * .22, .50, .53, 1.04, 1],
       [worksStart - vh * .79, .60, .45, .76, 1],
       [worksStart - vh * .50, mobile ? .76 : .79, .33, .39, 1],
-      [worksStart - vh * .18, .89, .22, .24, 0]
+      [titleDock, titleX, titleY, titleScale, 1],
+      titleHold,
+      [enterTile, tileX, tileY, tileScale, 1],
+      [leaveTile, tileX, tileY, tileScale, 1]
     ];
 
     // Short sections can put nearby landmarks at the same scroll position.
@@ -48,6 +71,8 @@ export function followPortfolioScroll(host) {
       poses[i][0] = Math.max(poses[i][0], poses[i - 1][0] + 1);
     }
     const last = poses.at(-1);
+    const inPlayground = y >= enterTile && y < last[0];
+    host.toggleAttribute('data-in-playground', inPlayground);
     host.toggleAttribute('data-offstage', y >= last[0]);
     if (y >= last[0]) {
       updateDialogue(null);
@@ -64,11 +89,13 @@ export function followPortfolioScroll(host) {
     const eased = t * t * (3 - 2 * t);
     const interpolate = index => from[index] + (to[index] - from[index]) * eased;
     const x = interpolate(1);
-    const screenY = interpolate(2) * vh;
+    // Bring the model back from the top edge as the first tile enters view.
+    const sourceY = from === titleHold ? Math.max(from[2], -.12) : from[2];
+    const screenY = (sourceY + (to[2] - sourceY) * eased) * vh;
     host.style.setProperty('--monkey-x', `${x * 100}vw`);
     host.style.setProperty('--monkey-y', `${screenY}px`);
     const scale = interpolate(3);
-    host.inert = scale < .45;
+    host.inert = scale < .45 && nextIndex < 9;
     host.style.setProperty('--monkey-scale', scale);
     host.style.setProperty('--monkey-opacity', interpolate(4));
 
@@ -88,7 +115,7 @@ export function followPortfolioScroll(host) {
         if (y < contentsApproach * .8) dialogueScene = 'welcome';
         else if (y < Math.min(poses[3][0], turnStart * .76)) dialogueScene = 'contents';
         else dialogueScene = 'keywords';
-      } else if (y > turnEnd + (last[0] - turnEnd) * .38 && interpolate(4) > .24) {
+      } else if (y > turnEnd + (poses[8][0] - turnEnd) * .38 && y < leaveTitle) {
         dialogueScene = 'projects';
       }
     }
@@ -115,6 +142,7 @@ export function followPortfolioScroll(host) {
       updateDialogue(null);
       originalParent.prepend(host);
       host.removeAttribute('data-offstage');
+      host.removeAttribute('data-in-playground');
       host.inert = false;
       cancelAnimationFrame(frame);
       frame = 0;
@@ -128,8 +156,11 @@ export function followPortfolioScroll(host) {
   }
 
   const layout = new ResizeObserver(schedule);
-  [hero, contents, keywords, bridge, works].forEach(section => layout.observe(section));
+  [hero, contents, keywords, bridge, works, projectTitle, playgroundTile].forEach(section => layout.observe(section));
   new MutationObserver(schedule).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  const titleHeader = projectTitle.closest('.project-marquee-head');
+  titleHeader.addEventListener('transitionend', schedule);
+  new MutationObserver(schedule).observe(titleHeader, { attributes: true, attributeFilter: ['style', 'class'] });
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', schedule);
   reducedMotion.addEventListener('change', setMotionPreference);

@@ -2407,7 +2407,7 @@ body.wave-main-active .character-img.wave.active{
 
     <section class="v-section v-order" id="works">
       <div class="project-marquee-head v-reveal">
-        <h2 class="project-title">PROJECTS</h2>
+        <h2 class="project-title"><span>PROJECTS</span></h2>
       </div>
       <div class="project-marquee-wrap v-reveal">
         <div class="project-marquee-viewport" id="projectMarqueeViewport" aria-label="프로젝트 가로 스크롤 영역">
@@ -2465,7 +2465,7 @@ body.wave-main-active .character-img.wave.active{
     <section class="portfolio-playground" id="playground" aria-labelledby="playground-title">
       <h2 class="portfolio-display" id="playground-title">PLAYGROUND</h2>
       <ul class="portfolio-playground-grid">
-        <li><img src="assets/portfolio-layout/frugo.png" width="190" height="190" alt="Frugo 실험 작업" loading="lazy" decoding="async"></li>
+        <li id="playground-monkey-box"><img src="assets/portfolio-layout/frugo.png" width="190" height="190" alt="Frugo 실험 작업" loading="lazy" decoding="async"></li>
         <li><img src="assets/portfolio-layout/playground-cat.gif" width="190" height="190" alt="움직이는 빨간 고양이" loading="lazy" decoding="async"></li>
         <li><img src="assets/portfolio-layout/pink.png" width="190" height="190" alt="분홍색 일러스트" loading="lazy" decoding="async"></li>
         <li><img src="assets/portfolio-layout/linework.png" width="190" height="190" alt="선으로 그린 일러스트" loading="lazy" decoding="async"></li>
@@ -5879,6 +5879,8 @@ h2 {
   transform:translate3d(var(--monkey-x, 38vw),var(--monkey-y, 55vh),0)
     translate(-50%,-50%) scale(var(--monkey-scale, .76));
 }
+#playground-monkey-box img{transition:opacity .3s ease}
+body:has(#dasom-monkey-3d.loaded[data-in-playground]) #playground-monkey-box img{opacity:.24}
 #dasom-monkey-3d.is-scroll-guide.loaded{opacity:var(--monkey-opacity, 1);transition:none}
 body:not(.vertical-ready) #dasom-monkey-3d.is-scroll-guide,
 body.case-overlay-open #dasom-monkey-3d.is-scroll-guide,
@@ -5911,7 +5913,7 @@ body.project-confirm-open .monkey-guide-dialogue{display:none}
 </style>
 
 <script src="assets/vendor/three-r128.min.js"></script>
-<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=guide-dialogue"></script>
+<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=project-playground"></script>
 <style id="dasom-monkey-drag-cue-style">
 #dasom-monkey-3d{cursor:grab;user-select:none;-webkit-user-select:none}
 #dasom-monkey-3d:active{cursor:grabbing}

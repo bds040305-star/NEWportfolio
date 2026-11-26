@@ -15,6 +15,7 @@
   imgA.src = book.dataset.aboutImage;
   let current = 'contents';
   let turning = false;
+  let openAboutWhenSettled = false;
   const turnDuration = 1100;
   const landingDuration = 180;
 
@@ -84,14 +85,12 @@ const shade=ctx.createLinearGradient(lo,0,hi,0);shade.addColorStop(0,'rgba(57,44
     if (turning || to === current) return;
     turning = true;
     const restoreFocus = [forward, back, hotspot, experience].includes(document.activeElement);
-    const showPrint = current !== 'experience' && to !== 'experience';
-    try {
-      if (showPrint) await Promise.all([imgC.decode(), imgA.decode()]);
-    } catch {
-      if (to === 'about') {
-        turning = false;
-        document.getElementById('profile-dialog')?.showModal();
-        return;
+    let showPrint = current !== 'experience' && to !== 'experience';
+    if (showPrint) {
+      try {
+        await Promise.all([imgC.decode(), imgA.decode()]);
+      } catch {
+        showPrint = false;
       }
     }
     const transition = { from: current, to };
@@ -111,6 +110,10 @@ const shade=ctx.createLinearGradient(lo,0,hi,0);shade.addColorStop(0,'rgba(57,44
         cv.classList.remove('active');
         turning = false;
         book.dispatchEvent(new CustomEvent('book-turn-finish', { detail: transition }));
+        if (openAboutWhenSettled) {
+          openAboutWhenSettled = false;
+          turn('about');
+        }
       }
       if (animateLanding) {
         const fade = cv.animate([{ opacity: 1 }, { opacity: 0 }], {
@@ -145,6 +148,10 @@ const shade=ctx.createLinearGradient(lo,0,hi,0);shade.addColorStop(0,'rgba(57,44
     requestAnimationFrame(frame);
   }
   if (ctx) new ResizeObserver(resize).observe(book);
+  book.addEventListener('book-open-about', () => {
+    if (turning) openAboutWhenSettled = true;
+    else turn('about');
+  });
   forward.addEventListener('click', () => turn('about'));
   hotspot.addEventListener('click', () => turn('about'));
   experience?.addEventListener('click', () => turn('experience'));

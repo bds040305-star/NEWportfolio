@@ -171,22 +171,6 @@ body #works .project-marquee-viewport {
 
 .portfolio-about-link:hover { color: #a8380c; text-decoration: underline; }
 
-.portfolio-about-dialog {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  max-width: 100%;
-  max-height: 92dvh;
-  padding: 0;
-  border: 0;
-  overflow: auto;
-  background: #e9e4da;
-  color: #171717;
-}
-
-.portfolio-about-dialog::backdrop { background: #15100dcc; }
-.portfolio-about-close { position: sticky; top: 0; z-index: 2; height: 0; margin: 0; text-align: right; }
-.portfolio-about-close button { margin: 12px; padding: 10px 16px; border: 0; border-radius: 30px; background: #151515; color: white; cursor: pointer; }
 .portfolio-skills-caption { margin: 6px 16px 0; font-size: clamp(13px, 1.1vw, 20px); color: #626262; }
 #keywords .portfolio-display { margin-bottom: 0; }
 #keywords .keyword-cloud { margin-top: clamp(22px, 2.6vw, 50px); }
@@ -236,14 +220,6 @@ body #works .project-marquee-viewport {
 
   body #monkeyBridge.monkey-bridge {
     background: linear-gradient(180deg, #ff641b, #fb5b10) !important;
-  }
-
-  #profile-dialog .ha-about {
-    height: calc(1440px * 1518 / 1920);
-  }
-
-  #profile-dialog .ha-about-plane {
-    transform: translateX(-50%) scale(.75);
   }
 
   #contact .pc-footer {

@@ -1,8 +1,8 @@
 /* Independent reference sections. No existing GSAP or Three.js scene is recreated. */
 (()=>{
 'use strict';if(window.heroAboutMotion)return;
-const about=document.getElementById('about'),bar=document.getElementById('dasomLogoBar'),header=document.getElementById('ds-fixed-nav');
-if(!about||!bar||!header)return;
+const contents=document.getElementById('contents'),bar=document.getElementById('dasomLogoBar'),header=document.getElementById('ds-fixed-nav');
+if(!contents||!bar||!header)return;
 const life=new AbortController(),reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const track=bar.querySelector('.ha-logo-track'),group=track.firstElementChild,source=[...group.children];
 let visible=false,lastWidth=0;
@@ -22,7 +22,7 @@ function fit(){
 let boundaryFrame=0;
 function updateBoundary(){
  boundaryFrame=0;
- const rect=about.getBoundingClientRect(),height=header.getBoundingClientRect().height;
+ const rect=contents.getBoundingClientRect(),height=header.getBoundingClientRect().height;
  const past=rect.top<=height+18;
  if(header.classList.contains('is-scrolled')!==past)header.classList.toggle('is-scrolled',past);
  const firstScenes=rect.bottom>height;

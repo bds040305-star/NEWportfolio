@@ -9,9 +9,16 @@ export function followPortfolioScroll(host) {
   const smallScreen = matchMedia('(max-width: 760px)');
 
   let frame = 0;
+  let previousY = window.scrollY;
+  let stopTimer;
+
+  host.addEventListener('robot-monkey-ready', schedule);
   function update() {
     frame = 0;
     const y = window.scrollY;
+    const delta = y - previousY;
+    const lastY = previousY;
+    previousY = y;
     const vh = window.innerHeight;
     const mobile = smallScreen.matches;
     const top = element => element.getBoundingClientRect().top + y;
@@ -39,7 +46,12 @@ export function followPortfolioScroll(host) {
     }
     const last = poses.at(-1);
     host.toggleAttribute('data-offstage', y >= last[0]);
-    if (y >= last[0]) return;
+    if (y >= last[0]) {
+      clearTimeout(stopTimer);
+      stopTimer = undefined;
+      host.robotMonkey?.setGuideMotion();
+      return;
+    }
 
     const nextIndex = poses.findIndex(([start], index) => index > 0 && y < start);
     const from = poses[nextIndex - 1];
@@ -53,6 +65,25 @@ export function followPortfolioScroll(host) {
     host.inert = scale < .45;
     host.style.setProperty('--monkey-scale', scale);
     host.style.setProperty('--monkey-opacity', interpolate(4));
+
+    const turnStart = poses[4][0];
+    const turnEnd = poses[5][0];
+    const turn = Math.max(0, Math.min(1, (y - turnStart) / (turnEnd - turnStart)));
+    const turning = turn > 0 && turn < 1;
+    const turnHeading = Math.PI * 2 * turn * turn * (3 - 2 * turn);
+    const travelHeading = turning ? 0 : Math.sign(to[1] - from[1]) * .5 * Math.sin(Math.PI * t);
+    const heading = turnHeading + travelHeading;
+    const walking = Math.abs(delta) > .5 && !turning;
+    const greeting = lastY < turnEnd && y >= turnEnd;
+    const model = host.robotMonkey;
+    if (model && (delta || !stopTimer)) {
+      model.setGuideMotion({ heading, walking, greeting });
+      clearTimeout(stopTimer);
+      stopTimer = setTimeout(() => {
+        stopTimer = undefined;
+        model.setGuideMotion({ heading });
+      }, 160);
+    }
   }
 
   function schedule() {
@@ -69,7 +100,11 @@ export function followPortfolioScroll(host) {
       host.inert = false;
       cancelAnimationFrame(frame);
       frame = 0;
+      clearTimeout(stopTimer);
+      stopTimer = undefined;
+      host.robotMonkey?.setGuideMotion();
     }
+    previousY = window.scrollY;
     host.classList.toggle('is-scroll-guide', follow);
     schedule();
   }

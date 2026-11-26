@@ -33,6 +33,7 @@ export function followPortfolioScroll(host) {
   let experienceFrameTime = null;
   let experienceElapsed = 0;
   let experienceSnackStarted = false;
+  let replayBookOnScroll = false;
   const experiencePause = 300;
   const experienceWalkDuration = 1550;
 
@@ -59,6 +60,7 @@ export function followPortfolioScroll(host) {
     waitingForExperience = detail.from === 'about' && detail.to === 'experience';
     experienceFrameTime = null;
     experienceElapsed = 0;
+    replayBookOnScroll = false;
     if (experienceSnackStarted && host.dataset.motion === 'eat') host.robotMonkey?.play('idle');
     experienceSnackStarted = false;
     if (waitingForExperience) peekStart ??= performance.now() - 1300;
@@ -183,19 +185,26 @@ export function followPortfolioScroll(host) {
     const hasExperience = experienceFrameTime !== null;
     const departure = Math.min(landingY + y - vh * .43, dockAt - vh * .18);
     const arrivedAtLanding = experienceElapsed >= experiencePause + experienceWalkDuration;
+    const returnFrom = hasExperience ? departure : bounds.bottom + y - vh * .22;
+    if (!waitingForBook && !waitingForExperience && delta < 0 && lastY >= returnFrom) {
+      replayBookOnScroll = true;
+    }
+    // On a return visit, scrolling controls the same poses in either direction.
+    const replayWalkStart = Math.max(0, Math.min(departure - vh * .24, bounds.bottom + y - vh * .68));
+    const peekScroll = 1 - Math.max(0, Math.min(1, (bounds.top / vh - .43) / .38));
     const crossingToSkills = y < turnStart && (hasExperience
-      ? y >= departure && (arrivedAtLanding || y >= dockAt)
+      ? y >= departure && (replayBookOnScroll || arrivedAtLanding || y >= dockAt)
       : y >= dockAt && !bookOnscreen);
     const peeking = peekStart !== null && (bookOnscreen || landingOnscreen) && !crossingToSkills;
     const experienceWalking = peeking && experienceFrameTime !== null;
     if (experienceFrameTime !== null) {
       // Keep the steps visible even when rendering drops a frame.
-      if (experienceWalking) experienceElapsed += Math.max(0, Math.min(190, now - experienceFrameTime));
+      if (experienceWalking && !replayBookOnScroll) experienceElapsed += Math.max(0, Math.min(190, now - experienceFrameTime));
       experienceFrameTime = now;
     }
-    const stride = experienceWalking
-      ? Math.max(0, Math.min(1, (experienceElapsed - experiencePause) / experienceWalkDuration))
-      : 0;
+    const stride = !experienceWalking ? 0 : replayBookOnScroll
+      ? Math.max(0, Math.min(1, (y - replayWalkStart) / Math.max(1, departure - replayWalkStart)))
+      : Math.max(0, Math.min(1, (experienceElapsed - experiencePause) / experienceWalkDuration));
     const stepping = stride > 0 && stride < 1;
     const coverActive = book.dataset.state === 'contents' && !waitingForBook &&
       bounds.top > 58 && bounds.top < vh * .85 && document.body.classList.contains('vertical-ready');
@@ -210,20 +219,23 @@ export function followPortfolioScroll(host) {
       scale = coverScale;
       const centerX = bounds.left + bounds.width * .25;
       x = centerX / vw;
-      const riseOffset = coverHeight * .54 * (1 - grip.rise);
+      const rise = replayBookOnScroll ? Math.min(grip.rise, 1 - (1 - peekScroll) ** 3) : grip.rise;
+      const riseOffset = coverHeight * .54 * (1 - rise);
       screenY = bounds.top + coverHeight * (.5 - grip.handLine) + riseOffset - grip.edgeLift;
       const upper = screenY - coverHeight * .5;
       const cut = Math.max(0, Math.min(100, (upper + coverHeight - bounds.top) / coverHeight * 100));
       const spineCut = Math.max(0, (centerX + coverWidth * .5 - (bounds.left + bounds.width * .50)) / coverWidth * 100);
       host.style.setProperty('--cover-grip-clip', `inset(0 ${spineCut}% ${cut}% 0)`);
-      opacity = Math.min(1, grip.rise * 4);
+      opacity = Math.min(1, rise * 4);
     }
     host.toggleAttribute('data-first-book-peek', peeking);
     if (waitingForBook && bookOnscreen) opacity = 0;
     if (peekStart !== null && bounds.bottom <= 0) opacity *= Math.min(1, -bounds.bottom / (vh * .18));
     if (peeking) {
       const elapsed = Math.max(0, now - peekStart);
-      const t = Math.max(0, Math.min(1, (elapsed - 215) / 730));
+      const t = replayBookOnScroll && !waitingForExperience
+        ? Math.max(stride, peekScroll)
+        : Math.max(0, Math.min(1, (elapsed - 215) / 730));
       const reach = 1 - (1 - t) ** 3 + .055 * Math.sin(Math.PI * t);
       scale = mobile ? .58 : .72;
       const width = canvasWidth * scale;
@@ -246,7 +258,7 @@ export function followPortfolioScroll(host) {
         x += (landingX - x) * approach;
         screenY += (landingY - screenY) * approach;
         scale += (landingScale - scale) * approach;
-        if (stride < 1) schedule();
+        if (!replayBookOnScroll && stride < 1) schedule();
       }
       host.style.setProperty('--first-book-peek-clip', clip);
       host.style.setProperty('--first-book-peek-lean', `${lean}deg`);
@@ -329,7 +341,15 @@ export function followPortfolioScroll(host) {
       }
     }
     updateDialogue(dialogueScene, x, screenY, scale);
-    if (model && experienceWalking) {
+    if (model && experienceWalking && replayBookOnScroll) {
+      if (host.dataset.motion === 'eat') model.play('idle');
+      model.setGuideMotion({ walking: stepping && Math.abs(delta) > .5, heading: stepping && delta < 0 ? -.45 : 0 });
+      clearTimeout(stopTimer);
+      stopTimer = setTimeout(() => {
+        stopTimer = undefined;
+        model.setGuideMotion();
+      }, 160);
+    } else if (model && experienceWalking) {
       const snackVisible = screenY > canvasHeight * scale * .28 &&
         screenY < vh - canvasHeight * scale * .28;
       if (stride === 1 && snackVisible && !experienceSnackStarted) {
@@ -368,6 +388,7 @@ export function followPortfolioScroll(host) {
       waitingForExperience = false;
       experienceFrameTime = null;
       experienceElapsed = 0;
+      replayBookOnScroll = false;
       peekStart = null;
       clearTimeout(blinkTimer);
       host.robotMonkey?.setBlink(null);

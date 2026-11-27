@@ -141,6 +141,7 @@ export function followPortfolioScroll(host) {
     host.toggleAttribute('data-in-playground', inPlayground);
     host.toggleAttribute('data-offstage', y >= last[0]);
     if (y >= last[0]) {
+      book.removeAttribute('data-monkey-behind');
       updateDialogue(null);
       clearTimeout(stopTimer);
       stopTimer = undefined;
@@ -229,6 +230,7 @@ export function followPortfolioScroll(host) {
       opacity = Math.min(1, rise * 4);
     }
     host.toggleAttribute('data-first-book-peek', peeking);
+    book.toggleAttribute('data-monkey-behind', peeking && !mobile);
     if (waitingForBook && bookOnscreen) opacity = 0;
     if (peekStart !== null && bounds.bottom <= 0) opacity *= Math.min(1, -bounds.bottom / (vh * .18));
     if (peeking) {
@@ -247,7 +249,7 @@ export function followPortfolioScroll(host) {
       const centerX = mobile ? mobileCenter : edgeCenter - width * .57 * (1 - Math.min(1, reach));
       x = centerX / vw;
       screenY = mobile ? bounds.top + height * (.48 - .55 * reach) : bounds.top + bounds.height * .46;
-      const release = 1 - Math.min(1, stride * 2.4);
+      const release = 1 - progressBetween(0, .44, stride);
       const percent = (pixels, dimension) => Math.max(0, Math.min(100, 100 * pixels / dimension));
       const peekTop = screenY - height * .5;
       const lean = (mobile ? 9 : 13) * reach * release;
@@ -256,24 +258,18 @@ export function followPortfolioScroll(host) {
         if (mobile) {
           x += (landingX - x) * approach;
         } else {
-          const sideX = Math.max(centerX, Math.min(bounds.right + width * .22, vw - width * .32)) / vw;
-          x += (sideX - x) * progressBetween(0, .32, stride);
-          x += (landingX - x) * progressBetween(.57, 1, stride);
+          const sideX = Math.max(centerX, Math.min(bounds.right + width * .13, vw - width * .42)) / vw;
+          x += (sideX - x) * progressBetween(0, .40, stride);
+          x += (landingX - x) * progressBetween(.48, 1, stride);
         }
         screenY += (landingY - screenY) * approach;
         scale += (landingScale - scale) * approach;
         if (!replayBookOnScroll && stride < 1) schedule();
       }
-      // Mask against the true book edge after moving, including the bottom corner.
-      const movingWidth = canvasWidth * scale;
-      const movingHeight = canvasHeight * scale;
-      const leftCut = percent(bounds.right - x * vw + movingWidth * .5, movingWidth);
-      const bottomEdge = percent(bounds.bottom - screenY + movingHeight * .5, movingHeight);
+      // On wide screens the actual book silhouette occludes the monkey.
       const clip = mobile
         ? `inset(${percent(contentsTitle.getBoundingClientRect().bottom + 5 - peekTop, height) * release}% 0 ${percent(peekTop + height - bounds.top, height) * release}% 0)`
-        : leftCut === 0 || bottomEdge === 0 ? 'inset(0 0 0 0)'
-        : bottomEdge === 100 ? `inset(0 0 0 ${leftCut}%)`
-        : `polygon(${leftCut}% 0, 100% 0, 100% 100%, 0 100%, 0 ${bottomEdge}%, ${leftCut}% ${bottomEdge}%)`;
+        : 'none';
       host.style.setProperty('--first-book-peek-clip', clip);
       host.style.setProperty('--first-book-peek-lean', `${lean}deg`);
       opacity = Math.min(1, t * 5);
@@ -355,9 +351,10 @@ export function followPortfolioScroll(host) {
       }
     }
     updateDialogue(dialogueScene, x, screenY, scale);
+    const cornerHeading = mobile ? 0 : Math.sin(stride * Math.PI * 2) * .32;
     if (model && experienceWalking && replayBookOnScroll) {
       if (host.dataset.motion === 'eat') model.play('idle');
-      model.setGuideMotion({ walking: stepping && Math.abs(delta) > .5, heading: stepping && delta < 0 ? -.45 : 0 });
+      model.setGuideMotion({ walking: stepping && Math.abs(delta) > .5, heading: stepping ? cornerHeading + (delta < 0 ? -.35 : 0) : 0 });
       clearTimeout(stopTimer);
       stopTimer = setTimeout(() => {
         stopTimer = undefined;
@@ -371,7 +368,7 @@ export function followPortfolioScroll(host) {
         model.setGuideMotion();
         model.eatBanana();
       } else if (!experienceSnackStarted) {
-        model.setGuideMotion({ walking: stepping });
+        model.setGuideMotion({ walking: stepping, heading: cornerHeading });
       }
     } else if (model && !waitingForExperience && (delta || !stopTimer)) {
       model.setGuideMotion({ heading, walking, greeting, careful: carefulDescent });
@@ -396,6 +393,7 @@ export function followPortfolioScroll(host) {
       originalParent.prepend(host);
       host.removeAttribute('data-offstage');
       host.removeAttribute('data-first-book-peek');
+      book.removeAttribute('data-monkey-behind');
       host.removeAttribute('data-cover-grip');
       host.robotMonkey?.setBookGrip(false);
       waitingForBook = false;

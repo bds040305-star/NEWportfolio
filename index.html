@@ -3709,8 +3709,13 @@ body.case-overlay-open,body.project-confirm-open{overflow:hidden!important}
 
   measure();
   render();
-  tick();
-  // Continuous autoplay with manual drag support; hover never captures or follows the pointer.
+  new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting && !rafId) tick();
+    else if (!entry.isIntersecting && rafId) {
+      cancelAnimationFrame(rafId);
+      rafId = 0;
+    }
+  }).observe(viewport);
   window.addEventListener('resize',measure);
 })();
 </script>
@@ -4855,66 +4860,6 @@ body.vertical-ready { scroll-behavior: auto !important; }
   html, body { scroll-behavior: auto !important; }
 }
 </style>
-<script id="gentle-wheel-scroll">
-(() => {
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduceMotion) return;
-  let targetY = window.scrollY;
-  let rafId = 0;
-  let lastTime = 0;
-  const ease = 0.105;
-  // Cancel an in-flight eased wheel animation before a replay reset.
-  window.addEventListener('portfolio:reset-smooth-scroll', () => {
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = 0;
-    targetY = 0;
-    lastTime = 0;
-  });
-  window.addEventListener('portfolio:nav-target',event=>{
-    if(rafId)cancelAnimationFrame(rafId);
-    rafId=0;lastTime=0;
-    const maxY=Math.max(0,document.documentElement.scrollHeight-innerHeight);
-    targetY=Math.min(maxY,Math.max(0,Number(event.detail?.top)||0));
-  });
-  const stopAtNativeScroll = (event) => {
-    const el = event.target instanceof Element ? event.target : null;
-    return !document.body.classList.contains('vertical-ready') ||
-      event.ctrlKey || event.metaKey ||
-      !!el?.closest('input, textarea, select, [contenteditable="true"], .soi-project-modal.open, #caseStudyOverlay[aria-hidden="false"]');
-  };
-  const tick = (time) => {
-    rafId = 0;
-    const current = window.scrollY;
-    const diff = targetY - current;
-    if (Math.abs(diff) < 0.7) {
-      window.scrollTo(0, targetY);
-      lastTime = time;
-      return;
-    }
-    const frameScale = lastTime ? Math.min(1.8, (time - lastTime) / 16.67) : 1;
-    lastTime = time;
-    window.scrollTo(0, current + diff * (1 - Math.pow(1 - ease, frameScale)));
-    rafId = requestAnimationFrame(tick);
-  };
-  window.addEventListener('wheel', (event) => {
-    if (stopAtNativeScroll(event) || event.deltaY === 0) return;
-    event.preventDefault();
-    const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-    targetY = Math.max(0, Math.min(maxY, (rafId ? targetY : window.scrollY) + event.deltaY * 0.82));
-    if (!rafId) rafId = requestAnimationFrame(tick);
-  }, { passive: false });
-  window.addEventListener('scroll', () => {
-    if (!rafId) targetY = window.scrollY;
-  }, { passive: true });
-  window.addEventListener('keydown', (event) => {
-    if (['ArrowDown','ArrowUp','PageDown','PageUp','Home','End',' '].includes(event.key)) {
-      targetY = window.scrollY;
-      if (rafId) cancelAnimationFrame(rafId);
-      rafId = 0;
-    }
-  });
-})();
-</script>
 
 
 <script id="portfolio-gsap-three-enhancements">
@@ -5958,7 +5903,7 @@ body.project-confirm-open .monkey-guide-dialogue{display:none}
 </style>
 
 <script src="assets/vendor/three-r128.min.js"></script>
-<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=book-front-step"></script>
+<script type="module" src="assets/robot-monkey/portfolio-monkey.js?v=lighter-scroll"></script>
 <style id="dasom-monkey-drag-cue-style">
 #dasom-monkey-3d{cursor:grab;user-select:none;-webkit-user-select:none}
 #dasom-monkey-3d:active{cursor:grabbing}
@@ -6020,7 +5965,7 @@ body.vertical-ready #dasom-intro-guidance{opacity:1;transform:none;pointer-event
 </dialog>
 <script defer src="assets/hero-about/hero-about.js?v=book-boundary"></script>
 
-  <script defer src="assets/portfolio-layout/book-turn.js?v=smooth-experience"></script>
+  <script defer src="assets/portfolio-layout/book-turn.js?v=lighter-turn"></script>
 
 
 

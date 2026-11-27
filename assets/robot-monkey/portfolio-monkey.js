@@ -1,4 +1,4 @@
-import { mountRobotMonkey } from './robot-monkey.js?v=guide-render-performance';
+import { mountRobotMonkey } from './robot-monkey.js?v=lighter-scroll';
 import { followPortfolioScroll } from './monkey-scroll.js?v=book-front-step';
 
 const host = document.getElementById('dasom-monkey-3d');

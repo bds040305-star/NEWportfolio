@@ -461,7 +461,7 @@ export async function mountRobotMonkey(host, options = {}) {
     const poseChanging = held || activePointer !== null || actionName !== 'idle' ||
       Math.abs(pivot.rotation.y - yaw - guideYaw) > .001 ||
       Math.abs(pivot.rotation.x - pitch - guidePitch) > .001;
-    if (optimizeGuide && lastTime && !poseChanging && time - lastTime < 31) return;
+    if (optimizeGuide && lastTime && activePointer === null && time - lastTime < 31) return;
     const dt = lastTime ? Math.min((time - lastTime) / 1000, optimizeGuide ? .12 : .05) : 0;
     lastTime = time;
     updateRenderScale();
@@ -478,7 +478,7 @@ export async function mountRobotMonkey(host, options = {}) {
     updateFace();
     pivot.rotation.set(pitch + guidePitch, yaw + guideYaw, 0);
     if (bookGrip && !held) poseBookGrip();
-    if (optimizeGuide && time - lastShadow >= (poseChanging ? 31 : 64)) {
+    if (optimizeGuide && time - lastShadow >= (poseChanging ? 48 : 96)) {
       key.shadow.needsUpdate = true;
       lastShadow = time;
     }

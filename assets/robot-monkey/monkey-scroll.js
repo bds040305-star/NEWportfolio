@@ -36,6 +36,7 @@ export function followPortfolioScroll(host) {
   let replayBookOnScroll = false;
   const experiencePause = 300;
   const experienceWalkDuration = 1550;
+  const frontStep = .38;
 
   function updateCoverGrip(now, active, width) {
     const model = host.robotMonkey;
@@ -230,7 +231,7 @@ export function followPortfolioScroll(host) {
       opacity = Math.min(1, rise * 4);
     }
     host.toggleAttribute('data-first-book-peek', peeking);
-    book.toggleAttribute('data-monkey-behind', peeking && !mobile);
+    book.toggleAttribute('data-monkey-behind', peeking && !mobile && stride < frontStep);
     if (waitingForBook && bookOnscreen) opacity = 0;
     if (peekStart !== null && bounds.bottom <= 0) opacity *= Math.min(1, -bounds.bottom / (vh * .18));
     if (peeking) {
@@ -249,7 +250,7 @@ export function followPortfolioScroll(host) {
       const centerX = mobile ? mobileCenter : edgeCenter - width * .57 * (1 - Math.min(1, reach));
       x = centerX / vw;
       screenY = mobile ? bounds.top + height * (.48 - .55 * reach) : bounds.top + bounds.height * .46;
-      const release = 1 - progressBetween(0, .44, stride);
+      const release = 1 - progressBetween(0, frontStep, stride);
       const percent = (pixels, dimension) => Math.max(0, Math.min(100, 100 * pixels / dimension));
       const peekTop = screenY - height * .5;
       const lean = (mobile ? 9 : 13) * reach * release;
@@ -259,8 +260,8 @@ export function followPortfolioScroll(host) {
           x += (landingX - x) * approach;
         } else {
           const sideX = Math.max(centerX, Math.min(bounds.right + width * .13, vw - width * .42)) / vw;
-          x += (sideX - x) * progressBetween(0, .40, stride);
-          x += (landingX - x) * progressBetween(.48, 1, stride);
+          x += (sideX - x) * progressBetween(0, frontStep, stride);
+          x += (landingX - x) * progressBetween(frontStep, 1, stride);
         }
         screenY += (landingY - screenY) * approach;
         scale += (landingScale - scale) * approach;
